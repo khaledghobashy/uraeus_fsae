@@ -1,0 +1,126 @@
+{
+    "information": {
+        "topology_name": "steering_rack",
+        "configuration_name": "steering_rack_cfg",
+        "subsystem_name": ""
+    },
+    "user_inputs": {
+        "UF_mcs_rack_act": {
+            "constructor": "Lambda",
+            "args": [
+                [
+                    "t"
+                ],
+                0.0
+            ]
+        },
+        "Rd_rbs_rack": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pd_rbs_rack": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Rdd_rbs_rack": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pdd_rbs_rack": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "hpr_rack_end": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "vcs_y": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "s_rack_radius": 1.0
+    },
+    "evaluations": {
+        "hpl_rack_end": {
+            "constructor": "Mirrored",
+            "args": [
+                "hpr_rack_end"
+            ]
+        },
+        "gms_rack": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpr_rack_end",
+                "hpl_rack_end",
+                "s_rack_radius"
+            ]
+        }
+    },
+    "outputs": {
+        "ax1_jcs_rack": "vcs_y",
+        "pt1_jcs_rack": {
+            "constructor": "Centered",
+            "args": [
+                "hpr_rack_end",
+                "hpl_rack_end"
+            ]
+        },
+        "R_rbs_rack": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_rack",
+                "R"
+            ]
+        },
+        "P_rbs_rack": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_rack",
+                "P"
+            ]
+        },
+        "m_rbs_rack": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_rack",
+                "m"
+            ]
+        },
+        "Jbar_rbs_rack": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_rack",
+                "J"
+            ]
+        }
+    },
+    "geometries_map": {
+        "gms_rack": "rbs_rack"
+    }
+}
