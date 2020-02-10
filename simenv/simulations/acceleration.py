@@ -36,7 +36,7 @@ def RR_Torque():
     return drive_torque(num_model.Subsystems.AX2.P_rbr_upright, factor)
 
 def RL_Torque():
-    factor = 0.6 if num_model.topology.t <= 4 else 0
+    factor = 1 if num_model.topology.t <= 4 else 0.5
     return drive_torque(num_model.Subsystems.AX2.P_rbl_upright, factor)
 
 
@@ -79,7 +79,7 @@ sim.soln.set_initial_states(q0, 0*q0)
 sim.set_time_array(5, dt)
 sim.solve()
 
-sim.save_results('results', 'acc_1')
+sim.save_results('results', 'acc_biased')
 
 
 

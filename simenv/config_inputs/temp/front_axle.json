@@ -2,7 +2,7 @@
     "information": {
         "topology_name": "dwb_bellcrank_push",
         "configuration_name": "dwb_bellcrank_push_cfg",
-        "subsystem_name": ""
+        "subsystem_name": "AX1"
     },
     "user_inputs": {
         "ax1_jcr_uca_upright": {
