@@ -7,11 +7,12 @@ import pandas as pd
 from uraeus.nmbd.python import simulation
 from uraeus.nmbd.python.engine.numerics.math_funcs import A
 
-database_directory = r'C:\khaledghobashy\github'
+database_directory = os.path.abspath('../../')
+print('Database Directory: %s'%database_directory)
 sys.path.append(database_directory)
 
-from imut_car_database.simulations.ST500.assemblies import num_assm as num_assm
-from imut_car_database.simulations.ST500.assemblies.num_assm import num_model
+from uraeus_fsae.simenv.assemblies import asurt_FS16 as num_assm
+from uraeus_fsae.simenv.assemblies.asurt_FS16 import num_model
 
 
 def normalize(v):
@@ -20,25 +21,24 @@ def normalize(v):
 
 def terrain_state(x, y):
    
-   t = num_model.topology.t
-   amplitude = np.deg2rad(30)
-   duration  = 15
-   theta = amplitude*(1/duration)*t if t <=duration else amplitude
+    t = num_model.topology.t
+    amplitude = np.deg2rad(60)
+    duration  = 15
+    theta = amplitude*(1/duration)*t if t <=duration else amplitude
 
-   n = np.array([[0],[0],[1]])
-   v = normalize(np.cos(theta) * n)
+    n = np.array([[0],[0],[1]])
+    v = normalize(np.cos(theta) * n)
 
-   pivot = -1200
-   l = abs(pivot - y)
-   hieght = l * np.sin(theta)
+    pivot = -1200
+    hieght = np.tan(theta) * abs(pivot - y)
 
-   return [v, hieght]
+    return [v, hieght]
 
 num_assm.terrain_data.get_state = terrain_state
 
 
 dt = num_assm.dt
-TR = 546
+TR = 254
 
 def FR_Torque():
     return 0
@@ -56,7 +56,7 @@ def RL_Torque():
 def steering_function(t):
     return 0
 
-num_assm.ST1_config.UF_mcs_steer_act = steering_function
+num_assm.ST1_config.UF_mcs_rack_act = steering_function
 
 num_assm.AX1_config.UF_far_drive_T = FR_Torque
 num_assm.AX1_config.UF_fal_drive_T = FL_Torque
@@ -73,7 +73,7 @@ num_assm.CH_config.UF_fas_aero_drag_T = lambda : np.zeros((3,1), dtype=np.float6
 
 
 
-equlibrium_results = pd.read_csv('results/equilibrium.csv', index_col=0)
+equlibrium_results = pd.read_csv('results/equilibrium_v1.csv', index_col=0)
 q0 = np.array(equlibrium_results.iloc[-1][:-1]).reshape((num_model.topology.n, 1))
 
 sim = simulation('sim', num_model, 'dds')
@@ -83,7 +83,7 @@ sim.soln.set_initial_states(q0, 0*q0)
 sim.set_time_array(20, dt)
 sim.solve()
 
-sim.save_results('results', 'tilt_30d_20s_1')
+sim.save_results('results', 'tilt_60d_20s_4')
 
 
 
