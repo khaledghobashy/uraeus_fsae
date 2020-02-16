@@ -53,6 +53,7 @@ def get_contact_point(R, P):
     u = np.array([[0], [0], [-TR]])
     point = R + (A(P) @ u)
     x, y, z = point.flat[:]
+    print('Contact Point = %s'%((x,y),))
     return x, y
 
 def fr_tire_force():

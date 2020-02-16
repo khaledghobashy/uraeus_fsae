@@ -15,30 +15,32 @@ from uraeus_fsae.simenv.assemblies import asurt_FS16 as num_assm
 from uraeus_fsae.simenv.assemblies.asurt_FS16 import num_model
 
 
-def normalize(v):
-    normalized = v/np.linalg.norm(v)
-    return normalized
+dt = num_assm.dt
+TR = 254
 
 def terrain_state(x, y):
    
     t = num_model.topology.t
-    amplitude = np.deg2rad(60)
+    amplitude = np.deg2rad(45)
     duration  = 15
     theta = amplitude*(1/duration)*t if t <=duration else amplitude
 
-    n = np.array([[0],[0],[1]])
-    v = normalize(np.cos(theta) * n)
+    print('Table Angle = %s'%np.rad2deg(theta))
 
-    pivot = -1200
-    hieght = np.tan(theta) * abs(pivot - y)
+    local_normal = np.array([[0],[0],[1]])
+    table_matrix = np.array([[1, 0, 0],
+                             [0, np.cos(theta), -np.sin(theta)],
+                             [0, np.sin(theta), np.cos(theta)]])
 
-    return [v, hieght]
+    table_normal = table_matrix @ local_normal
 
-num_assm.terrain_data.get_state = terrain_state
+    pivot = -600
+    horizontal_length = abs(y - pivot)
+    hieght = horizontal_length * np.tan(theta)
+
+    return [table_normal, hieght]
 
 
-dt = num_assm.dt
-TR = 254
 
 def FR_Torque():
     return 0
@@ -52,16 +54,18 @@ def RR_Torque():
 def RL_Torque():
     return 0
 
-
 def steering_function(t):
     return 0
 
-num_assm.ST1_config.UF_mcs_rack_act = steering_function
+num_assm.terrain_data.get_state = terrain_state
+
 
 num_assm.AX1_config.UF_far_drive_T = FR_Torque
 num_assm.AX1_config.UF_fal_drive_T = FL_Torque
 num_assm.AX2_config.UF_far_drive_T = RR_Torque
 num_assm.AX2_config.UF_fal_drive_T = RL_Torque
+
+num_assm.ST1_config.UF_mcs_rack_act = steering_function
 
 num_assm.AX1_config.UF_far_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
 num_assm.AX1_config.UF_fal_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
@@ -74,7 +78,7 @@ num_assm.CH_config.UF_fas_aero_drag_T = lambda : np.zeros((3,1), dtype=np.float6
 
 
 equlibrium_results = pd.read_csv('results/equilibrium_v1.csv', index_col=0)
-q0 = np.array(equlibrium_results.iloc[-1][:-1]).reshape((num_model.topology.n, 1))
+q0 = equlibrium_results.iloc[-1][:-1][:,np.newaxis]
 
 sim = simulation('sim', num_model, 'dds')
 
@@ -83,7 +87,7 @@ sim.soln.set_initial_states(q0, 0*q0)
 sim.set_time_array(20, dt)
 sim.solve()
 
-sim.save_results('results', 'tilt_60d_20s_4')
+sim.save_results('results', 'tilt_45d_20s_2')
 
 
 

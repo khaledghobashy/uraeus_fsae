@@ -14,14 +14,22 @@ sys.path.append(database_directory)
 from uraeus_fsae.simenv.assemblies import asurt_FS16 as num_assm
 from uraeus_fsae.simenv.assemblies.asurt_FS16 import num_model
 
+
 dt = num_assm.dt
 TR = 254
+
+def terrain_state(x, y):
+    local_normal = np.array([[0],[0],[1]])
+    hieght = 0
+    return [local_normal, hieght]
+
+
 
 def drive_torque(P_hub, factor):
     local_torque = np.array([[0],
                              [-factor*(70*9.81)*1e6*TR],
                              [0]])
-    global_torque = A(P_hub).dot(local_torque)
+    global_torque = A(P_hub) @ local_torque
     return global_torque
 
 
@@ -32,23 +40,36 @@ def FL_Torque():
     return 0
 
 def RR_Torque():
-    factor = 0.6 if num_model.topology.t <= 4 else 0
+    factor = 1 if num_model.topology.t <= 3 else 0.3
     return drive_torque(num_model.Subsystems.AX2.P_rbr_upright, factor)
 
 def RL_Torque():
-    factor = 1 if num_model.topology.t <= 4 else 0.5
+    factor = 1 if num_model.topology.t <= 3 else 0.7
     return drive_torque(num_model.Subsystems.AX2.P_rbl_upright, factor)
 
 
 def steering_function(t):
-    return 0
+    
+    t_dur = 2
+    t_str = 4
+    t_end = t_str + t_dur
+    
+    rotation  = 0
+    amplitude = 20
+    #if t >= t_str and t <= t_end:
+        #rotation = amplitude*np.sin((2*np.pi/t_dur)*(t-t_str))
+    
+    return amplitude
 
-num_assm.ST1_config.UF_mcs_rack_act = steering_function
+num_assm.terrain_data.get_state = terrain_state
+
 
 num_assm.AX1_config.UF_far_drive_T = FR_Torque
 num_assm.AX1_config.UF_fal_drive_T = FL_Torque
 num_assm.AX2_config.UF_far_drive_T = RR_Torque
 num_assm.AX2_config.UF_fal_drive_T = RL_Torque
+
+num_assm.ST1_config.UF_mcs_rack_act = steering_function
 
 num_assm.AX1_config.UF_far_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
 num_assm.AX1_config.UF_fal_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
@@ -59,6 +80,7 @@ num_assm.CH_config.UF_fas_aero_drag_F = lambda : np.zeros((3,1), dtype=np.float6
 num_assm.CH_config.UF_fas_aero_drag_T = lambda : np.zeros((3,1), dtype=np.float64)
 
 
+
 equlibrium_results = pd.read_csv('results/equilibrium_v1.csv', index_col=0)
 q0 = equlibrium_results.iloc[-1][:-1][:,np.newaxis]
 
@@ -66,14 +88,14 @@ sim = simulation('sim', num_model, 'dds')
 
 sim.soln.set_initial_states(q0, 0*q0)
 
-sim.set_time_array(5, dt)
+sim.set_time_array(8, dt)
 sim.solve()
 
-sim.save_results('results', 'acc_biased')
+sim.save_results('results', 'constant_steer_4')
 
 
 
-#=============================================================================
+# =============================================================================
 #                       Plotting Simulation Results
 # =============================================================================
 
