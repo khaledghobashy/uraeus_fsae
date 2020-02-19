@@ -40,11 +40,11 @@ def FL_Torque():
     return 0
 
 def RR_Torque():
-    factor = 1 if num_model.topology.t <= 3 else 0.3
+    factor = 1 if num_model.topology.t <= 3 else 0.5
     return drive_torque(num_model.Subsystems.AX2.P_rbr_upright, factor)
 
 def RL_Torque():
-    factor = 1 if num_model.topology.t <= 3 else 0.7
+    factor = 1 if num_model.topology.t <= 3 else 0.5
     return drive_torque(num_model.Subsystems.AX2.P_rbl_upright, factor)
 
 
@@ -55,7 +55,7 @@ def steering_function(t):
     t_end = t_str + t_dur
     
     rotation  = 0
-    amplitude = 20
+    amplitude = 22
     #if t >= t_str and t <= t_end:
         #rotation = amplitude*np.sin((2*np.pi/t_dur)*(t-t_str))
     
@@ -91,7 +91,7 @@ sim.soln.set_initial_states(q0, 0*q0)
 sim.set_time_array(8, dt)
 sim.solve()
 
-sim.save_results('results', 'constant_steer_4')
+sim.save_results('results', 'constant_steer_5')
 
 
 

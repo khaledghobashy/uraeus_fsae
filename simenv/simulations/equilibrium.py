@@ -17,16 +17,16 @@ from uraeus_fsae.simenv.assemblies.asurt_FS16 import num_model
 dt = num_assm.dt
 TR = 254
 
-def FR_Torque():
+def FR_Torque(t):
     return 0
 
-def FL_Torque():
+def FL_Torque(t):
     return 0
 
-def RR_Torque():
+def RR_Torque(t):
     return 0
 
-def RL_Torque():
+def RL_Torque(t):
     return 0
 
 
@@ -40,10 +40,10 @@ num_assm.AX1_config.UF_fal_drive_T = FL_Torque
 num_assm.AX2_config.UF_far_drive_T = RR_Torque
 num_assm.AX2_config.UF_fal_drive_T = RL_Torque
 
-num_assm.AX1_config.UF_far_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
-num_assm.AX1_config.UF_fal_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
-num_assm.AX2_config.UF_far_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
-num_assm.AX2_config.UF_fal_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
+num_assm.AX1_config.UF_far_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.AX1_config.UF_fal_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.AX2_config.UF_far_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.AX2_config.UF_fal_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
 
 num_assm.CH_config.UF_fas_aero_drag_F = lambda : np.zeros((3,1), dtype=np.float64)
 num_assm.CH_config.UF_fas_aero_drag_T = lambda : np.zeros((3,1), dtype=np.float64)
@@ -59,7 +59,7 @@ sim = simulation('sim', num_model, 'dds')
 sim.set_time_array(5, dt)
 sim.solve()
 
-sim.save_results('results', 'equilibrium_v1')
+sim.save_results('results', 'equilibrium_v2')
 
 
 

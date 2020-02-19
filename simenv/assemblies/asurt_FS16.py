@@ -56,9 +56,8 @@ def get_contact_point(R, P):
     print('Contact Point = %s'%((x,y),))
     return x, y
 
-def fr_tire_force():
+def fr_tire_force(t):
     print('FR_Tire : \n=========')
-    t  = num_model.topology.t
     R  = num_model.Subsystems.AX1.R_rbr_hub
     P  = num_model.Subsystems.AX1.P_rbr_hub
     Rd = num_model.Subsystems.AX1.Rd_rbr_hub
@@ -68,7 +67,7 @@ def fr_tire_force():
     x, y = get_contact_point(R, num_model.Subsystems.AX1.P_rbr_upright)
     terrain_state = terrain_data.get_state(x, y)
     
-    drive_torque = np.linalg.norm(AX1_config.UF_far_drive_T())
+    drive_torque = np.linalg.norm(AX1_config.UF_far_drive_T(t))
     if drive_torque == 0:
         front_right_tire.driven = 0
 
@@ -83,7 +82,7 @@ def fr_tire_force():
 
 
 AX1_config.UF_far_tire_F = fr_tire_force
-AX1_config.UF_far_tire_T = lambda : front_right_tire.M
+AX1_config.UF_far_tire_T = lambda t: front_right_tire.M
 
 
 
@@ -101,9 +100,8 @@ front_left_tire.cp   = 1500*1e3
 front_left_tire.C_Fk = 400*1e9
 front_left_tire.C_Fa = 400*1e9
 
-def fl_tire_force():
+def fl_tire_force(t):
     print('FL_Tire : \n=========')
-    t  = num_model.topology.t
     R  = num_model.Subsystems.AX1.R_rbl_hub
     P  = num_model.Subsystems.AX1.P_rbl_hub
     Rd = num_model.Subsystems.AX1.Rd_rbl_hub
@@ -113,7 +111,7 @@ def fl_tire_force():
     x, y = get_contact_point(R, num_model.Subsystems.AX1.P_rbl_upright)
     terrain_state = terrain_data.get_state(x, y)
 
-    drive_torque = np.linalg.norm(AX1_config.UF_fal_drive_T())
+    drive_torque = np.linalg.norm(AX1_config.UF_fal_drive_T(t))
     if drive_torque == 0:
         front_left_tire.driven = 0
 
@@ -128,7 +126,7 @@ def fl_tire_force():
 
 
 AX1_config.UF_fal_tire_F = fl_tire_force
-AX1_config.UF_fal_tire_T = lambda : front_left_tire.M
+AX1_config.UF_fal_tire_T = lambda t: front_left_tire.M
 
 
 
@@ -146,9 +144,8 @@ rear_right_tire.cp   = 1500*1e3
 rear_right_tire.C_Fk = 400*1e9
 rear_right_tire.C_Fa = 400*1e9
 
-def rr_tire_force():
+def rr_tire_force(t):
     print('RR_Tire : \n=========')
-    t  = num_model.topology.t
     R  = num_model.Subsystems.AX2.R_rbr_hub
     P  = num_model.Subsystems.AX2.P_rbr_hub
     Rd = num_model.Subsystems.AX2.Rd_rbr_hub
@@ -158,7 +155,7 @@ def rr_tire_force():
     x, y = get_contact_point(R, num_model.Subsystems.AX2.P_rbr_upright)
     terrain_state = terrain_data.get_state(x, y)
 
-    drive_torque = np.linalg.norm(AX2_config.UF_far_drive_T())
+    drive_torque = np.linalg.norm(AX2_config.UF_far_drive_T(t))
     if drive_torque == 0:
         rear_right_tire.driven = 0
 
@@ -172,7 +169,7 @@ def rr_tire_force():
     return force
 
 AX2_config.UF_far_tire_F = rr_tire_force
-AX2_config.UF_far_tire_T = lambda : rear_right_tire.M
+AX2_config.UF_far_tire_T = lambda t: rear_right_tire.M
 
 
 rear_left_tire = tire_model()
@@ -189,9 +186,8 @@ rear_left_tire.cp   = 1500*1e3
 rear_left_tire.C_Fk = 400*1e9
 rear_left_tire.C_Fa = 400*1e9
 
-def rl_tire_force():
+def rl_tire_force(t):
     print('RL_Tire : \n=========')
-    t  = num_model.topology.t
     R  = num_model.Subsystems.AX2.R_rbl_hub
     P  = num_model.Subsystems.AX2.P_rbl_hub
     Rd = num_model.Subsystems.AX2.Rd_rbl_hub
@@ -201,7 +197,7 @@ def rl_tire_force():
     x, y = get_contact_point(R, num_model.Subsystems.AX2.P_rbl_upright)
     terrain_state = terrain_data.get_state(x, y)
 
-    drive_torque = np.linalg.norm(AX2_config.UF_fal_drive_T())
+    drive_torque = np.linalg.norm(AX2_config.UF_fal_drive_T(t))
     if drive_torque == 0:
         rear_left_tire.driven = 0
 
@@ -216,6 +212,6 @@ def rl_tire_force():
 
 
 AX2_config.UF_fal_tire_F = rl_tire_force
-AX2_config.UF_fal_tire_T = lambda : rear_left_tire.M
+AX2_config.UF_fal_tire_T = lambda t: rear_left_tire.M
 
 
