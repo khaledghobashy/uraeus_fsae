@@ -91,7 +91,11 @@ sim.soln.set_initial_states(q0, 0*q0)
 sim.set_time_array(8, dt)
 sim.solve()
 
+<<<<<<< HEAD
 sim.save_results('results', 'constant_steer_5')
+=======
+sim.save_results('results', 'constant_steer_1')
+>>>>>>> aad6a0371dd3b5969942ba7c3083ea7e3d82440f
 
 
 
