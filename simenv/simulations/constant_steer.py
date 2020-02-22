@@ -79,8 +79,12 @@ num_assm.AX2_config.UF_fal_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
 num_assm.CH_config.UF_fas_aero_drag_F = lambda : np.zeros((3,1), dtype=np.float64)
 num_assm.CH_config.UF_fas_aero_drag_T = lambda : np.zeros((3,1), dtype=np.float64)
 
+# =============================================================================
+#                       Setting and Starting Simulation
+# =============================================================================
 
-
+# Getting Equilibrium results as initial conditions to this simulation
+# ====================================================================
 equlibrium_results = pd.read_csv('results/equilibrium_v1.csv', index_col=0)
 q0 = equlibrium_results.iloc[-1][:-1][:,np.newaxis]
 
@@ -91,13 +95,7 @@ sim.soln.set_initial_states(q0, 0*q0)
 sim.set_time_array(8, dt)
 sim.solve()
 
-<<<<<<< HEAD
-sim.save_results('results', 'constant_steer_5')
-=======
 sim.save_results('results', 'constant_steer_1')
->>>>>>> aad6a0371dd3b5969942ba7c3083ea7e3d82440f
-
-
 
 # =============================================================================
 #                       Plotting Simulation Results

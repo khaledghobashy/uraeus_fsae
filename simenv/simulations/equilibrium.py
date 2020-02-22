@@ -45,15 +45,12 @@ num_assm.AX1_config.UF_fal_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
 num_assm.AX2_config.UF_far_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
 num_assm.AX2_config.UF_fal_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
 
-num_assm.CH_config.UF_fas_aero_drag_F = lambda : np.zeros((3,1), dtype=np.float64)
-num_assm.CH_config.UF_fas_aero_drag_T = lambda : np.zeros((3,1), dtype=np.float64)
+num_assm.CH_config.UF_fas_aero_drag_F = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.CH_config.UF_fas_aero_drag_T = lambda t: np.zeros((3,1), dtype=np.float64)
 
-
-print(num_model.Subsystems.AX1.config.m_rbr_hub)
-print(num_model.Subsystems.AX1.config.m_rbl_hub)
-print(num_model.Subsystems.CH.config.m_rbs_chassis)
-
-
+# =============================================================================
+#                       Setting and Starting Simulation
+# =============================================================================
 sim = simulation('sim', num_model, 'dds')
 
 sim.set_time_array(5, dt)
@@ -61,9 +58,7 @@ sim.solve()
 
 sim.save_results('results', 'equilibrium_v2')
 
-
-
-#=============================================================================
+# =============================================================================
 #                       Plotting Simulation Results
 # =============================================================================
 

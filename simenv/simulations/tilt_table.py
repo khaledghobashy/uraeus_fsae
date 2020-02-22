@@ -42,16 +42,16 @@ def terrain_state(x, y):
 
 
 
-def FR_Torque():
+def FR_Torque(t):
     return 0
 
-def FL_Torque():
+def FL_Torque(t):
     return 0
 
-def RR_Torque():
+def RR_Torque(t):
     return 0
 
-def RL_Torque():
+def RL_Torque(t):
     return 0
 
 def steering_function(t):
@@ -67,16 +67,20 @@ num_assm.AX2_config.UF_fal_drive_T = RL_Torque
 
 num_assm.ST1_config.UF_mcs_rack_act = steering_function
 
-num_assm.AX1_config.UF_far_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
-num_assm.AX1_config.UF_fal_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
-num_assm.AX2_config.UF_far_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
-num_assm.AX2_config.UF_fal_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
+num_assm.AX1_config.UF_far_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.AX1_config.UF_fal_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.AX2_config.UF_far_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.AX2_config.UF_fal_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
 
-num_assm.CH_config.UF_fas_aero_drag_F = lambda : np.zeros((3,1), dtype=np.float64)
-num_assm.CH_config.UF_fas_aero_drag_T = lambda : np.zeros((3,1), dtype=np.float64)
+num_assm.CH_config.UF_fas_aero_drag_F = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.CH_config.UF_fas_aero_drag_T = lambda t: np.zeros((3,1), dtype=np.float64)
 
+# =============================================================================
+#                       Setting and Starting Simulation
+# =============================================================================
 
-
+# Getting Equilibrium results as initial conditions to this simulation
+# ====================================================================
 equlibrium_results = pd.read_csv('results/equilibrium_v1.csv', index_col=0)
 q0 = equlibrium_results.iloc[-1][:-1][:,np.newaxis]
 

@@ -25,18 +25,18 @@ def drive_torque(P_hub, factor):
     return global_torque
 
 
-def FR_Torque():
+def FR_Torque(t):
     return 0
 
-def FL_Torque():
+def FL_Torque(t):
     return 0
 
-def RR_Torque():
-    factor = 0.6 if num_model.topology.t <= 4 else 0
+def RR_Torque(t):
+    factor = 1 if t <= 4 else 0
     return drive_torque(num_model.Subsystems.AX2.P_rbr_upright, factor)
 
-def RL_Torque():
-    factor = 1 if num_model.topology.t <= 4 else 0.5
+def RL_Torque(t):
+    factor = 1 if t <= 4 else 0.5
     return drive_torque(num_model.Subsystems.AX2.P_rbl_upright, factor)
 
 
@@ -50,15 +50,20 @@ num_assm.AX1_config.UF_fal_drive_T = FL_Torque
 num_assm.AX2_config.UF_far_drive_T = RR_Torque
 num_assm.AX2_config.UF_fal_drive_T = RL_Torque
 
-num_assm.AX1_config.UF_far_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
-num_assm.AX1_config.UF_fal_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
-num_assm.AX2_config.UF_far_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
-num_assm.AX2_config.UF_fal_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
+num_assm.AX1_config.UF_far_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.AX1_config.UF_fal_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.AX2_config.UF_far_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.AX2_config.UF_fal_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
 
-num_assm.CH_config.UF_fas_aero_drag_F = lambda : np.zeros((3,1), dtype=np.float64)
-num_assm.CH_config.UF_fas_aero_drag_T = lambda : np.zeros((3,1), dtype=np.float64)
+num_assm.CH_config.UF_fas_aero_drag_F = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.CH_config.UF_fas_aero_drag_T = lambda t: np.zeros((3,1), dtype=np.float64)
 
+# =============================================================================
+#                       Setting and Starting Simulation
+# =============================================================================
 
+# Getting Equilibrium results as initial conditions to this simulation
+# ====================================================================
 equlibrium_results = pd.read_csv('results/equilibrium_v1.csv', index_col=0)
 q0 = equlibrium_results.iloc[-1][:-1][:,np.newaxis]
 
@@ -69,9 +74,7 @@ sim.soln.set_initial_states(q0, 0*q0)
 sim.set_time_array(5, dt)
 sim.solve()
 
-sim.save_results('results', 'acc_biased')
-
-
+sim.save_results('results', 'acc_1')
 
 #=============================================================================
 #                       Plotting Simulation Results
