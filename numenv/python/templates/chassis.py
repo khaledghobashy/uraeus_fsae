@@ -136,11 +136,13 @@ class topology(object):
         config = self.config
         t = self.t
 
-        f0 = G(self.Pd_rbs_chassis)
-        f1 = self.P_rbs_chassis
+        f0 = t
+        f1 = config.UF_fas_aero_drag_F(f0)
+        f2 = G(self.Pd_rbs_chassis)
+        f3 = self.P_rbs_chassis
 
-        self.frc_eq_blocks = ((config.UF_fas_aero_drag_F() + self.F_rbs_chassis_gravity),
-        (8*multi_dot([f0.T,config.Jbar_rbs_chassis,f0,f1]) + 2*multi_dot([G(f1).T,(config.UF_fas_aero_drag_T() + multi_dot([skew(multi_dot([A(f1),self.ubar_rbs_chassis_fas_aero_drag])).T,config.UF_fas_aero_drag_F()]))])),)
+        self.frc_eq_blocks = ((self.F_rbs_chassis_gravity + f1),
+        (8*multi_dot([f2.T,config.Jbar_rbs_chassis,f2,f3]) + 2*multi_dot([G(f3).T,(config.UF_fas_aero_drag_T(f0) + multi_dot([skew(multi_dot([A(f3),self.ubar_rbs_chassis_fas_aero_drag])).T,f1]))])),)
 
     
     def eval_reactions_eq(self):
