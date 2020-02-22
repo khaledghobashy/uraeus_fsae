@@ -11,10 +11,10 @@ brush_model
 
 from ..components.terrain_data import terrain
 
-from ..subsystems.asurt_fs16.front_axle import AX1_config
-from ..subsystems.asurt_fs16.rear_axle import AX2_config
-from ..subsystems.asurt_fs16.steering import ST1_config
-from ..subsystems.asurt_fs16.chassis import CH_config
+from ..subsystems.asurt_fs17.front_axle import AX1_config
+from ..subsystems.asurt_fs17.rear_axle import AX2_config
+from ..subsystems.asurt_fs17.steering import ST1_config
+from ..subsystems.asurt_fs17.chassis import CH_config
 
 templates_dir = os.path.abspath('../numenv/python/templates')
 print('templates directory : %s'%templates_dir)

@@ -8,11 +8,10 @@ from uraeus.nmbd.python import simulation
 from uraeus.nmbd.python.engine.numerics.math_funcs import A
 
 database_directory = os.path.abspath('../../')
-print('Database Directory: %s'%database_directory)
 sys.path.append(database_directory)
 
-from uraeus_fsae.simenv.assemblies import asurt_FS16 as num_assm
-from uraeus_fsae.simenv.assemblies.asurt_FS16 import num_model
+from uraeus_fsae.simenv.assemblies import asurt_FS17 as num_assm
+from uraeus_fsae.simenv.assemblies.asurt_FS17 import num_model
 
 
 dt = num_assm.dt
