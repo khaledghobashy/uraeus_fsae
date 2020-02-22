@@ -9,4 +9,4 @@
 **/*.blend1
 **/*.blmbs
 **/visualization
-**/results
+**/results/*.csv
