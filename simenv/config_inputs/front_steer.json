@@ -2,7 +2,7 @@
     "information": {
         "topology_name": "steering_rack",
         "configuration_name": "steering_rack_cfg",
-        "subsystem_name": ""
+        "subsystem_name": "ST1"
     },
     "user_inputs": {
         "UF_mcs_rack_act": {

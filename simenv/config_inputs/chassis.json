@@ -2,7 +2,7 @@
     "information": {
         "topology_name": "chassis",
         "configuration_name": "chassis_cfg",
-        "subsystem_name": ""
+        "subsystem_name": "CH"
     },
     "user_inputs": {
         "UF_fas_aero_drag_F": {

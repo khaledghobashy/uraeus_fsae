@@ -2,33 +2,9 @@
     "information": {
         "topology_name": "dwb_bellcrank_push",
         "configuration_name": "dwb_bellcrank_push_cfg",
-        "subsystem_name": ""
+        "subsystem_name": "AX2"
     },
     "user_inputs": {
-        "ax1_jcr_uca_upright": {
-            "constructor": "array",
-            "args": [
-                0.0,
-                0.0,
-                1.0
-            ]
-        },
-        "ax1_jcr_lca_upright": {
-            "constructor": "array",
-            "args": [
-                0.0,
-                0.0,
-                1.0
-            ]
-        },
-        "ax1_jcr_prod_rocker": {
-            "constructor": "array",
-            "args": [
-                0.0,
-                0.0,
-                1.0
-            ]
-        },
         "UF_far_strut_Fs": {
             "constructor": "Lambda",
             "args": [
@@ -45,14 +21,6 @@
                     "t"
                 ],
                 0.0
-            ]
-        },
-        "ax1_jcr_tie_upright": {
-            "constructor": "array",
-            "args": [
-                0.0,
-                0.0,
-                1.0
             ]
         },
         "UF_far_tire_F": {
@@ -837,12 +805,8 @@
         }
     },
     "outputs": {
-        "ax1_jcl_uca_upright": {
-            "constructor": "Mirrored",
-            "args": [
-                "ax1_jcr_uca_upright"
-            ]
-        },
+        "ax1_jcr_uca_upright": "vcs_z",
+        "ax1_jcl_uca_upright": "vcs_z",
         "pt1_jcr_uca_upright": "hpr_ucao",
         "pt1_jcl_uca_upright": "hpl_ucao",
         "ax1_jcr_uca_chassis": {
@@ -903,12 +867,8 @@
         },
         "pt1_jcr_prod_uca": "hpr_pushrod_uca",
         "pt1_jcl_prod_uca": "hpl_pushrod_uca",
-        "ax1_jcl_lca_upright": {
-            "constructor": "Mirrored",
-            "args": [
-                "ax1_jcr_lca_upright"
-            ]
-        },
+        "ax1_jcr_lca_upright": "vcs_z",
+        "ax1_jcl_lca_upright": "vcs_z",
         "pt1_jcr_lca_upright": "hpr_lcao",
         "pt1_jcl_lca_upright": "hpl_lcao",
         "ax1_jcr_lca_chassis": {
@@ -943,12 +903,8 @@
         "ax1_jcl_hub_bearing": "vcs_y",
         "pt1_jcr_hub_bearing": "hpr_wc",
         "pt1_jcl_hub_bearing": "hpl_wc",
-        "ax1_jcl_prod_rocker": {
-            "constructor": "Mirrored",
-            "args": [
-                "ax1_jcr_prod_rocker"
-            ]
-        },
+        "ax1_jcr_prod_rocker": "hpr_pushrod_rocker",
+        "ax1_jcl_prod_rocker": "hpl_pushrod_rocker",
         "pt1_jcr_prod_rocker": "hpr_pushrod_rocker",
         "pt1_jcl_prod_rocker": "hpl_pushrod_rocker",
         "ax1_jcr_rocker_chassis": {
@@ -1053,12 +1009,8 @@
         },
         "pt1_jcr_strut_rocker": "hpr_strut_rocker",
         "pt1_jcl_strut_rocker": "hpl_strut_rocker",
-        "ax1_jcl_tie_upright": {
-            "constructor": "Mirrored",
-            "args": [
-                "ax1_jcr_tie_upright"
-            ]
-        },
+        "ax1_jcr_tie_upright": "hpr_tro",
+        "ax1_jcl_tie_upright": "hpl_tro",
         "pt1_jcr_tie_upright": "hpr_tro",
         "pt1_jcl_tie_upright": "hpl_tro",
         "ax1_jcr_tie_steering": {
