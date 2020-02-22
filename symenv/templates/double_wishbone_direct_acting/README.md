@@ -1,4 +1,4 @@
-# DOUBLE WISHBONE BELL-CRANK ACTUATED
+# DOUBLE WISHBONE DIRECT ACTING
 
 **TEMPLATE-BASED TOPOLOGY**
 
@@ -10,15 +10,15 @@ A **double wishbone** mechanism is a type of  independent suspension mechanism u
 
 This kinematic chain is augmented with a another simple chain that controls the vertical motion of the wheel-assembly, this simple chain can be a direct-acting coil-over that is connected to either one of the control arms and the chassis, or can be a rocker-push/pull rod mechanism that is connected to the coil-over.
 
-![Figure 1 - System Layout](double_wishbone_bellcrank.png)
+![Figure 1 - System Layout](double_wishbone.png)
 
-*Figure 1 - System Layout*
+*Figure 1 - Double Wishbone Layout*
 
 --------------------------------------
 
 ### **Topology Layout**
 
-The mechanism consists of 9 Bodies. Therefore, total system coordinates is $n=n_b\times7 = 9\times7 = 63 $, where $n_b$ is the total number of bodies. [^1]
+The mechanism consists of 8 Bodies + 1 Ground. Therefore, total system coordinates -including the ground- is $n=n_b\times7 = 9\times7 = 63$, where $n_b$ is the total number of bodies. [^1]
 
 The list of bodies is given below:
 
@@ -27,38 +27,35 @@ The list of bodies is given below:
 - Upright.
 - Wheel Hub.
 - Tie-Rod.
-- Push-Rod.
-- Rocker.
 - CoilOver P1.
 - CoilOver P2.
+- Steering Rack.
 
 The system connectivity is given in the table below.
 
 <center>
 
-| Joint Name       | Body i      | Body j      | Joint Type  | $n_c$ |
-| :--------------- | :---------- | :---------- | :---------: | ----: |
-| UCA Outer Joint  | UCA         | Upright     |  Spherical  |     3 |
-| LCA Outer Joint  | LCA         | Upright     |  Spherical  |     3 |
-| Tie-Rod Outer    | Tie-Rod     | Upright     |  Spherical  |     3 |
-| PRod - Rocker    | Push-Rod    | Rocker      |  Spherical  |     3 |
-| Rocker - Chassis | Rocker      | Chassis     |  Revolute   |     5 |
-| UCA-Chassis      | UCA         | Chassis     |  Revolute   |     5 |
-| LCA-Chassis      | LCA         | Chassis     |  Revolute   |     5 |
-| Hub Bearing      | Wheel-Hub   | Upright     |  Revolute   |     5 |
-| Tie-Rod Inner    | Tie-Rod     | Chassis     |  Universal  |     4 |
-| PRod - UCA       | Push Rod    | UCA         |  Universal  |     4 |
-| CoilOver Top     | CoilOver P1 | Chassis     |  Universal  |     4 |
-| CoilOver Bottom  | CoilOver P2 | UCA         |  Universal  |     4 |
-| CoilOver Cyl     | CoilOver P1 | CoilOver P2 | Cylindrical |     4 |
-| **Total**        |             |             |             |    52 |
+| Joint Name      | Body i        | Body j      |  Joint Type   | $n_c$ |
+| :-------------- | :------------ | :---------- | :-----------: | ----: |
+| UCA Outer Joint | UCA           | Upright     |   Spherical   |     3 |
+| LCA Outer Joint | LCA           | Upright     |   Spherical   |     3 |
+| Tie-Rod Outer   | Tie-Rod       | Upright     |   Spherical   |     3 |
+| UCA-Chassis     | UCA           | Chassis     |   Revolute    |     5 |
+| LCA-Chassis     | LCA           | Chassis     |   Revolute    |     5 |
+| Hub Bearing     | Wheel-Hub     | Upright     |   Revolute    |     5 |
+| Tie-Rod Inner   | Tie-Rod       | Chassis     |   Universal   |     4 |
+| CoilOver Top    | CoilOver P1   | Chassis     |   Universal   |     4 |
+| CoilOver Bottom | CoilOver P2   | UCA         |   Universal   |     4 |
+| CoilOver Cyl    | CoilOver P1   | CoilOver P2 |  Cylindrical  |     4 |
+| Rack-Chassis    | Steering Rack | Chassis     | Translational |     5 |
+| **Total**       |               |             |               |    45 |
 
 </center>
 
 </br>
 
 Hence, the total number of constraints equations is:
-$$ n_{c} = n_{c_j} + n_{c_p} + n_{c_g} = 52 + (9\times 1) + 0 = 61 $$
+$$ n_{c} = n_{c_j} + n_{c_p} + n_{c_g} = 45 + (9\times 1) + 6 = 60 $$
 
 where:
 * $n_{c_j}$ is the joints constraints.
@@ -66,9 +63,9 @@ where:
 * $n_{c_g}$ is the ground constraints.
 
 Therefore, the resulting **DOF** is:
-$$ n - n_c = 63 - 61 = 2 $$
+$$ n - n_c = 63 - 60 = 3 $$
 
-which can be interpreted in a convenient way that one DOF is the rotational motion of the wheel, one is the vertical motion.
+which can be interpreted in a convenient way that one DOF is the rotational motion of the wheel, one is the vertical motion and one for the rack travel.
 
 ------------------------------------------------------
 <br/>
