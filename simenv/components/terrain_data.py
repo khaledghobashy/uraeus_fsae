@@ -19,7 +19,7 @@ class terrain(object):
    def get_state(self, x, y):
       return [normal, 0]
 
-
+""" 
 terrain_data = pd.read_csv(os.path.abspath('components/terrains/terrain_3.csv'))
 scale = 20
 x = np.unique(terrain_data['Px']) * scale
@@ -41,3 +41,4 @@ def terrain_state(x, y):
    values = [normal, hieght[0,0]]
    print(values)
    return values
+ """
