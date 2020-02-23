@@ -32,18 +32,18 @@ def drive_torque(P_hub, factor):
     return global_torque
 
 
-def FR_Torque():
+def FR_Torque(t):
     return 0
 
-def FL_Torque():
+def FL_Torque(t):
     return 0
 
-def RR_Torque():
-    factor = 1 if num_model.topology.t <= 3 else 0.5
+def RR_Torque(t):
+    factor = 1 if t <= 3 else 0.5
     return drive_torque(num_model.Subsystems.AX2.P_rbr_upright, factor)
 
-def RL_Torque():
-    factor = 1 if num_model.topology.t <= 3 else 0.5
+def RL_Torque(t):
+    factor = 1 if t <= 3 else 0.5
     return drive_torque(num_model.Subsystems.AX2.P_rbl_upright, factor)
 
 
@@ -70,13 +70,13 @@ num_assm.AX2_config.UF_fal_drive_T = RL_Torque
 
 num_assm.ST1_config.UF_mcs_rack_act = steering_function
 
-num_assm.AX1_config.UF_far_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
-num_assm.AX1_config.UF_fal_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
-num_assm.AX2_config.UF_far_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
-num_assm.AX2_config.UF_fal_drive_F = lambda : np.zeros((3,1), dtype=np.float64)
+num_assm.AX1_config.UF_far_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.AX1_config.UF_fal_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.AX2_config.UF_far_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.AX2_config.UF_fal_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
 
-num_assm.CH_config.UF_fas_aero_drag_F = lambda : np.zeros((3,1), dtype=np.float64)
-num_assm.CH_config.UF_fas_aero_drag_T = lambda : np.zeros((3,1), dtype=np.float64)
+num_assm.CH_config.UF_fas_aero_drag_F = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.CH_config.UF_fas_aero_drag_T = lambda t: np.zeros((3,1), dtype=np.float64)
 
 # =============================================================================
 #                       Setting and Starting Simulation
