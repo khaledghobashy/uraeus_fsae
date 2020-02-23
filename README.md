@@ -16,9 +16,13 @@ This repository aims to provide:
 
 *Brief about the uraeus framework*
 
+![vehicle visual](C:\khaledghobashy\github\uraeus_fsae\readme_materials\sample_vehicle_3D.png)
+
+*3D vehicle model loaded in uraeus visualization environment which is based on babylon.js*
+
 ### Features
 
-Currently, the database provides:
+Currently, the database provides several ready-to-use symbolic models and assemblies, as well as a numerical simulation environment in python that can be used perform various types of numerical simulations. 
 
 #### Symbolic Models
 These are various template-based symbolic topologies that represent different multi-body mechanisms that can be found in a typical **Formula Student** vehicle. 
