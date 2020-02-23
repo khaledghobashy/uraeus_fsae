@@ -545,40 +545,96 @@
                 "hpr_tri"
             ]
         },
-        "gmr_uca": {
-            "constructor": "Triangular_Prism",
+        "gmr_uca_c2": {
+            "constructor": "Cylinder_Geometry",
             "args": [
-                "hpr_ucaf",
                 "hpr_ucar",
                 "hpr_ucao",
-                "s_thickness"
+                "s_links_ro"
+            ]
+        },
+        "gmr_uca_c1": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpr_ucaf",
+                "hpr_ucao",
+                "s_links_ro"
+            ]
+        },
+        "gmr_uca": {
+            "constructor": "Composite_Geometry",
+            "args": [
+                "gmr_uca_c1",
+                "gmr_uca_c2"
+            ]
+        },
+        "gml_uca_c2": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpl_ucar",
+                "hpl_ucao",
+                "s_links_ro"
+            ]
+        },
+        "gml_uca_c1": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpl_ucaf",
+                "hpl_ucao",
+                "s_links_ro"
             ]
         },
         "gml_uca": {
-            "constructor": "Triangular_Prism",
+            "constructor": "Composite_Geometry",
             "args": [
-                "hpl_ucaf",
-                "hpl_ucar",
-                "hpl_ucao",
-                "s_thickness"
+                "gml_uca_c1",
+                "gml_uca_c2"
+            ]
+        },
+        "gmr_lca_c2": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpr_lcar",
+                "hpr_lcao",
+                "s_links_ro"
+            ]
+        },
+        "gmr_lca_c1": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpr_lcaf",
+                "hpr_lcao",
+                "s_links_ro"
             ]
         },
         "gmr_lca": {
-            "constructor": "Triangular_Prism",
+            "constructor": "Composite_Geometry",
             "args": [
-                "hpr_lcaf",
-                "hpr_lcar",
-                "hpr_lcao",
-                "s_thickness"
+                "gmr_lca_c1",
+                "gmr_lca_c2"
+            ]
+        },
+        "gml_lca_c2": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpl_lcar",
+                "hpl_lcao",
+                "s_links_ro"
+            ]
+        },
+        "gml_lca_c1": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpl_lcaf",
+                "hpl_lcao",
+                "s_links_ro"
             ]
         },
         "gml_lca": {
-            "constructor": "Triangular_Prism",
+            "constructor": "Composite_Geometry",
             "args": [
-                "hpl_lcaf",
-                "hpl_lcar",
-                "hpl_lcao",
-                "s_thickness"
+                "gml_lca_c1",
+                "gml_lca_c2"
             ]
         },
         "gmr_upright": {
