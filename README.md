@@ -1,10 +1,12 @@
 # **URAEUS** | FSAE
 
-A multi-body systems database for **FSAE** vehicles implemented in the **uraeus** open-source framework.
+A multi-body systems database for **FSAE**/**Formula Student** vehicles implemented in the **uraeus** open-source framework.
 
 ----------------
 
 ## Description
+
+*To-Do*
 
 This repository aims to provide:
 
@@ -18,7 +20,7 @@ This repository aims to provide:
 
 ![vehicle visual](readme_materials/sample_vehicle_3D.png)
 
-*3D vehicle model loaded in uraeus visualization environment which is based on babylon.js*
+*3D vehicle model loaded in uraeus visualization environment.*
 
 ### Features
 
