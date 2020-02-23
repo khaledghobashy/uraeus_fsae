@@ -16,7 +16,7 @@ This repository aims to provide:
 
 *Brief about the uraeus framework*
 
-![vehicle visual](C:\khaledghobashy\github\uraeus_fsae\readme_materials\sample_vehicle_3D.png)
+![vehicle visual](readme_materials\sample_vehicle_3D.png)
 
 *3D vehicle model loaded in uraeus visualization environment which is based on babylon.js*
 
