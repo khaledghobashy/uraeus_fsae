@@ -33,7 +33,7 @@ This repository aims to provide:
 
 *Brief about the uraeus framework*
 
-![vehicle visual](readme_materials/sample_vehicle_3D.png)
+![vehicle visual](readme_materials/sample_vehicle_3D_2.png)
 
 *3D vehicle model loaded in uraeus visualization environment.*
 
