@@ -1,10 +1,25 @@
 # **URAEUS** | FSAE
 
-A multi-body systems database for **FSAE**/**Formula Student** vehicles implemented in the **uraeus** open-source framework.
+A multi-body systems database for formula-style vehicles, such as those developed in the **FSAE** and the **Formula Student** competitions, implemented in the **uraeus** open-source framework.
 
 ----------------
 
-## Description
+## Introduction
+
+Formula Student is a series of competitions that challenge teams of university undergraduate and graduate students to conceive, design, fabricate, develop, and compete with small, formula-style vehicles.
+
+The design of such vehicles requires a lot of efforts in many aspects, as it is a full real-life engineering project. One of the main technical challenges encountered in this project, is the adoption of engineering simulations to acquire valuable insights and accurate predictions of the vehicle performance in the various dynamics events.
+
+These simulations can be categorized in various ways, such as their governing physical domains, i.e. Computational Fluid Dynamics, Finite Element Analysis, Thermal Analysis, Multi-Body Dynamics, Electromagnetism, etc.
+While the real physical system encounters all these domains at once, it can be almost impossible to include all these interactions together in a single simulation instance. So, we adopt the concept of abstraction to simplify things out, in a sensible way, in order to achieve useful descriptions of the physical system that can be used to acquire valuable insights.
+
+Vehicle dynamics is a major field of study when it comes to modelling and simulating vehicle performance regarding isolation and control. Traditionally, these performance aspects were analysed using classical vehicle dynamics approaches that are developed for ages and proved to be quite helpful and insightful.
+
+Another way of approaching the problem is by treating the vehicle as a generic multi-body system, where the vehicle systems of interest are modelled as rigid/flexible bodies connected together via joints, bushes and force elements.
+
+*To be Continued ...*
+
+## About The Repository
 
 *To-Do*
 
@@ -28,7 +43,7 @@ Currently, the database provides several ready-to-use symbolic models and assemb
 
 #### Symbolic Models
 These are various template-based symbolic topologies that represent different multi-body mechanisms that can be found in a typical **Formula Student** vehicle. 
-This is a list of the currently modelled topologies:
+This is a list of the currently available topologies:
 
 - **Suspension Mechanisms**:
   - Double Wishbone Direct-Acting mechanism
@@ -43,7 +58,7 @@ This is a list of the currently modelled topologies:
 
 #### Symbolic Assemblies
 
-These are symbolic topologies that assemble various template-based models together, constructing a bigger multi-body system, such as full-vehicle assemblies and suspension test-rigs.
+Symbolic Assemblies are topologies that assemble various template-based models together, constructing a bigger multi-body system, such as full-vehicle assemblies and suspension test-rigs.
 
 - **Full-vehicle Assembly**
   A symbolic assembly representing a full-vehicle with the following subsystems:
