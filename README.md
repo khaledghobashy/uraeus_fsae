@@ -37,6 +37,10 @@ This repository aims to provide:
 
 *3D vehicle model loaded in uraeus visualization environment.*
 
+![Tilt table test](readme_materials/tilt_table_test.gif)
+
+*Vehicle performing a tilt table test*
+
 ### Features
 
 Currently, the database provides several ready-to-use symbolic models and assemblies, as well as a numerical simulation environment in python that can be used perform various types of numerical simulations. 
