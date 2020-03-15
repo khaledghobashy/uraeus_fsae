@@ -64,11 +64,14 @@ AX2_config.vcs_x.flat[:] = [1, 0, 0]
 AX2_config.vcs_y.flat[:] = [0, 1, 0]
 AX2_config.vcs_z.flat[:] = [0, 0, 1]
 
-AX2_config.s_hub_radius  = TR
+AX2_config.s_tire_radius = TR
+AX2_config.s_hub_radius  = 0.3 * TR
 AX2_config.s_links_ro    = 8
 AX2_config.s_strut_inner = 15
 AX2_config.s_strut_outer = 22
 AX2_config.s_thickness   = 8
+
+#AX2_config.ax1_far_drive = AX2_config.vcs_y
 
 
 # Loading data into the configuration instance
@@ -92,11 +95,13 @@ AX2_config.m_rbl_hub = 11*1e3
 # =============================================================================
 
 def strut_spring(x):
+    x = float(x)
     k = 75*1e6
     force = k * x if x >0 else 0
     return force
 
 def strut_damping(v):
+    v = v[0,0]
     force = 3*1e6 * v
     return force
 

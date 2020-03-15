@@ -11,18 +11,11 @@ database_directory = os.path.abspath('../../')
 sys.path.append(database_directory)
 
 from uraeus_fsae.simenv.assemblies import asurt_FS17 as num_assm
-from uraeus_fsae.simenv.assemblies.asurt_FS17 import num_model
+
+num_model = num_assm.num_model
 
 dt = num_assm.dt
 TR = 254
-
-def drive_torque(P_hub, factor):
-    local_torque = np.array([[0],
-                             [-factor*(70*9.81)*1e6*TR],
-                             [0]])
-    global_torque = A(P_hub).dot(local_torque)
-    return global_torque
-
 
 def FR_Torque(t):
     return 0
@@ -32,48 +25,47 @@ def FL_Torque(t):
 
 def RR_Torque(t):
     factor = 1 if t <= 4 else 0
-    return drive_torque(num_model.Subsystems.AX2.P_rbr_upright, factor)
+    torque = -factor*(70*9.81)*1e6*TR
+    return torque
 
 def RL_Torque(t):
-    factor = 1 if t <= 4 else 0.5
-    return drive_torque(num_model.Subsystems.AX2.P_rbl_upright, factor)
-
+    factor = 1 if t <= 4 else 0
+    torque = -factor*(70*9.81)*1e6*TR
+    return torque
 
 def steering_function(t):
     return 0
 
+def zero_func(t):
+    return np.zeros((3, 1), dtype=np.float64)
+
+num_assm.terrain_data.get_state = terrain_state
+
 num_assm.ST1_config.UF_mcs_rack_act = steering_function
 
-num_assm.AX1_config.UF_far_drive_T = FR_Torque
-num_assm.AX1_config.UF_fal_drive_T = FL_Torque
-num_assm.AX2_config.UF_far_drive_T = RR_Torque
-num_assm.AX2_config.UF_fal_drive_T = RL_Torque
+num_assm.AX1_config.UF_far_drive = FR_Torque
+num_assm.AX1_config.UF_fal_drive = FL_Torque
+num_assm.AX2_config.UF_far_drive = RR_Torque
+num_assm.AX2_config.UF_fal_drive = RL_Torque
 
-num_assm.AX1_config.UF_far_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
-num_assm.AX1_config.UF_fal_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
-num_assm.AX2_config.UF_far_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
-num_assm.AX2_config.UF_fal_drive_F = lambda t: np.zeros((3,1), dtype=np.float64)
-
-num_assm.CH_config.UF_fas_aero_drag_F = lambda t: np.zeros((3,1), dtype=np.float64)
-num_assm.CH_config.UF_fas_aero_drag_T = lambda t: np.zeros((3,1), dtype=np.float64)
+num_assm.CH_config.UF_fas_aero_drag_F = zero_func
+num_assm.CH_config.UF_fas_aero_drag_T = zero_func
 
 # =============================================================================
 #                       Setting and Starting Simulation
 # =============================================================================
 
+sim = simulation('sim', num_model, 'dds')
+sim.set_time_array(5, dt)
+
 # Getting Equilibrium results as initial conditions to this simulation
 # ====================================================================
-equlibrium_results = pd.read_csv('results/equilibrium_v1.csv', index_col=0)
-q0 = equlibrium_results.iloc[-1][:-1][:,np.newaxis]
+sim.set_initial_states('results/equilibrium_v1.npz')
 
-sim = simulation('sim', num_model, 'dds')
-
-sim.soln.set_initial_states(q0, 0*q0)
-
-sim.set_time_array(5, dt)
 sim.solve()
 
-sim.save_results('results', 'acc_1')
+sim.save_as_csv('results', 'acceleration_v1')
+sim.save_as_npz('results', 'acceleration_v1')
 
 #=============================================================================
 #                       Plotting Simulation Results

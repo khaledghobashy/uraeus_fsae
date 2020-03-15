@@ -1,0 +1,339 @@
+{
+    "information": {
+        "topology_name": "steering_wheel",
+        "configuration_name": "steering_wheel_cfg",
+        "subsystem_name": ""
+    },
+    "user_inputs": {
+        "UF_mcs_hand_wheel": {
+            "constructor": "Lambda",
+            "args": [
+                [
+                    "t"
+                ],
+                0.0
+            ]
+        },
+        "Rd_rbs_input_shaft": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pd_rbs_input_shaft": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Rdd_rbs_input_shaft": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pdd_rbs_input_shaft": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Rd_rbs_connect_shaft": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pd_rbs_connect_shaft": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Rdd_rbs_connect_shaft": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pdd_rbs_connect_shaft": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Rd_rbs_output_shaft": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pd_rbs_output_shaft": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Rdd_rbs_output_shaft": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pdd_rbs_output_shaft": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "hps_a": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "hps_b": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "hps_c": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "hps_d": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "s_links_radius": 1.0,
+        "s_handwheel_radius": 1.0
+    },
+    "evaluations": {
+        "gms_input_shaft": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hps_a",
+                "hps_b",
+                "s_links_radius"
+            ]
+        },
+        "gms_connect_shaft": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hps_b",
+                "hps_c",
+                "s_links_radius"
+            ]
+        },
+        "gms_output_shaft": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hps_c",
+                "hps_d",
+                "s_links_radius"
+            ]
+        }
+    },
+    "outputs": {
+        "ax1_jcs_input_bearing": {
+            "constructor": "Oriented",
+            "args": [
+                "hps_a",
+                "hps_b"
+            ]
+        },
+        "pt1_jcs_input_bearing": {
+            "constructor": "Centered",
+            "args": [
+                "hps_a",
+                "hps_b"
+            ]
+        },
+        "ax1_jcs_input_connect": {
+            "constructor": "Oriented",
+            "args": [
+                "hps_a",
+                "hps_b"
+            ]
+        },
+        "ax2_jcs_input_connect": {
+            "constructor": "Oriented",
+            "args": [
+                "hps_b",
+                "hps_c"
+            ]
+        },
+        "pt1_jcs_input_connect": {
+            "constructor": "Centered",
+            "args": [
+                "hps_b"
+            ]
+        },
+        "ax1_jcs_output_connect": {
+            "constructor": "Oriented",
+            "args": [
+                "hps_b",
+                "hps_c"
+            ]
+        },
+        "ax2_jcs_output_connect": {
+            "constructor": "Oriented",
+            "args": [
+                "hps_c",
+                "hps_d"
+            ]
+        },
+        "pt1_jcs_output_connect": {
+            "constructor": "Centered",
+            "args": [
+                "hps_c"
+            ]
+        },
+        "ax1_jcs_output_bearing": {
+            "constructor": "Oriented",
+            "args": [
+                "hps_c",
+                "hps_d"
+            ]
+        },
+        "pt1_jcs_output_bearing": {
+            "constructor": "Centered",
+            "args": [
+                "hps_c",
+                "hps_d"
+            ]
+        },
+        "R_rbs_input_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_input_shaft",
+                "R"
+            ]
+        },
+        "P_rbs_input_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_input_shaft",
+                "P"
+            ]
+        },
+        "m_rbs_input_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_input_shaft",
+                "m"
+            ]
+        },
+        "Jbar_rbs_input_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_input_shaft",
+                "J"
+            ]
+        },
+        "R_rbs_connect_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_connect_shaft",
+                "R"
+            ]
+        },
+        "P_rbs_connect_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_connect_shaft",
+                "P"
+            ]
+        },
+        "m_rbs_connect_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_connect_shaft",
+                "m"
+            ]
+        },
+        "Jbar_rbs_connect_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_connect_shaft",
+                "J"
+            ]
+        },
+        "R_rbs_output_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_output_shaft",
+                "R"
+            ]
+        },
+        "P_rbs_output_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_output_shaft",
+                "P"
+            ]
+        },
+        "m_rbs_output_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_output_shaft",
+                "m"
+            ]
+        },
+        "Jbar_rbs_output_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_output_shaft",
+                "J"
+            ]
+        }
+    },
+    "geometries_map": {
+        "gms_input_shaft": "rbs_input_shaft",
+        "gms_connect_shaft": "rbs_connect_shaft",
+        "gms_output_shaft": "rbs_output_shaft"
+    }
+}

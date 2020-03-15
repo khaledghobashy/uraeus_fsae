@@ -5,24 +5,6 @@
         "subsystem_name": "AX1"
     },
     "user_inputs": {
-        "UF_far_strut_Fs": {
-            "constructor": "Lambda",
-            "args": [
-                [
-                    "t"
-                ],
-                0.0
-            ]
-        },
-        "UF_far_strut_Fd": {
-            "constructor": "Lambda",
-            "args": [
-                [
-                    "t"
-                ],
-                0.0
-            ]
-        },
         "UF_far_tire_F": {
             "constructor": "Lambda",
             "args": [
@@ -49,7 +31,7 @@
                 254.0
             ]
         },
-        "UF_far_drive_F": {
+        "UF_far_drive": {
             "constructor": "Lambda",
             "args": [
                 [
@@ -58,7 +40,7 @@
                 0.0
             ]
         },
-        "UF_far_drive_T": {
+        "UF_far_strut_Fs": {
             "constructor": "Lambda",
             "args": [
                 [
@@ -67,11 +49,12 @@
                 0.0
             ]
         },
-        "pt1_far_drive": {
-            "constructor": "array",
+        "UF_far_strut_Fd": {
+            "constructor": "Lambda",
             "args": [
-                0.0,
-                0.0,
+                [
+                    "t"
+                ],
                 0.0
             ]
         },
@@ -169,6 +152,74 @@
             ]
         },
         "Pdd_rbr_upright": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Rd_rbr_tie_rod": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pd_rbr_tie_rod": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Rdd_rbr_tie_rod": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pdd_rbr_tie_rod": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Rd_rbr_hub": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pd_rbr_hub": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Rdd_rbr_hub": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pdd_rbr_hub": {
             "constructor": "array",
             "args": [
                 0.0,
@@ -305,74 +356,6 @@
             ]
         },
         "Pdd_rbr_lower_strut": {
-            "constructor": "array",
-            "args": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "Rd_rbr_tie_rod": {
-            "constructor": "array",
-            "args": [
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "Pd_rbr_tie_rod": {
-            "constructor": "array",
-            "args": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "Rdd_rbr_tie_rod": {
-            "constructor": "array",
-            "args": [
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "Pdd_rbr_tie_rod": {
-            "constructor": "array",
-            "args": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "Rd_rbr_hub": {
-            "constructor": "array",
-            "args": [
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "Pd_rbr_hub": {
-            "constructor": "array",
-            "args": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "Rdd_rbr_hub": {
-            "constructor": "array",
-            "args": [
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "Pdd_rbr_hub": {
             "constructor": "array",
             "args": [
                 0.0,
@@ -538,7 +521,8 @@
         "s_strut_outer": 22,
         "s_strut_inner": 15,
         "s_thickness": 8,
-        "s_hub_radius": 254
+        "s_hub_radius": 76.2,
+        "s_tire_radius": 254
     },
     "evaluations": {
         "hpl_ucao": {
@@ -595,6 +579,18 @@
                 "hpr_wc"
             ]
         },
+        "hpl_tro": {
+            "constructor": "Mirrored",
+            "args": [
+                "hpr_tro"
+            ]
+        },
+        "hpl_tri": {
+            "constructor": "Mirrored",
+            "args": [
+                "hpr_tri"
+            ]
+        },
         "hpl_strut_rocker": {
             "constructor": "Mirrored",
             "args": [
@@ -625,18 +621,6 @@
             "args": [
                 "hpl_strut_chassis",
                 "hpl_strut_rocker"
-            ]
-        },
-        "hpl_tro": {
-            "constructor": "Mirrored",
-            "args": [
-                "hpr_tro"
-            ]
-        },
-        "hpl_tri": {
-            "constructor": "Mirrored",
-            "args": [
-                "hpr_tri"
             ]
         },
         "gmr_uca_c2": {
@@ -749,6 +733,80 @@
                 "s_thickness"
             ]
         },
+        "gmr_tie_rod": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpr_tri",
+                "hpr_tro",
+                "s_links_ro"
+            ]
+        },
+        "gml_tie_rod": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpl_tri",
+                "hpl_tro",
+                "s_links_ro"
+            ]
+        },
+        "gmr_tire": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpr_wc1",
+                "hpr_wc",
+                "s_tire_radius"
+            ]
+        },
+        "gmr_hub_cyl": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpr_wc2",
+                "hpr_wc",
+                "s_hub_radius"
+            ]
+        },
+        "gmr_hub": {
+            "constructor": "Composite_Geometry",
+            "args": [
+                "gmr_hub_cyl",
+                "gmr_tire"
+            ]
+        },
+        "hpl_wc1": {
+            "constructor": "Mirrored",
+            "args": [
+                "hpr_wc1"
+            ]
+        },
+        "hpl_wc2": {
+            "constructor": "Mirrored",
+            "args": [
+                "hpr_wc2"
+            ]
+        },
+        "gml_tire": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpl_wc1",
+                "hpl_wc",
+                "s_tire_radius"
+            ]
+        },
+        "gml_hub_cyl": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpl_wc2",
+                "hpl_wc",
+                "s_hub_radius"
+            ]
+        },
+        "gml_hub": {
+            "constructor": "Composite_Geometry",
+            "args": [
+                "gml_hub_cyl",
+                "gml_tire"
+            ]
+        },
         "gmr_pushrod": {
             "constructor": "Cylinder_Geometry",
             "args": [
@@ -813,50 +871,6 @@
                 "hpl_strut_mid",
                 "hpl_strut_rocker",
                 "s_strut_inner"
-            ]
-        },
-        "gmr_tie_rod": {
-            "constructor": "Cylinder_Geometry",
-            "args": [
-                "hpr_tri",
-                "hpr_tro",
-                "s_links_ro"
-            ]
-        },
-        "gml_tie_rod": {
-            "constructor": "Cylinder_Geometry",
-            "args": [
-                "hpl_tri",
-                "hpl_tro",
-                "s_links_ro"
-            ]
-        },
-        "gmr_hub": {
-            "constructor": "Cylinder_Geometry",
-            "args": [
-                "hpr_wc1",
-                "hpr_wc2",
-                "s_hub_radius"
-            ]
-        },
-        "hpl_wc2": {
-            "constructor": "Mirrored",
-            "args": [
-                "hpr_wc2"
-            ]
-        },
-        "hpl_wc1": {
-            "constructor": "Mirrored",
-            "args": [
-                "hpr_wc1"
-            ]
-        },
-        "gml_hub": {
-            "constructor": "Cylinder_Geometry",
-            "args": [
-                "hpl_wc1",
-                "hpl_wc2",
-                "s_hub_radius"
             ]
         }
     },
@@ -959,6 +973,51 @@
         "ax1_jcl_hub_bearing": "vcs_y",
         "pt1_jcr_hub_bearing": "hpr_wc",
         "pt1_jcl_hub_bearing": "hpl_wc",
+        "ax1_jcr_tie_upright": "hpr_tro",
+        "ax1_jcl_tie_upright": "hpl_tro",
+        "pt1_jcr_tie_upright": "hpr_tro",
+        "pt1_jcl_tie_upright": "hpl_tro",
+        "ax1_jcr_tie_steering": {
+            "constructor": "Oriented",
+            "args": [
+                "hpr_tri",
+                "hpr_tro"
+            ]
+        },
+        "ax1_jcl_tie_steering": {
+            "constructor": "Oriented",
+            "args": [
+                "hpl_tri",
+                "hpl_tro"
+            ]
+        },
+        "ax2_jcr_tie_steering": {
+            "constructor": "Oriented",
+            "args": [
+                "hpr_tro",
+                "hpr_tri"
+            ]
+        },
+        "ax2_jcl_tie_steering": {
+            "constructor": "Oriented",
+            "args": [
+                "hpl_tro",
+                "hpl_tri"
+            ]
+        },
+        "pt1_jcr_tie_steering": "hpr_tri",
+        "pt1_jcl_tie_steering": "hpl_tri",
+        "UF_fal_tire_F": "UF_far_tire_F",
+        "UF_fal_tire_T": "UF_far_tire_T",
+        "pt1_fal_tire": {
+            "constructor": "Mirrored",
+            "args": [
+                "pt1_far_tire"
+            ]
+        },
+        "UF_fal_drive": "UF_far_drive",
+        "ax1_far_drive": "vcs_y",
+        "ax1_fal_drive": "vcs_y",
         "ax1_jcr_prod_rocker": "hpr_pushrod_rocker",
         "ax1_jcl_prod_rocker": "hpl_pushrod_rocker",
         "pt1_jcr_prod_rocker": "hpr_pushrod_rocker",
@@ -1065,56 +1124,6 @@
         },
         "pt1_jcr_strut_rocker": "hpr_strut_rocker",
         "pt1_jcl_strut_rocker": "hpl_strut_rocker",
-        "ax1_jcr_tie_upright": "hpr_tro",
-        "ax1_jcl_tie_upright": "hpl_tro",
-        "pt1_jcr_tie_upright": "hpr_tro",
-        "pt1_jcl_tie_upright": "hpl_tro",
-        "ax1_jcr_tie_steering": {
-            "constructor": "Oriented",
-            "args": [
-                "hpr_tri",
-                "hpr_tro"
-            ]
-        },
-        "ax1_jcl_tie_steering": {
-            "constructor": "Oriented",
-            "args": [
-                "hpl_tri",
-                "hpl_tro"
-            ]
-        },
-        "ax2_jcr_tie_steering": {
-            "constructor": "Oriented",
-            "args": [
-                "hpr_tro",
-                "hpr_tri"
-            ]
-        },
-        "ax2_jcl_tie_steering": {
-            "constructor": "Oriented",
-            "args": [
-                "hpl_tro",
-                "hpl_tri"
-            ]
-        },
-        "pt1_jcr_tie_steering": "hpr_tri",
-        "pt1_jcl_tie_steering": "hpl_tri",
-        "UF_fal_tire_F": "UF_far_tire_F",
-        "UF_fal_tire_T": "UF_far_tire_T",
-        "pt1_fal_tire": {
-            "constructor": "Mirrored",
-            "args": [
-                "pt1_far_tire"
-            ]
-        },
-        "UF_fal_drive_F": "UF_far_drive_F",
-        "UF_fal_drive_T": "UF_far_drive_T",
-        "pt1_fal_drive": {
-            "constructor": "Mirrored",
-            "args": [
-                "pt1_far_drive"
-            ]
-        },
         "R_rbr_uca": {
             "constructor": "getattribute",
             "args": [
@@ -1352,6 +1361,166 @@
             "constructor": "getattribute",
             "args": [
                 "gml_upright",
+                "J"
+            ]
+        },
+        "R_rbr_tie_rod": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_tie_rod",
+                "R"
+            ]
+        },
+        "R_rbl_tie_rod": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_tie_rod",
+                "R"
+            ]
+        },
+        "P_rbr_tie_rod": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_tie_rod",
+                "P"
+            ]
+        },
+        "P_rbl_tie_rod": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_tie_rod",
+                "P"
+            ]
+        },
+        "Rd_rbl_tie_rod": {
+            "constructor": "Mirrored",
+            "args": [
+                "Rd_rbr_tie_rod"
+            ]
+        },
+        "Pd_rbl_tie_rod": {
+            "constructor": "Mirrored",
+            "args": [
+                "Pd_rbr_tie_rod"
+            ]
+        },
+        "Rdd_rbl_tie_rod": {
+            "constructor": "Mirrored",
+            "args": [
+                "Rdd_rbr_tie_rod"
+            ]
+        },
+        "Pdd_rbl_tie_rod": {
+            "constructor": "Mirrored",
+            "args": [
+                "Pdd_rbr_tie_rod"
+            ]
+        },
+        "m_rbr_tie_rod": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_tie_rod",
+                "m"
+            ]
+        },
+        "m_rbl_tie_rod": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_tie_rod",
+                "m"
+            ]
+        },
+        "Jbar_rbr_tie_rod": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_tie_rod",
+                "J"
+            ]
+        },
+        "Jbar_rbl_tie_rod": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_tie_rod",
+                "J"
+            ]
+        },
+        "R_rbr_hub": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_hub",
+                "R"
+            ]
+        },
+        "R_rbl_hub": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_hub",
+                "R"
+            ]
+        },
+        "P_rbr_hub": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_hub",
+                "P"
+            ]
+        },
+        "P_rbl_hub": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_hub",
+                "P"
+            ]
+        },
+        "Rd_rbl_hub": {
+            "constructor": "Mirrored",
+            "args": [
+                "Rd_rbr_hub"
+            ]
+        },
+        "Pd_rbl_hub": {
+            "constructor": "Mirrored",
+            "args": [
+                "Pd_rbr_hub"
+            ]
+        },
+        "Rdd_rbl_hub": {
+            "constructor": "Mirrored",
+            "args": [
+                "Rdd_rbr_hub"
+            ]
+        },
+        "Pdd_rbl_hub": {
+            "constructor": "Mirrored",
+            "args": [
+                "Pdd_rbr_hub"
+            ]
+        },
+        "m_rbr_hub": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_hub",
+                "m"
+            ]
+        },
+        "m_rbl_hub": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_hub",
+                "m"
+            ]
+        },
+        "Jbar_rbr_hub": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_hub",
+                "J"
+            ]
+        },
+        "Jbar_rbl_hub": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_hub",
                 "J"
             ]
         },
@@ -1672,166 +1841,6 @@
             "constructor": "getattribute",
             "args": [
                 "gml_lower_strut",
-                "J"
-            ]
-        },
-        "R_rbr_tie_rod": {
-            "constructor": "getattribute",
-            "args": [
-                "gmr_tie_rod",
-                "R"
-            ]
-        },
-        "R_rbl_tie_rod": {
-            "constructor": "getattribute",
-            "args": [
-                "gml_tie_rod",
-                "R"
-            ]
-        },
-        "P_rbr_tie_rod": {
-            "constructor": "getattribute",
-            "args": [
-                "gmr_tie_rod",
-                "P"
-            ]
-        },
-        "P_rbl_tie_rod": {
-            "constructor": "getattribute",
-            "args": [
-                "gml_tie_rod",
-                "P"
-            ]
-        },
-        "Rd_rbl_tie_rod": {
-            "constructor": "Mirrored",
-            "args": [
-                "Rd_rbr_tie_rod"
-            ]
-        },
-        "Pd_rbl_tie_rod": {
-            "constructor": "Mirrored",
-            "args": [
-                "Pd_rbr_tie_rod"
-            ]
-        },
-        "Rdd_rbl_tie_rod": {
-            "constructor": "Mirrored",
-            "args": [
-                "Rdd_rbr_tie_rod"
-            ]
-        },
-        "Pdd_rbl_tie_rod": {
-            "constructor": "Mirrored",
-            "args": [
-                "Pdd_rbr_tie_rod"
-            ]
-        },
-        "m_rbr_tie_rod": {
-            "constructor": "getattribute",
-            "args": [
-                "gmr_tie_rod",
-                "m"
-            ]
-        },
-        "m_rbl_tie_rod": {
-            "constructor": "getattribute",
-            "args": [
-                "gml_tie_rod",
-                "m"
-            ]
-        },
-        "Jbar_rbr_tie_rod": {
-            "constructor": "getattribute",
-            "args": [
-                "gmr_tie_rod",
-                "J"
-            ]
-        },
-        "Jbar_rbl_tie_rod": {
-            "constructor": "getattribute",
-            "args": [
-                "gml_tie_rod",
-                "J"
-            ]
-        },
-        "R_rbr_hub": {
-            "constructor": "getattribute",
-            "args": [
-                "gmr_hub",
-                "R"
-            ]
-        },
-        "R_rbl_hub": {
-            "constructor": "getattribute",
-            "args": [
-                "gml_hub",
-                "R"
-            ]
-        },
-        "P_rbr_hub": {
-            "constructor": "getattribute",
-            "args": [
-                "gmr_hub",
-                "P"
-            ]
-        },
-        "P_rbl_hub": {
-            "constructor": "getattribute",
-            "args": [
-                "gml_hub",
-                "P"
-            ]
-        },
-        "Rd_rbl_hub": {
-            "constructor": "Mirrored",
-            "args": [
-                "Rd_rbr_hub"
-            ]
-        },
-        "Pd_rbl_hub": {
-            "constructor": "Mirrored",
-            "args": [
-                "Pd_rbr_hub"
-            ]
-        },
-        "Rdd_rbl_hub": {
-            "constructor": "Mirrored",
-            "args": [
-                "Rdd_rbr_hub"
-            ]
-        },
-        "Pdd_rbl_hub": {
-            "constructor": "Mirrored",
-            "args": [
-                "Pdd_rbr_hub"
-            ]
-        },
-        "m_rbr_hub": {
-            "constructor": "getattribute",
-            "args": [
-                "gmr_hub",
-                "m"
-            ]
-        },
-        "m_rbl_hub": {
-            "constructor": "getattribute",
-            "args": [
-                "gml_hub",
-                "m"
-            ]
-        },
-        "Jbar_rbr_hub": {
-            "constructor": "getattribute",
-            "args": [
-                "gmr_hub",
-                "J"
-            ]
-        },
-        "Jbar_rbl_hub": {
-            "constructor": "getattribute",
-            "args": [
-                "gml_hub",
                 "J"
             ]
         }

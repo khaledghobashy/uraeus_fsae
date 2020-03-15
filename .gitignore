@@ -10,3 +10,4 @@
 **/*.blmbs
 **/visualization
 **/results/*.csv
+**/results/*.npz

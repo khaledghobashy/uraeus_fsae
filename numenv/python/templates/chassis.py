@@ -62,8 +62,8 @@ class topology(object):
 
         self.F_rbs_chassis_gravity = np.array([[0], [0], [-9810.0*config.m_rbs_chassis]], dtype=np.float64)
 
-        self.ubar_rbs_chassis_fas_aero_drag = (multi_dot([A(config.P_rbs_chassis).T,config.pt1_fas_aero_drag]) + -1*multi_dot([A(config.P_rbs_chassis).T,config.R_rbs_chassis]))
-        self.ubar_vbs_ground_fas_aero_drag = (multi_dot([A(config.P_vbs_ground).T,config.pt1_fas_aero_drag]) + -1*multi_dot([A(config.P_vbs_ground).T,config.R_vbs_ground]))
+        self.ubar_rbs_chassis_fas_aero_drag = (multi_dot([A(config.P_rbs_chassis).T,config.pt1_fas_aero_drag]) + (-1) * multi_dot([A(config.P_rbs_chassis).T,config.R_rbs_chassis]))
+        self.ubar_vbs_ground_fas_aero_drag = (multi_dot([A(config.P_vbs_ground).T,config.pt1_fas_aero_drag]) + (-1) * multi_dot([A(config.P_vbs_ground).T,config.R_vbs_ground]))
 
     
     def set_gen_coordinates(self,q):
@@ -91,7 +91,7 @@ class topology(object):
 
         x0 = self.P_rbs_chassis
 
-        self.pos_eq_blocks = ((-1*np.eye(1, dtype=np.float64) + multi_dot([x0.T,x0])),)
+        self.pos_eq_blocks = (((-1) * np.eye(1, dtype=np.float64) + multi_dot([x0.T,x0])),)
 
     
     def eval_vel_eq(self):
@@ -109,7 +109,7 @@ class topology(object):
 
         a0 = self.Pd_rbs_chassis
 
-        self.acc_eq_blocks = (2*multi_dot([a0.T,a0]),)
+        self.acc_eq_blocks = ((2) * multi_dot([a0.T,a0]),)
 
     
     def eval_jac_eq(self):
@@ -119,7 +119,7 @@ class topology(object):
     
 
         self.jac_eq_blocks = (np.zeros((1,3),dtype=np.float64),
-        2*self.P_rbs_chassis.T,)
+        (2) * self.P_rbs_chassis.T,)
 
     
     def eval_mass_eq(self):
@@ -128,8 +128,8 @@ class topology(object):
 
         m0 = G(self.P_rbs_chassis)
 
-        self.mass_eq_blocks = (config.m_rbs_chassis*np.eye(3, dtype=np.float64),
-        4*multi_dot([m0.T,config.Jbar_rbs_chassis,m0]),)
+        self.mass_eq_blocks = (config.m_rbs_chassis * np.eye(3, dtype=np.float64),
+        (4) * multi_dot([m0.T,config.Jbar_rbs_chassis,m0]),)
 
     
     def eval_frc_eq(self):
@@ -142,7 +142,7 @@ class topology(object):
         f3 = self.P_rbs_chassis
 
         self.frc_eq_blocks = ((self.F_rbs_chassis_gravity + f1),
-        (8*multi_dot([f2.T,config.Jbar_rbs_chassis,f2,f3]) + 2*multi_dot([G(f3).T,(config.UF_fas_aero_drag_T(f0) + multi_dot([skew(multi_dot([A(f3),self.ubar_rbs_chassis_fas_aero_drag])).T,f1]))])),)
+        ((8) * multi_dot([f2.T,config.Jbar_rbs_chassis,f2,f3]) + (2) * multi_dot([E(f3).T,(config.UF_fas_aero_drag_T(f0) + multi_dot([skew(multi_dot([A(f3),self.ubar_rbs_chassis_fas_aero_drag])),f1]))])),)
 
     
     def eval_reactions_eq(self):
