@@ -26,7 +26,7 @@ CH_config.s_CG_radius = 80
 # Loading data into the configuration instance
 CH_config.assemble()
 
-CH_config.m_rbs_chassis = 280*1e3
+CH_config.m_rbs_chassis = 250*1e3
 CH_config.Jbar_rbs_chassis = np.array([[120*1e9 , 0, 0   ],
                                        [0   , 150*1e9 ,0 ],
                                        [0   , 0, 150*1e9 ]])

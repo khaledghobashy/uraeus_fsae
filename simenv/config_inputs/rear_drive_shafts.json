@@ -1,0 +1,572 @@
+{
+    "information": {
+        "topology_name": "drive_shafts",
+        "configuration_name": "drive_shafts_cfg",
+        "subsystem_name": "DR2"
+    },
+    "user_inputs": {
+        "UF_far_drive": {
+            "constructor": "Lambda",
+            "args": [
+                [
+                    "t"
+                ],
+                0.0
+            ]
+        },
+        "Rd_rbr_inner_shaft": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pd_rbr_inner_shaft": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Rdd_rbr_inner_shaft": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pdd_rbr_inner_shaft": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Rd_rbr_coupling_inner": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pd_rbr_coupling_inner": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Rdd_rbr_coupling_inner": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pdd_rbr_coupling_inner": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Rd_rbr_coupling_outer": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pd_rbr_coupling_outer": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Rdd_rbr_coupling_outer": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "Pdd_rbr_coupling_outer": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "hpr_inner_cv": {
+            "constructor": "array",
+            "args": [
+                1600.0,
+                100.0,
+                274.0
+            ]
+        },
+        "hpr_outer_cv": {
+            "constructor": "array",
+            "args": [
+                1600.0,
+                425.0,
+                254.0
+            ]
+        },
+        "hpr_diff_input": {
+            "constructor": "array",
+            "args": [
+                1600.0,
+                50.0,
+                274.0
+            ]
+        },
+        "vcs_x": {
+            "constructor": "array",
+            "args": [
+                1.0,
+                0.0,
+                0.0
+            ]
+        },
+        "vcs_y": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                1.0,
+                0.0
+            ]
+        },
+        "vcs_z": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "s_shafts_radius": 15
+    },
+    "evaluations": {
+        "hpl_diff_input": {
+            "constructor": "Mirrored",
+            "args": [
+                "hpr_diff_input"
+            ]
+        },
+        "hpl_inner_cv": {
+            "constructor": "Mirrored",
+            "args": [
+                "hpr_inner_cv"
+            ]
+        },
+        "hpl_outer_cv": {
+            "constructor": "Mirrored",
+            "args": [
+                "hpr_outer_cv"
+            ]
+        },
+        "hpr_coupling_mid": {
+            "constructor": "Centered",
+            "args": [
+                "hpr_inner_cv",
+                "hpr_outer_cv"
+            ]
+        },
+        "hpl_coupling_mid": {
+            "constructor": "Centered",
+            "args": [
+                "hpl_inner_cv",
+                "hpl_outer_cv"
+            ]
+        },
+        "gmr_inner_shaft": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpr_diff_input",
+                "hpr_inner_cv",
+                "s_shafts_radius"
+            ]
+        },
+        "gml_inner_shaft": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpl_diff_input",
+                "hpl_inner_cv",
+                "s_shafts_radius"
+            ]
+        },
+        "gmr_coupling_inner": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpr_inner_cv",
+                "hpr_coupling_mid",
+                "s_shafts_radius"
+            ]
+        },
+        "gml_coupling_inner": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpl_inner_cv",
+                "hpl_coupling_mid",
+                "s_shafts_radius"
+            ]
+        },
+        "gmr_coupling_outer": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpr_coupling_mid",
+                "hpr_outer_cv",
+                "s_shafts_radius"
+            ]
+        },
+        "gml_coupling_outer": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpl_coupling_mid",
+                "hpl_outer_cv",
+                "s_shafts_radius"
+            ]
+        }
+    },
+    "outputs": {
+        "UF_fal_drive": "UF_far_drive",
+        "ax1_far_drive": "vcs_y",
+        "ax1_fal_drive": "vcs_y",
+        "ax1_jcr_diff_joint": "vcs_y",
+        "ax1_jcl_diff_joint": "vcs_y",
+        "pt1_jcr_diff_joint": "hpr_diff_input",
+        "pt1_jcl_diff_joint": "hpl_diff_input",
+        "ax1_jcr_inner_cv": {
+            "constructor": "Oriented",
+            "args": [
+                "hpr_inner_cv",
+                "hpr_diff_input"
+            ]
+        },
+        "ax1_jcl_inner_cv": {
+            "constructor": "Oriented",
+            "args": [
+                "hpl_inner_cv",
+                "hpl_diff_input"
+            ]
+        },
+        "ax2_jcr_inner_cv": {
+            "constructor": "Oriented",
+            "args": [
+                "hpr_outer_cv",
+                "hpr_inner_cv"
+            ]
+        },
+        "ax2_jcl_inner_cv": {
+            "constructor": "Oriented",
+            "args": [
+                "hpl_outer_cv",
+                "hpl_inner_cv"
+            ]
+        },
+        "pt1_jcr_inner_cv": "hpr_inner_cv",
+        "pt1_jcl_inner_cv": "hpl_inner_cv",
+        "ax1_jcr_coupling_trans": {
+            "constructor": "Oriented",
+            "args": [
+                "hpr_outer_cv",
+                "hpr_inner_cv"
+            ]
+        },
+        "ax1_jcl_coupling_trans": {
+            "constructor": "Oriented",
+            "args": [
+                "hpl_outer_cv",
+                "hpl_inner_cv"
+            ]
+        },
+        "pt1_jcr_coupling_trans": "hpr_coupling_mid",
+        "pt1_jcl_coupling_trans": "hpl_coupling_mid",
+        "ax1_jcr_outer_cv": {
+            "constructor": "Oriented",
+            "args": [
+                "hpr_outer_cv",
+                "hpr_inner_cv"
+            ]
+        },
+        "ax1_jcl_outer_cv": {
+            "constructor": "Oriented",
+            "args": [
+                "hpl_outer_cv",
+                "hpl_inner_cv"
+            ]
+        },
+        "ax2_jcr_outer_cv": "vcs_y",
+        "ax2_jcl_outer_cv": "vcs_y",
+        "pt1_jcr_outer_cv": "hpr_outer_cv",
+        "pt1_jcl_outer_cv": "hpl_outer_cv",
+        "R_rbr_inner_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_inner_shaft",
+                "R"
+            ]
+        },
+        "R_rbl_inner_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_inner_shaft",
+                "R"
+            ]
+        },
+        "P_rbr_inner_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_inner_shaft",
+                "P"
+            ]
+        },
+        "P_rbl_inner_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_inner_shaft",
+                "P"
+            ]
+        },
+        "Rd_rbl_inner_shaft": {
+            "constructor": "Mirrored",
+            "args": [
+                "Rd_rbr_inner_shaft"
+            ]
+        },
+        "Pd_rbl_inner_shaft": {
+            "constructor": "Mirrored",
+            "args": [
+                "Pd_rbr_inner_shaft"
+            ]
+        },
+        "Rdd_rbl_inner_shaft": {
+            "constructor": "Mirrored",
+            "args": [
+                "Rdd_rbr_inner_shaft"
+            ]
+        },
+        "Pdd_rbl_inner_shaft": {
+            "constructor": "Mirrored",
+            "args": [
+                "Pdd_rbr_inner_shaft"
+            ]
+        },
+        "m_rbr_inner_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_inner_shaft",
+                "m"
+            ]
+        },
+        "m_rbl_inner_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_inner_shaft",
+                "m"
+            ]
+        },
+        "Jbar_rbr_inner_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_inner_shaft",
+                "J"
+            ]
+        },
+        "Jbar_rbl_inner_shaft": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_inner_shaft",
+                "J"
+            ]
+        },
+        "R_rbr_coupling_inner": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_coupling_inner",
+                "R"
+            ]
+        },
+        "R_rbl_coupling_inner": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_coupling_inner",
+                "R"
+            ]
+        },
+        "P_rbr_coupling_inner": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_coupling_inner",
+                "P"
+            ]
+        },
+        "P_rbl_coupling_inner": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_coupling_inner",
+                "P"
+            ]
+        },
+        "Rd_rbl_coupling_inner": {
+            "constructor": "Mirrored",
+            "args": [
+                "Rd_rbr_coupling_inner"
+            ]
+        },
+        "Pd_rbl_coupling_inner": {
+            "constructor": "Mirrored",
+            "args": [
+                "Pd_rbr_coupling_inner"
+            ]
+        },
+        "Rdd_rbl_coupling_inner": {
+            "constructor": "Mirrored",
+            "args": [
+                "Rdd_rbr_coupling_inner"
+            ]
+        },
+        "Pdd_rbl_coupling_inner": {
+            "constructor": "Mirrored",
+            "args": [
+                "Pdd_rbr_coupling_inner"
+            ]
+        },
+        "m_rbr_coupling_inner": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_coupling_inner",
+                "m"
+            ]
+        },
+        "m_rbl_coupling_inner": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_coupling_inner",
+                "m"
+            ]
+        },
+        "Jbar_rbr_coupling_inner": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_coupling_inner",
+                "J"
+            ]
+        },
+        "Jbar_rbl_coupling_inner": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_coupling_inner",
+                "J"
+            ]
+        },
+        "R_rbr_coupling_outer": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_coupling_outer",
+                "R"
+            ]
+        },
+        "R_rbl_coupling_outer": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_coupling_outer",
+                "R"
+            ]
+        },
+        "P_rbr_coupling_outer": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_coupling_outer",
+                "P"
+            ]
+        },
+        "P_rbl_coupling_outer": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_coupling_outer",
+                "P"
+            ]
+        },
+        "Rd_rbl_coupling_outer": {
+            "constructor": "Mirrored",
+            "args": [
+                "Rd_rbr_coupling_outer"
+            ]
+        },
+        "Pd_rbl_coupling_outer": {
+            "constructor": "Mirrored",
+            "args": [
+                "Pd_rbr_coupling_outer"
+            ]
+        },
+        "Rdd_rbl_coupling_outer": {
+            "constructor": "Mirrored",
+            "args": [
+                "Rdd_rbr_coupling_outer"
+            ]
+        },
+        "Pdd_rbl_coupling_outer": {
+            "constructor": "Mirrored",
+            "args": [
+                "Pdd_rbr_coupling_outer"
+            ]
+        },
+        "m_rbr_coupling_outer": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_coupling_outer",
+                "m"
+            ]
+        },
+        "m_rbl_coupling_outer": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_coupling_outer",
+                "m"
+            ]
+        },
+        "Jbar_rbr_coupling_outer": {
+            "constructor": "getattribute",
+            "args": [
+                "gmr_coupling_outer",
+                "J"
+            ]
+        },
+        "Jbar_rbl_coupling_outer": {
+            "constructor": "getattribute",
+            "args": [
+                "gml_coupling_outer",
+                "J"
+            ]
+        }
+    },
+    "geometries_map": {
+        "gmr_inner_shaft": "rbr_inner_shaft",
+        "gml_inner_shaft": "rbl_inner_shaft",
+        "gmr_coupling_inner": "rbr_coupling_inner",
+        "gml_coupling_inner": "rbl_coupling_inner",
+        "gmr_coupling_outer": "rbr_coupling_outer",
+        "gml_coupling_outer": "rbl_coupling_outer"
+    }
+}

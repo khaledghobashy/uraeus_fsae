@@ -66,10 +66,10 @@ AX2_config.vcs_z.flat[:] = [0, 0, 1]
 
 AX2_config.s_tire_radius = TR
 AX2_config.s_hub_radius  = 0.3 * TR
-AX2_config.s_links_ro    = 8
-AX2_config.s_strut_inner = 15
-AX2_config.s_strut_outer = 22
-AX2_config.s_thickness   = 8
+AX2_config.s_links_ro    = 12
+AX2_config.s_strut_inner = 21
+AX2_config.s_strut_outer = 25
+AX2_config.s_thickness   = 20
 
 #AX2_config.ax1_far_drive = AX2_config.vcs_y
 
@@ -87,8 +87,8 @@ wheel_inertia =  np.array([[1*1e4, 0,      0 ],
 AX2_config.Jbar_rbr_hub = wheel_inertia
 AX2_config.Jbar_rbl_hub = wheel_inertia
 
-AX2_config.m_rbr_hub = 11*1e3
-AX2_config.m_rbl_hub = 11*1e3
+AX2_config.m_rbr_hub = 15*1e3
+AX2_config.m_rbl_hub = 15*1e3
 
 # =============================================================================
 #                       Creating Struts Force Elements

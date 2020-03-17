@@ -1,11 +1,11 @@
 {
     "information": {
-        "topology_name": "chassis",
-        "configuration_name": "chassis_cfg",
-        "subsystem_name": "CH"
+        "topology_name": "rack_steering",
+        "configuration_name": "rack_steering_cfg",
+        "subsystem_name": ""
     },
     "user_inputs": {
-        "UF_fas_aero_drag_F": {
+        "UF_mcs_rack_act": {
             "constructor": "Lambda",
             "args": [
                 [
@@ -14,16 +14,7 @@
                 0.0
             ]
         },
-        "UF_fas_aero_drag_T": {
-            "constructor": "Lambda",
-            "args": [
-                [
-                    "t"
-                ],
-                0.0
-            ]
-        },
-        "Rd_rbs_chassis": {
+        "Rd_rbs_rack": {
             "constructor": "array",
             "args": [
                 0.0,
@@ -31,7 +22,7 @@
                 0.0
             ]
         },
-        "Pd_rbs_chassis": {
+        "Pd_rbs_rack": {
             "constructor": "array",
             "args": [
                 0.0,
@@ -40,7 +31,7 @@
                 0.0
             ]
         },
-        "Rdd_rbs_chassis": {
+        "Rdd_rbs_rack": {
             "constructor": "array",
             "args": [
                 0.0,
@@ -48,7 +39,7 @@
                 0.0
             ]
         },
-        "Pdd_rbs_chassis": {
+        "Pdd_rbs_rack": {
             "constructor": "array",
             "args": [
                 0.0,
@@ -57,58 +48,79 @@
                 0.0
             ]
         },
-        "m_rbs_chassis": 250000.0,
-        "Jbar_rbs_chassis": {
+        "hpr_rack_end": {
             "constructor": "array",
             "args": [
-                120000000000.0,
                 0.0,
                 0.0,
-                0.0,
-                150000000000.0,
-                0.0,
-                0.0,
-                0.0,
-                150000000000.0
+                0.0
             ]
         },
-        "hps_CG": {
+        "vcs_y": {
             "constructor": "array",
             "args": [
-                800.0,
                 0.0,
-                300.0
+                0.0,
+                0.0
             ]
         },
-        "s_CG_radius": 80
+        "s_rack_radius": 1.0
     },
     "evaluations": {
-        "gms_CG": {
-            "constructor": "Sphere_Geometry",
+        "hpl_rack_end": {
+            "constructor": "Mirrored",
             "args": [
-                "hps_CG",
-                "s_CG_radius"
+                "hpr_rack_end"
+            ]
+        },
+        "gms_rack": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
+                "hpr_rack_end",
+                "hpl_rack_end",
+                "s_rack_radius"
             ]
         }
     },
     "outputs": {
-        "pt1_fas_aero_drag": "hps_CG",
-        "R_rbs_chassis": {
+        "ax1_jcs_rack": "vcs_y",
+        "pt1_jcs_rack": {
+            "constructor": "Centered",
+            "args": [
+                "hpr_rack_end",
+                "hpl_rack_end"
+            ]
+        },
+        "R_rbs_rack": {
             "constructor": "getattribute",
             "args": [
-                "gms_CG",
+                "gms_rack",
                 "R"
             ]
         },
-        "P_rbs_chassis": {
+        "P_rbs_rack": {
             "constructor": "getattribute",
             "args": [
-                "gms_CG",
+                "gms_rack",
                 "P"
+            ]
+        },
+        "m_rbs_rack": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_rack",
+                "m"
+            ]
+        },
+        "Jbar_rbs_rack": {
+            "constructor": "getattribute",
+            "args": [
+                "gms_rack",
+                "J"
             ]
         }
     },
     "geometries_map": {
-        "gms_CG": "rbs_chassis"
+        "gms_rack": "rbs_rack"
     }
 }

@@ -66,32 +66,6 @@
                 0.0
             ]
         },
-        "UF_far_drive_F": {
-            "constructor": "Lambda",
-            "args": [
-                [
-                    "t"
-                ],
-                0.0
-            ]
-        },
-        "UF_far_drive_T": {
-            "constructor": "Lambda",
-            "args": [
-                [
-                    "t"
-                ],
-                0.0
-            ]
-        },
-        "pt1_far_drive": {
-            "constructor": "array",
-            "args": [
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
         "Rd_rbr_uca": {
             "constructor": "array",
             "args": [
@@ -462,7 +436,8 @@
         "s_strut_outer": 1.0,
         "s_strut_inner": 1.0,
         "s_thickness": 1.0,
-        "s_hub_radius": 1.0
+        "s_hub_radius": 1.0,
+        "s_tire_radius": 1.0
     },
     "evaluations": {
         "hpl_ucao": {
@@ -703,18 +678,27 @@
                 "s_links_ro"
             ]
         },
-        "gmr_hub": {
+        "gmr_tire": {
             "constructor": "Cylinder_Geometry",
             "args": [
                 "hpr_wc1",
+                "hpr_wc",
+                "s_tire_radius"
+            ]
+        },
+        "gmr_hub_cyl": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
                 "hpr_wc2",
+                "hpr_wc",
                 "s_hub_radius"
             ]
         },
-        "hpl_wc2": {
-            "constructor": "Mirrored",
+        "gmr_hub": {
+            "constructor": "Composite_Geometry",
             "args": [
-                "hpr_wc2"
+                "gmr_hub_cyl",
+                "gmr_tire"
             ]
         },
         "hpl_wc1": {
@@ -723,12 +707,33 @@
                 "hpr_wc1"
             ]
         },
-        "gml_hub": {
+        "hpl_wc2": {
+            "constructor": "Mirrored",
+            "args": [
+                "hpr_wc2"
+            ]
+        },
+        "gml_tire": {
             "constructor": "Cylinder_Geometry",
             "args": [
                 "hpl_wc1",
+                "hpl_wc",
+                "s_tire_radius"
+            ]
+        },
+        "gml_hub_cyl": {
+            "constructor": "Cylinder_Geometry",
+            "args": [
                 "hpl_wc2",
+                "hpl_wc",
                 "s_hub_radius"
+            ]
+        },
+        "gml_hub": {
+            "constructor": "Composite_Geometry",
+            "args": [
+                "gml_hub_cyl",
+                "gml_tire"
             ]
         }
     },
@@ -932,14 +937,6 @@
             "constructor": "Mirrored",
             "args": [
                 "pt1_far_tire"
-            ]
-        },
-        "UF_fal_drive_F": "UF_far_drive_F",
-        "UF_fal_drive_T": "UF_far_drive_T",
-        "pt1_fal_drive": {
-            "constructor": "Mirrored",
-            "args": [
-                "pt1_far_drive"
             ]
         },
         "R_rbr_uca": {

@@ -517,10 +517,10 @@
             ]
         },
         "s_strut_freelength": 255,
-        "s_links_ro": 8,
-        "s_strut_outer": 22,
-        "s_strut_inner": 15,
-        "s_thickness": 8,
+        "s_links_ro": 12,
+        "s_strut_outer": 25,
+        "s_strut_inner": 21,
+        "s_thickness": 20,
         "s_hub_radius": 76.2,
         "s_tire_radius": 254
     },
