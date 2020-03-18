@@ -1,8 +1,8 @@
 {
     "information": {
-        "topology_name": "drive_shafts",
-        "configuration_name": "drive_shafts_cfg",
-        "subsystem_name": ""
+        "topology_name": "drive_shafts_v1",
+        "configuration_name": "drive_shafts_v1_cfg",
+        "subsystem_name": "DR2"
     },
     "user_inputs": {
         "UF_far_drive": {
@@ -85,31 +85,31 @@
         "hpr_inner_cv": {
             "constructor": "array",
             "args": [
-                0.0,
-                0.0,
-                0.0
+                1560.0,
+                100.0,
+                274.0
             ]
         },
         "hpr_outer_cv": {
             "constructor": "array",
             "args": [
-                0.0,
-                0.0,
-                0.0
+                1600.0,
+                425.0,
+                254.0
             ]
         },
         "hpr_diff_input": {
             "constructor": "array",
             "args": [
-                0.0,
-                0.0,
-                0.0
+                1560.0,
+                50.0,
+                274.0
             ]
         },
         "vcs_x": {
             "constructor": "array",
             "args": [
-                0.0,
+                1.0,
                 0.0,
                 0.0
             ]
@@ -118,7 +118,7 @@
             "constructor": "array",
             "args": [
                 0.0,
-                0.0,
+                1.0,
                 0.0
             ]
         },
@@ -127,10 +127,10 @@
             "args": [
                 0.0,
                 0.0,
-                0.0
+                1.0
             ]
         },
-        "s_shafts_radius": 1.0
+        "s_shafts_radius": 15
     },
     "evaluations": {
         "hpl_diff_input": {
@@ -192,20 +192,8 @@
         "ax1_jcl_diff_joint": "vcs_y",
         "pt1_jcr_diff_joint": "hpr_diff_input",
         "pt1_jcl_diff_joint": "hpl_diff_input",
-        "ax1_jcr_inner_cv": {
-            "constructor": "Oriented",
-            "args": [
-                "hpr_inner_cv",
-                "hpr_diff_input"
-            ]
-        },
-        "ax1_jcl_inner_cv": {
-            "constructor": "Oriented",
-            "args": [
-                "hpl_inner_cv",
-                "hpl_diff_input"
-            ]
-        },
+        "ax1_jcr_inner_cv": "vcs_y",
+        "ax1_jcl_inner_cv": "vcs_y",
         "ax2_jcr_inner_cv": {
             "constructor": "Oriented",
             "args": [
@@ -222,22 +210,22 @@
         },
         "pt1_jcr_inner_cv": "hpr_inner_cv",
         "pt1_jcl_inner_cv": "hpl_inner_cv",
-        "ax1_jcr_outer_cv": "vcs_y",
-        "ax1_jcl_outer_cv": "vcs_y",
-        "ax2_jcr_outer_cv": {
+        "ax1_jcr_outer_cv": {
             "constructor": "Oriented",
             "args": [
-                "hpr_outer_cv",
-                "hpr_inner_cv"
+                "hpr_inner_cv",
+                "hpr_outer_cv"
             ]
         },
-        "ax2_jcl_outer_cv": {
+        "ax1_jcl_outer_cv": {
             "constructor": "Oriented",
             "args": [
-                "hpl_outer_cv",
-                "hpl_inner_cv"
+                "hpl_inner_cv",
+                "hpl_outer_cv"
             ]
         },
+        "ax2_jcr_outer_cv": "vcs_y",
+        "ax2_jcl_outer_cv": "vcs_y",
         "pt1_jcr_outer_cv": "hpr_outer_cv",
         "pt1_jcl_outer_cv": "hpl_outer_cv",
         "R_rbr_inner_shaft": {

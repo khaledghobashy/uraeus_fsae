@@ -7,7 +7,7 @@ from uraeus.nmbd.python import configuration
     
 from uraeus_fsae.numenv.python.templates import steering_rack
 
-json_file = os.path.abspath('../symenv/templates/rack_steering/data/steering_rack_cfg.json')
+json_file = os.path.abspath('../symenv/templates/rack_steering/data/rack_steering_cfg.json')
 
 ST1_config = configuration('front_steer')
 ST1_config.construct_from_json(json_file)

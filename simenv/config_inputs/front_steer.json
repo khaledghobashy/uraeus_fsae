@@ -1,7 +1,7 @@
 {
     "information": {
-        "topology_name": "steering_rack",
-        "configuration_name": "steering_rack_cfg",
+        "topology_name": "rack_steering",
+        "configuration_name": "rack_steering_cfg",
         "subsystem_name": "ST1"
     },
     "user_inputs": {

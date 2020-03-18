@@ -4,12 +4,10 @@ import os
 import numpy as np
 import pandas as pd
 from uraeus.nmbd.python import configuration
-    
-from uraeus_fsae.numenv.python.templates import drive_shafts
 
-json_file = os.path.abspath('../symenv/templates/drive_shafts_2/data/drive_shafts_cfg.json')
+json_file = os.path.abspath('../symenv/templates/drive_shafts_v2/data/drive_shafts_v2_cfg.json')
 
-DR2_config = configuration('rear_drive_shafts')
+DR2_config = configuration('DR2_v2')
 DR2_config.construct_from_json(json_file)
 
 # =============================================================================
@@ -20,8 +18,8 @@ DR2_config.construct_from_json(json_file)
 WB = 1600
 TR = 254
 
-DR2_config.hpr_diff_input.flat[:] = [WB - 0, 50, TR + 20]
-DR2_config.hpr_inner_cv.flat[:] = [WB - 0, 100, TR + 20]
+DR2_config.hpr_diff_input.flat[:] = [WB - 40, 50, TR + 20]
+DR2_config.hpr_inner_cv.flat[:] = [WB - 40, 100, TR + 20]
 DR2_config.hpr_outer_cv.flat[:] = [WB, 525 - 100, TR]
 
 # Helpers

@@ -10,7 +10,7 @@ from uraeus.nmbd.python.engine.numerics.math_funcs import A
 database_directory = os.path.abspath('../../')
 sys.path.append(database_directory)
 
-from uraeus_fsae.simenv.assemblies import asurt_FS17 as num_assm
+from uraeus_fsae.simenv.assemblies import asurt_FS17_v1 as num_assm
 
 num_model = num_assm.num_model
 
@@ -37,10 +37,8 @@ def zero_func(t):
 
 num_assm.ST1_config.UF_mcs_rack_act = steering_function
 
-num_assm.AX1_config.UF_far_drive = FR_Torque
-num_assm.AX1_config.UF_fal_drive = FL_Torque
-num_assm.AX2_config.UF_far_drive = RR_Torque
-num_assm.AX2_config.UF_fal_drive = RL_Torque
+num_assm.DR2_config.UF_far_drive = RR_Torque
+num_assm.DR2_config.UF_fal_drive = RL_Torque
 
 num_assm.CH_config.UF_fas_aero_drag_F = zero_func
 num_assm.CH_config.UF_fas_aero_drag_T = zero_func
@@ -53,8 +51,8 @@ sim = simulation('sim', num_model, 'dds')
 sim.set_time_array(3, dt)
 sim.solve()
 
-sim.save_as_csv('results', 'equilibrium_v1')
-sim.save_as_npz('results', 'equilibrium_v1')
+sim.save_as_csv('results', 'equilibrium_v4')
+sim.save_as_npz('results', 'equilibrium_v4')
 
 # =============================================================================
 #                       Plotting Simulation Results

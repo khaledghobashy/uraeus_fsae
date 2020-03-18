@@ -41,11 +41,6 @@ def zero_func(t):
 
 num_assm.ST1_config.UF_mcs_rack_act = steering_function
 
-#num_assm.AX1_config.UF_far_drive = FR_Torque
-#num_assm.AX1_config.UF_fal_drive = FL_Torque
-#num_assm.AX2_config.UF_far_drive = RR_Torque
-#num_assm.AX2_config.UF_fal_drive = RL_Torque
-
 num_assm.DR2_config.UF_far_drive = RR_Torque
 num_assm.DR2_config.UF_fal_drive = RL_Torque
 

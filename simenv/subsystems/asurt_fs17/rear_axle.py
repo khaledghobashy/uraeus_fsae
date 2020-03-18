@@ -5,9 +5,6 @@ import numpy as np
 import pandas as pd
 from uraeus.nmbd.python import configuration
 
-from uraeus_fsae.numenv.python.templates import dwb_bellcrank_push
-#from ..components.struts_data import stiffness_func, damping_func
-
 json_file = os.path.abspath('../symenv/templates/double_wishbone_bellcrank/data/dwb_bellcrank_push_cfg.json')
 
 AX2_config = configuration('rear_axle')
@@ -71,9 +68,6 @@ AX2_config.s_strut_inner = 21
 AX2_config.s_strut_outer = 25
 AX2_config.s_thickness   = 20
 
-#AX2_config.ax1_far_drive = AX2_config.vcs_y
-
-
 # Loading data into the configuration instance
 AX2_config.assemble()
 
@@ -81,7 +75,7 @@ AX2_config.assemble()
 # ==================================
 wheel_inertia =  np.array([[1*1e4, 0,      0 ],
                            [0    , 1*1e9,  0 ],
-                           [0    , 0, 1*1e4  ]])
+                           [0    , 0,   1*1e4]])
 
 
 AX2_config.Jbar_rbr_hub = wheel_inertia

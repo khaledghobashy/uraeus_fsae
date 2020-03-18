@@ -1,7 +1,7 @@
 {
     "information": {
-        "topology_name": "drive_shafts",
-        "configuration_name": "drive_shafts_cfg",
+        "topology_name": "drive_shafts_v2",
+        "configuration_name": "drive_shafts_v2_cfg",
         "subsystem_name": ""
     },
     "user_inputs": {
