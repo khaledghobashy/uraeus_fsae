@@ -18,8 +18,8 @@ DR2_config.construct_from_json(json_file)
 WB = 1600
 TR = 254
 
-DR2_config.hpr_diff_input.flat[:] = [WB - 40, 50, TR + 20]
-DR2_config.hpr_inner_cv.flat[:] = [WB - 40, 100, TR + 20]
+DR2_config.hpr_diff_input.flat[:] = [WB - 0, 50, TR + 20]
+DR2_config.hpr_inner_cv.flat[:] = [WB - 0, 100, TR + 20]
 DR2_config.hpr_outer_cv.flat[:] = [WB, 525 - 100, TR]
 
 # Helpers

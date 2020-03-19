@@ -85,7 +85,7 @@
         "hpr_inner_cv": {
             "constructor": "array",
             "args": [
-                1560.0,
+                1600.0,
                 100.0,
                 274.0
             ]
@@ -101,7 +101,7 @@
         "hpr_diff_input": {
             "constructor": "array",
             "args": [
-                1560.0,
+                1600.0,
                 50.0,
                 274.0
             ]

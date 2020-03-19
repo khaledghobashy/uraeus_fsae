@@ -56,7 +56,7 @@ AX1_config.vcs_z.flat[:] = [0, 0, 1]
 
 AX1_config.s_tire_radius = TR
 AX1_config.s_hub_radius  = 0.3 * TR
-AX1_config.s_links_ro    = 12
+AX1_config.s_links_ro    = 10
 AX1_config.s_strut_inner = 21
 AX1_config.s_strut_outer = 25
 AX1_config.s_thickness   = 20

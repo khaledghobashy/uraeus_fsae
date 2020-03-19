@@ -61,8 +61,8 @@ sim.set_initial_states('results/equilibrium_v4.npz')
 
 sim.solve()
 
-sim.save_as_csv('results', 'acceleration_v8')
-sim.save_as_npz('results', 'acceleration_v8')
+sim.save_as_csv('results', 'acceleration_v9')
+sim.save_as_npz('results', 'acceleration_v9')
 
 #=============================================================================
 #                       Plotting Simulation Results
