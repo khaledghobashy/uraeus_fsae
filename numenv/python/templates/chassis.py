@@ -1,11 +1,24 @@
 
 import numpy as np
 from numpy import cos, sin
-from numpy.linalg import multi_dot
 from scipy.misc import derivative
 
-from uraeus.nmbd.python.engine.numerics.math_funcs import A, B, G, E, triad, skew
+from uraeus.nmbd.python.engine.numerics.math_funcs import A, B, G, E, triad, skew, multi_dot
 
+# CONSTANTS
+F64_DTYPE = np.float64
+
+I1 = np.eye(1, dtype=F64_DTYPE)
+I2 = np.eye(2, dtype=F64_DTYPE)
+I3 = np.eye(3, dtype=F64_DTYPE)
+I4 = np.eye(4, dtype=F64_DTYPE)
+
+Z1x1 = np.zeros((1,1), F64_DTYPE)
+Z1x3 = np.zeros((1,3), F64_DTYPE)
+Z3x1 = np.zeros((3,1), F64_DTYPE)
+Z3x4 = np.zeros((3,4), F64_DTYPE)
+Z4x1 = np.zeros((4,1), F64_DTYPE)
+Z4x3 = np.zeros((4,3), F64_DTYPE)
 
 
 
@@ -22,7 +35,7 @@ class topology(object):
         self.nc = 1
         self.nrows = 1
         self.ncols = 2*1
-        self.rows = np.arange(self.nrows)
+        self.rows = np.arange(self.nrows, dtype=np.intc)
 
         reactions_indicies = []
         self.reactions_indicies = ['%s%s'%(self.prefix,i) for i in reactions_indicies]
@@ -38,9 +51,9 @@ class topology(object):
         self.rows_offset = rows_offset
         self._set_mapping(indicies_map, interface_map)
         self.rows += self.rows_offset
-        self.jac_rows = np.array([0, 0])
+        self.jac_rows = np.array([0, 0], dtype=np.intc)
         self.jac_rows += self.rows_offset
-        self.jac_cols = np.array([self.rbs_chassis*2, self.rbs_chassis*2+1])
+        self.jac_cols = np.array([self.rbs_chassis*2, self.rbs_chassis*2+1], dtype=np.intc)
 
     def set_initial_states(self):
         self.q0  = np.concatenate([self.config.R_rbs_chassis,
@@ -67,18 +80,18 @@ class topology(object):
 
     
     def set_gen_coordinates(self,q):
-        self.R_rbs_chassis = q[0:3,0:1]
-        self.P_rbs_chassis = q[3:7,0:1]
+        self.R_rbs_chassis = q[0:3]
+        self.P_rbs_chassis = q[3:7]
 
     
     def set_gen_velocities(self,qd):
-        self.Rd_rbs_chassis = qd[0:3,0:1]
-        self.Pd_rbs_chassis = qd[3:7,0:1]
+        self.Rd_rbs_chassis = qd[0:3]
+        self.Pd_rbs_chassis = qd[3:7]
 
     
     def set_gen_accelerations(self,qdd):
-        self.Rdd_rbs_chassis = qdd[0:3,0:1]
-        self.Pdd_rbs_chassis = qdd[3:7,0:1]
+        self.Rdd_rbs_chassis = qdd[0:3]
+        self.Pdd_rbs_chassis = qdd[3:7]
 
     
     def set_lagrange_multipliers(self,Lambda):
@@ -91,7 +104,7 @@ class topology(object):
 
         x0 = self.P_rbs_chassis
 
-        self.pos_eq_blocks = (((-1) * np.eye(1, dtype=np.float64) + multi_dot([x0.T,x0])),)
+        self.pos_eq_blocks = (((-1) * I1 + multi_dot([x0.T,x0])),)
 
     
     def eval_vel_eq(self):
@@ -100,7 +113,7 @@ class topology(object):
 
     
 
-        self.vel_eq_blocks = (np.zeros((1,1),dtype=np.float64),)
+        self.vel_eq_blocks = (Z1x1,)
 
     
     def eval_acc_eq(self):
@@ -118,7 +131,7 @@ class topology(object):
 
     
 
-        self.jac_eq_blocks = (np.zeros((1,3),dtype=np.float64),
+        self.jac_eq_blocks = (Z1x3,
         (2) * self.P_rbs_chassis.T,)
 
     
@@ -128,7 +141,7 @@ class topology(object):
 
         m0 = G(self.P_rbs_chassis)
 
-        self.mass_eq_blocks = (config.m_rbs_chassis * np.eye(3, dtype=np.float64),
+        self.mass_eq_blocks = (config.m_rbs_chassis * I3,
         (4) * multi_dot([m0.T,config.Jbar_rbs_chassis,m0]),)
 
     

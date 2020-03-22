@@ -36,7 +36,7 @@ tire_model = brush_model
 dt = 5e-3
 TR = 254
 
-LOG_STATES = True
+LOG_STATES = False
 
 def print_tire_states(tire_instance, drive_torque, name):
     torque_ratio = drive_torque / tire_instance.My

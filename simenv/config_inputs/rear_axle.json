@@ -517,7 +517,7 @@
             ]
         },
         "s_strut_freelength": 255,
-        "s_links_ro": 12,
+        "s_links_ro": 10,
         "s_strut_outer": 25,
         "s_strut_inner": 21,
         "s_thickness": 20,

@@ -1,11 +1,24 @@
 
 import numpy as np
 from numpy import cos, sin
-from numpy.linalg import multi_dot
 from scipy.misc import derivative
 
-from uraeus.nmbd.python.engine.numerics.math_funcs import A, B, G, E, triad, skew
+from uraeus.nmbd.python.engine.numerics.math_funcs import A, B, G, E, triad, skew, multi_dot
 
+# CONSTANTS
+F64_DTYPE = np.float64
+
+I1 = np.eye(1, dtype=F64_DTYPE)
+I2 = np.eye(2, dtype=F64_DTYPE)
+I3 = np.eye(3, dtype=F64_DTYPE)
+I4 = np.eye(4, dtype=F64_DTYPE)
+
+Z1x1 = np.zeros((1,1), F64_DTYPE)
+Z1x3 = np.zeros((1,3), F64_DTYPE)
+Z3x1 = np.zeros((3,1), F64_DTYPE)
+Z3x4 = np.zeros((3,4), F64_DTYPE)
+Z4x1 = np.zeros((4,1), F64_DTYPE)
+Z4x3 = np.zeros((4,3), F64_DTYPE)
 
 
 
@@ -22,7 +35,7 @@ class topology(object):
         self.nc = 7
         self.nrows = 7
         self.ncols = 2*1
-        self.rows = np.arange(self.nrows)
+        self.rows = np.arange(self.nrows, dtype=np.intc)
 
         reactions_indicies = ['F_rbs_rack_jcs_rack', 'T_rbs_rack_jcs_rack', 'F_rbs_rack_mcs_rack_act', 'T_rbs_rack_mcs_rack_act']
         self.reactions_indicies = ['%s%s'%(self.prefix,i) for i in reactions_indicies]
@@ -38,9 +51,9 @@ class topology(object):
         self.rows_offset = rows_offset
         self._set_mapping(indicies_map, interface_map)
         self.rows += self.rows_offset
-        self.jac_rows = np.array([0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6])
+        self.jac_rows = np.array([0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6], dtype=np.intc)
         self.jac_rows += self.rows_offset
-        self.jac_cols = np.array([self.rbs_rack*2, self.rbs_rack*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbs_rack*2, self.rbs_rack*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbs_rack*2, self.rbs_rack*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbs_rack*2, self.rbs_rack*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbs_rack*2, self.rbs_rack*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbs_rack*2, self.rbs_rack*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbs_rack*2, self.rbs_rack*2+1])
+        self.jac_cols = np.array([self.rbs_rack*2, self.rbs_rack*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbs_rack*2, self.rbs_rack*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbs_rack*2, self.rbs_rack*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbs_rack*2, self.rbs_rack*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbs_rack*2, self.rbs_rack*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbs_rack*2, self.rbs_rack*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbs_rack*2, self.rbs_rack*2+1], dtype=np.intc)
 
     def set_initial_states(self):
         self.q0  = np.concatenate([self.config.R_rbs_rack,
@@ -74,23 +87,23 @@ class topology(object):
 
     
     def set_gen_coordinates(self,q):
-        self.R_rbs_rack = q[0:3,0:1]
-        self.P_rbs_rack = q[3:7,0:1]
+        self.R_rbs_rack = q[0:3]
+        self.P_rbs_rack = q[3:7]
 
     
     def set_gen_velocities(self,qd):
-        self.Rd_rbs_rack = qd[0:3,0:1]
-        self.Pd_rbs_rack = qd[3:7,0:1]
+        self.Rd_rbs_rack = qd[0:3]
+        self.Pd_rbs_rack = qd[3:7]
 
     
     def set_gen_accelerations(self,qdd):
-        self.Rdd_rbs_rack = qdd[0:3,0:1]
-        self.Pdd_rbs_rack = qdd[3:7,0:1]
+        self.Rdd_rbs_rack = qdd[0:3]
+        self.Pdd_rbs_rack = qdd[3:7]
 
     
     def set_lagrange_multipliers(self,Lambda):
-        self.L_jcs_rack = Lambda[0:5,0:1]
-        self.L_mcs_rack_act = Lambda[5:6,0:1]
+        self.L_jcs_rack = Lambda[0:5]
+        self.L_mcs_rack_act = Lambda[5:6]
 
     
     def eval_pos_eq(self):
@@ -105,7 +118,7 @@ class topology(object):
         x5 = self.Mbar_vbs_chassis_jcs_rack[:,2:3]
         x6 = self.Mbar_rbs_rack_jcs_rack[:,1:2].T
         x7 = (self.R_rbs_rack + (-1) * self.R_vbs_chassis + multi_dot([x2,self.ubar_rbs_rack_jcs_rack]) + (-1) * multi_dot([x4,self.ubar_vbs_chassis_jcs_rack]))
-        x8 = np.eye(1, dtype=np.float64)
+        x8 = I1
 
         self.pos_eq_blocks = (multi_dot([x0,x3,x4,x5]),
         multi_dot([x6,x3,x4,x5]),
@@ -120,14 +133,14 @@ class topology(object):
         config = self.config
         t = self.t
 
-        v0 = np.zeros((1,1),dtype=np.float64)
+        v0 = Z1x1
 
         self.vel_eq_blocks = (v0,
         v0,
         v0,
         v0,
         v0,
-        (v0 + (-1 * derivative(config.UF_mcs_rack_act, t, 0.1, 1)) * np.eye(1, dtype=np.float64)),
+        (v0 + (-1 * derivative(config.UF_mcs_rack_act, t, 0.1, 1)) * I1),
         v0,)
 
     
@@ -135,47 +148,47 @@ class topology(object):
         config = self.config
         t = self.t
 
-        a0 = self.Mbar_rbs_rack_jcs_rack[:,0:1]
+        a0 = self.Mbar_vbs_chassis_jcs_rack[:,2:3]
         a1 = a0.T
-        a2 = self.P_rbs_rack
+        a2 = self.P_vbs_chassis
         a3 = A(a2).T
-        a4 = self.Pd_vbs_chassis
-        a5 = self.Mbar_vbs_chassis_jcs_rack[:,2:3]
+        a4 = self.Pd_rbs_rack
+        a5 = self.Mbar_rbs_rack_jcs_rack[:,0:1]
         a6 = B(a4,a5)
         a7 = a5.T
-        a8 = self.P_vbs_chassis
+        a8 = self.P_rbs_rack
         a9 = A(a8).T
-        a10 = self.Pd_rbs_rack
+        a10 = self.Pd_vbs_chassis
         a11 = B(a10,a0)
-        a12 = a10.T
-        a13 = B(a2,a0).T
-        a14 = B(a8,a5)
+        a12 = a4.T
+        a13 = B(a8,a5).T
+        a14 = B(a2,a0)
         a15 = self.Mbar_rbs_rack_jcs_rack[:,1:2]
-        a16 = a15.T
-        a17 = B(a10,a15)
-        a18 = B(a2,a15).T
+        a16 = B(a4,a15)
+        a17 = a15.T
+        a18 = B(a8,a15).T
         a19 = self.ubar_rbs_rack_jcs_rack
         a20 = self.ubar_vbs_chassis_jcs_rack
-        a21 = (multi_dot([B(a10,a19),a10]) + (-1) * multi_dot([B(a4,a20),a4]))
-        a22 = (self.Rd_rbs_rack + (-1) * self.Rd_vbs_chassis + multi_dot([B(a2,a19),a10]) + (-1) * multi_dot([B(a8,a20),a4]))
-        a23 = (self.R_rbs_rack.T + (-1) * self.R_vbs_chassis.T + multi_dot([a19.T,a3]) + (-1) * multi_dot([a20.T,a9]))
+        a21 = (multi_dot([B(a4,a19),a4]) + (-1) * multi_dot([B(a10,a20),a10]))
+        a22 = (self.Rd_rbs_rack + (-1) * self.Rd_vbs_chassis + multi_dot([B(a8,a19),a4]) + (-1) * multi_dot([B(a2,a20),a10]))
+        a23 = (self.R_rbs_rack.T + (-1) * self.R_vbs_chassis.T + multi_dot([a19.T,a9]) + (-1) * multi_dot([a20.T,a3]))
         a24 = self.Mbar_vbs_chassis_jcs_rack[:,1:2]
         a25 = self.Mbar_rbs_rack_jcs_rack[:,2:3]
 
-        self.acc_eq_blocks = ((multi_dot([a1,a3,a6,a4]) + multi_dot([a7,a9,a11,a10]) + (2) * multi_dot([a12,a13,a14,a4])),
-        (multi_dot([a16,a3,a6,a4]) + multi_dot([a7,a9,a17,a10]) + (2) * multi_dot([a12,a18,a14,a4])),
-        (multi_dot([a1,a3,a21]) + (2) * multi_dot([a12,a13,a22]) + multi_dot([a23,a11,a10])),
-        (multi_dot([a16,a3,a21]) + (2) * multi_dot([a12,a18,a22]) + multi_dot([a23,a17,a10])),
-        (multi_dot([a1,a3,B(a4,a24),a4]) + multi_dot([a24.T,a9,a11,a10]) + (2) * multi_dot([a12,a13,B(a8,a24),a4])),
-        ((-1 * derivative(config.UF_mcs_rack_act, t, 0.1, 2)) * np.eye(1, dtype=np.float64) + multi_dot([a25.T,a3,a21]) + (2) * multi_dot([a12,B(a2,a25).T,a22]) + multi_dot([a23,B(a10,a25),a10])),
-        (2) * multi_dot([a12,a10]),)
+        self.acc_eq_blocks = ((multi_dot([a1,a3,a6,a4]) + multi_dot([a7,a9,a11,a10]) + (2) * multi_dot([a12,a13,a14,a10])),
+        (multi_dot([a1,a3,a16,a4]) + multi_dot([a17,a9,a11,a10]) + (2) * multi_dot([a12,a18,a14,a10])),
+        (multi_dot([a7,a9,a21]) + (2) * multi_dot([a12,a13,a22]) + multi_dot([a23,a6,a4])),
+        (multi_dot([a17,a9,a21]) + (2) * multi_dot([a12,a18,a22]) + multi_dot([a23,a16,a4])),
+        (multi_dot([a24.T,a3,a6,a4]) + multi_dot([a7,a9,B(a10,a24),a10]) + (2) * multi_dot([a12,a13,B(a2,a24),a10])),
+        ((-1 * derivative(config.UF_mcs_rack_act, t, 0.1, 2)) * I1 + multi_dot([a25.T,a9,a21]) + (2) * multi_dot([a12,B(a8,a25).T,a22]) + multi_dot([a23,B(a4,a25),a4])),
+        (2) * multi_dot([a12,a4]),)
 
     
     def eval_jac_eq(self):
         config = self.config
         t = self.t
 
-        j0 = np.zeros((1,3),dtype=np.float64)
+        j0 = Z1x3
         j1 = self.Mbar_vbs_chassis_jcs_rack[:,2:3]
         j2 = j1.T
         j3 = self.P_vbs_chassis
@@ -235,7 +248,7 @@ class topology(object):
 
         m0 = G(self.P_rbs_rack)
 
-        self.mass_eq_blocks = (config.m_rbs_rack * np.eye(3, dtype=np.float64),
+        self.mass_eq_blocks = (config.m_rbs_rack * I3,
         (4) * multi_dot([m0.T,config.Jbar_rbs_rack,m0]),)
 
     
@@ -253,13 +266,13 @@ class topology(object):
         config  = self.config
         t = self.t
 
-        Q_rbs_rack_jcs_rack = (-1) * multi_dot([np.bmat([[np.zeros((1,3),dtype=np.float64).T,np.zeros((1,3),dtype=np.float64).T,multi_dot([A(self.P_rbs_rack),self.Mbar_rbs_rack_jcs_rack[:,0:1]]),multi_dot([A(self.P_rbs_rack),self.Mbar_rbs_rack_jcs_rack[:,1:2]]),np.zeros((1,3),dtype=np.float64).T],[multi_dot([B(self.P_rbs_rack,self.Mbar_rbs_rack_jcs_rack[:,0:1]).T,A(self.P_vbs_chassis),self.Mbar_vbs_chassis_jcs_rack[:,2:3]]),multi_dot([B(self.P_rbs_rack,self.Mbar_rbs_rack_jcs_rack[:,1:2]).T,A(self.P_vbs_chassis),self.Mbar_vbs_chassis_jcs_rack[:,2:3]]),(multi_dot([B(self.P_rbs_rack,self.Mbar_rbs_rack_jcs_rack[:,0:1]).T,((-1) * self.R_vbs_chassis + multi_dot([A(self.P_rbs_rack),self.ubar_rbs_rack_jcs_rack]) + (-1) * multi_dot([A(self.P_vbs_chassis),self.ubar_vbs_chassis_jcs_rack]) + self.R_rbs_rack)]) + multi_dot([B(self.P_rbs_rack,self.ubar_rbs_rack_jcs_rack).T,A(self.P_rbs_rack),self.Mbar_rbs_rack_jcs_rack[:,0:1]])),(multi_dot([B(self.P_rbs_rack,self.Mbar_rbs_rack_jcs_rack[:,1:2]).T,((-1) * self.R_vbs_chassis + multi_dot([A(self.P_rbs_rack),self.ubar_rbs_rack_jcs_rack]) + (-1) * multi_dot([A(self.P_vbs_chassis),self.ubar_vbs_chassis_jcs_rack]) + self.R_rbs_rack)]) + multi_dot([B(self.P_rbs_rack,self.ubar_rbs_rack_jcs_rack).T,A(self.P_rbs_rack),self.Mbar_rbs_rack_jcs_rack[:,1:2]])),multi_dot([B(self.P_rbs_rack,self.Mbar_rbs_rack_jcs_rack[:,0:1]).T,A(self.P_vbs_chassis),self.Mbar_vbs_chassis_jcs_rack[:,1:2]])]]),self.L_jcs_rack])
-        self.F_rbs_rack_jcs_rack = Q_rbs_rack_jcs_rack[0:3,0:1]
-        Te_rbs_rack_jcs_rack = Q_rbs_rack_jcs_rack[3:7,0:1]
+        Q_rbs_rack_jcs_rack = (-1) * multi_dot([np.bmat([[Z1x3.T,Z1x3.T,multi_dot([A(self.P_rbs_rack),self.Mbar_rbs_rack_jcs_rack[:,0:1]]),multi_dot([A(self.P_rbs_rack),self.Mbar_rbs_rack_jcs_rack[:,1:2]]),Z1x3.T],[multi_dot([B(self.P_rbs_rack,self.Mbar_rbs_rack_jcs_rack[:,0:1]).T,A(self.P_vbs_chassis),self.Mbar_vbs_chassis_jcs_rack[:,2:3]]),multi_dot([B(self.P_rbs_rack,self.Mbar_rbs_rack_jcs_rack[:,1:2]).T,A(self.P_vbs_chassis),self.Mbar_vbs_chassis_jcs_rack[:,2:3]]),(multi_dot([B(self.P_rbs_rack,self.Mbar_rbs_rack_jcs_rack[:,0:1]).T,((-1) * self.R_vbs_chassis + multi_dot([A(self.P_rbs_rack),self.ubar_rbs_rack_jcs_rack]) + (-1) * multi_dot([A(self.P_vbs_chassis),self.ubar_vbs_chassis_jcs_rack]) + self.R_rbs_rack)]) + multi_dot([B(self.P_rbs_rack,self.ubar_rbs_rack_jcs_rack).T,A(self.P_rbs_rack),self.Mbar_rbs_rack_jcs_rack[:,0:1]])),(multi_dot([B(self.P_rbs_rack,self.Mbar_rbs_rack_jcs_rack[:,1:2]).T,((-1) * self.R_vbs_chassis + multi_dot([A(self.P_rbs_rack),self.ubar_rbs_rack_jcs_rack]) + (-1) * multi_dot([A(self.P_vbs_chassis),self.ubar_vbs_chassis_jcs_rack]) + self.R_rbs_rack)]) + multi_dot([B(self.P_rbs_rack,self.ubar_rbs_rack_jcs_rack).T,A(self.P_rbs_rack),self.Mbar_rbs_rack_jcs_rack[:,1:2]])),multi_dot([B(self.P_rbs_rack,self.Mbar_rbs_rack_jcs_rack[:,0:1]).T,A(self.P_vbs_chassis),self.Mbar_vbs_chassis_jcs_rack[:,1:2]])]]),self.L_jcs_rack])
+        self.F_rbs_rack_jcs_rack = Q_rbs_rack_jcs_rack[0:3]
+        Te_rbs_rack_jcs_rack = Q_rbs_rack_jcs_rack[3:7]
         self.T_rbs_rack_jcs_rack = ((-1) * multi_dot([skew(multi_dot([A(self.P_rbs_rack),self.ubar_rbs_rack_jcs_rack])),self.F_rbs_rack_jcs_rack]) + (0.5) * multi_dot([E(self.P_rbs_rack),Te_rbs_rack_jcs_rack]))
         Q_rbs_rack_mcs_rack_act = (-1) * multi_dot([np.bmat([[multi_dot([A(self.P_rbs_rack),self.Mbar_rbs_rack_jcs_rack[:,2:3]])],[(multi_dot([B(self.P_rbs_rack,self.Mbar_rbs_rack_jcs_rack[:,2:3]).T,((-1) * self.R_vbs_chassis + multi_dot([A(self.P_rbs_rack),self.ubar_rbs_rack_jcs_rack]) + (-1) * multi_dot([A(self.P_vbs_chassis),self.ubar_vbs_chassis_jcs_rack]) + self.R_rbs_rack)]) + multi_dot([B(self.P_rbs_rack,self.ubar_rbs_rack_jcs_rack).T,A(self.P_rbs_rack),self.Mbar_rbs_rack_jcs_rack[:,2:3]]))]]),self.L_mcs_rack_act])
-        self.F_rbs_rack_mcs_rack_act = Q_rbs_rack_mcs_rack_act[0:3,0:1]
-        Te_rbs_rack_mcs_rack_act = Q_rbs_rack_mcs_rack_act[3:7,0:1]
+        self.F_rbs_rack_mcs_rack_act = Q_rbs_rack_mcs_rack_act[0:3]
+        Te_rbs_rack_mcs_rack_act = Q_rbs_rack_mcs_rack_act[3:7]
         self.T_rbs_rack_mcs_rack_act = (0.5) * multi_dot([E(self.P_rbs_rack),Te_rbs_rack_mcs_rack_act])
 
         self.reactions = {'F_rbs_rack_jcs_rack' : self.F_rbs_rack_jcs_rack,
