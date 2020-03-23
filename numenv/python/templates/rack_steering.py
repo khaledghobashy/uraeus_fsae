@@ -148,40 +148,40 @@ class topology(object):
         config = self.config
         t = self.t
 
-        a0 = self.Mbar_vbs_chassis_jcs_rack[:,2:3]
+        a0 = self.Mbar_rbs_rack_jcs_rack[:,0:1]
         a1 = a0.T
-        a2 = self.P_vbs_chassis
+        a2 = self.P_rbs_rack
         a3 = A(a2).T
-        a4 = self.Pd_rbs_rack
-        a5 = self.Mbar_rbs_rack_jcs_rack[:,0:1]
+        a4 = self.Pd_vbs_chassis
+        a5 = self.Mbar_vbs_chassis_jcs_rack[:,2:3]
         a6 = B(a4,a5)
         a7 = a5.T
-        a8 = self.P_rbs_rack
+        a8 = self.P_vbs_chassis
         a9 = A(a8).T
-        a10 = self.Pd_vbs_chassis
+        a10 = self.Pd_rbs_rack
         a11 = B(a10,a0)
-        a12 = a4.T
-        a13 = B(a8,a5).T
-        a14 = B(a2,a0)
+        a12 = a10.T
+        a13 = B(a2,a0).T
+        a14 = B(a8,a5)
         a15 = self.Mbar_rbs_rack_jcs_rack[:,1:2]
-        a16 = B(a4,a15)
-        a17 = a15.T
-        a18 = B(a8,a15).T
+        a16 = a15.T
+        a17 = B(a10,a15)
+        a18 = B(a2,a15).T
         a19 = self.ubar_rbs_rack_jcs_rack
         a20 = self.ubar_vbs_chassis_jcs_rack
-        a21 = (multi_dot([B(a4,a19),a4]) + (-1) * multi_dot([B(a10,a20),a10]))
-        a22 = (self.Rd_rbs_rack + (-1) * self.Rd_vbs_chassis + multi_dot([B(a8,a19),a4]) + (-1) * multi_dot([B(a2,a20),a10]))
-        a23 = (self.R_rbs_rack.T + (-1) * self.R_vbs_chassis.T + multi_dot([a19.T,a9]) + (-1) * multi_dot([a20.T,a3]))
+        a21 = (multi_dot([B(a10,a19),a10]) + (-1) * multi_dot([B(a4,a20),a4]))
+        a22 = (self.Rd_rbs_rack + (-1) * self.Rd_vbs_chassis + multi_dot([B(a2,a19),a10]) + (-1) * multi_dot([B(a8,a20),a4]))
+        a23 = (self.R_rbs_rack.T + (-1) * self.R_vbs_chassis.T + multi_dot([a19.T,a3]) + (-1) * multi_dot([a20.T,a9]))
         a24 = self.Mbar_vbs_chassis_jcs_rack[:,1:2]
         a25 = self.Mbar_rbs_rack_jcs_rack[:,2:3]
 
-        self.acc_eq_blocks = ((multi_dot([a1,a3,a6,a4]) + multi_dot([a7,a9,a11,a10]) + (2) * multi_dot([a12,a13,a14,a10])),
-        (multi_dot([a1,a3,a16,a4]) + multi_dot([a17,a9,a11,a10]) + (2) * multi_dot([a12,a18,a14,a10])),
-        (multi_dot([a7,a9,a21]) + (2) * multi_dot([a12,a13,a22]) + multi_dot([a23,a6,a4])),
-        (multi_dot([a17,a9,a21]) + (2) * multi_dot([a12,a18,a22]) + multi_dot([a23,a16,a4])),
-        (multi_dot([a24.T,a3,a6,a4]) + multi_dot([a7,a9,B(a10,a24),a10]) + (2) * multi_dot([a12,a13,B(a2,a24),a10])),
-        ((-1 * derivative(config.UF_mcs_rack_act, t, 0.1, 2)) * I1 + multi_dot([a25.T,a9,a21]) + (2) * multi_dot([a12,B(a8,a25).T,a22]) + multi_dot([a23,B(a4,a25),a4])),
-        (2) * multi_dot([a12,a4]),)
+        self.acc_eq_blocks = ((multi_dot([a1,a3,a6,a4]) + multi_dot([a7,a9,a11,a10]) + (2) * multi_dot([a12,a13,a14,a4])),
+        (multi_dot([a16,a3,a6,a4]) + multi_dot([a7,a9,a17,a10]) + (2) * multi_dot([a12,a18,a14,a4])),
+        (multi_dot([a1,a3,a21]) + (2) * multi_dot([a12,a13,a22]) + multi_dot([a23,a11,a10])),
+        (multi_dot([a16,a3,a21]) + (2) * multi_dot([a12,a18,a22]) + multi_dot([a23,a17,a10])),
+        (multi_dot([a1,a3,B(a4,a24),a4]) + multi_dot([a24.T,a9,a11,a10]) + (2) * multi_dot([a12,a13,B(a8,a24),a4])),
+        ((-1 * derivative(config.UF_mcs_rack_act, t, 0.1, 2)) * I1 + multi_dot([a25.T,a3,a21]) + (2) * multi_dot([a12,B(a2,a25).T,a22]) + multi_dot([a23,B(a10,a25),a10])),
+        (2) * multi_dot([a12,a10]),)
 
     
     def eval_jac_eq(self):

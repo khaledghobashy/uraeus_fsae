@@ -92,8 +92,8 @@ class topology(object):
         self.rbl_coupling_inner = indicies_map[p + 'rbl_coupling_inner']
         self.rbr_coupling_outer = indicies_map[p + 'rbr_coupling_outer']
         self.rbl_coupling_outer = indicies_map[p + 'rbl_coupling_outer']
-        self.vbl_wheel_hub = indicies_map[interface_map[p + 'vbl_wheel_hub']]
         self.vbs_differential = indicies_map[interface_map[p + 'vbs_differential']]
+        self.vbl_wheel_hub = indicies_map[interface_map[p + 'vbl_wheel_hub']]
         self.vbs_ground = indicies_map[interface_map[p + 'vbs_ground']]
         self.vbr_wheel_hub = indicies_map[interface_map[p + 'vbr_wheel_hub']]
 
@@ -325,16 +325,16 @@ class topology(object):
 
         a0 = self.Pd_rbr_inner_shaft
         a1 = self.Pd_vbs_differential
-        a2 = self.Mbar_vbs_differential_jcr_diff_joint[:,2:3]
-        a3 = a2.T
-        a4 = self.P_vbs_differential
-        a5 = A(a4).T
-        a6 = self.Mbar_rbr_inner_shaft_jcr_diff_joint[:,0:1]
-        a7 = self.P_rbr_inner_shaft
-        a8 = A(a7).T
-        a9 = B(a1,a2)
+        a2 = self.Mbar_rbr_inner_shaft_jcr_diff_joint[:,0:1]
+        a3 = self.P_rbr_inner_shaft
+        a4 = A(a3).T
+        a5 = self.Mbar_vbs_differential_jcr_diff_joint[:,2:3]
+        a6 = B(a1,a5)
+        a7 = a5.T
+        a8 = self.P_vbs_differential
+        a9 = A(a8).T
         a10 = a0.T
-        a11 = B(a4,a2)
+        a11 = B(a8,a5)
         a12 = self.Mbar_rbr_inner_shaft_jcr_diff_joint[:,1:2]
         a13 = self.Pd_rbr_coupling_inner
         a14 = self.Mbar_rbr_inner_shaft_jcr_inner_cv[:,0:1]
@@ -349,34 +349,34 @@ class topology(object):
         a23 = B(a1,a22)
         a24 = a22.T
         a25 = a18.T
-        a26 = B(a4,a22)
+        a26 = B(a8,a22)
         a27 = self.Mbar_rbl_inner_shaft_jcl_diff_joint[:,1:2]
         a28 = self.Pd_rbl_coupling_inner
         a29 = self.Mbar_rbl_inner_shaft_jcl_inner_cv[:,0:1]
         a30 = self.Mbar_rbl_coupling_inner_jcl_inner_cv[:,0:1]
         a31 = self.P_rbl_coupling_inner
         a32 = A(a31).T
-        a33 = self.Mbar_rbr_coupling_inner_jcr_coupling_trans[:,0:1]
+        a33 = self.Mbar_rbr_coupling_outer_jcr_coupling_trans[:,2:3]
         a34 = a33.T
-        a35 = self.Pd_rbr_coupling_outer
-        a36 = self.Mbar_rbr_coupling_outer_jcr_coupling_trans[:,2:3]
-        a37 = B(a35,a36)
-        a38 = a36.T
-        a39 = self.P_rbr_coupling_outer
-        a40 = A(a39).T
-        a41 = B(a13,a33)
+        a35 = self.P_rbr_coupling_outer
+        a36 = A(a35).T
+        a37 = self.Mbar_rbr_coupling_inner_jcr_coupling_trans[:,0:1]
+        a38 = B(a13,a37)
+        a39 = a37.T
+        a40 = self.Pd_rbr_coupling_outer
+        a41 = B(a40,a33)
         a42 = a13.T
-        a43 = B(a16,a33).T
-        a44 = B(a39,a36)
+        a43 = B(a16,a37).T
+        a44 = B(a35,a33)
         a45 = self.Mbar_rbr_coupling_inner_jcr_coupling_trans[:,1:2]
-        a46 = a45.T
-        a47 = B(a13,a45)
+        a46 = B(a13,a45)
+        a47 = a45.T
         a48 = B(a16,a45).T
         a49 = self.ubar_rbr_coupling_inner_jcr_coupling_trans
         a50 = self.ubar_rbr_coupling_outer_jcr_coupling_trans
-        a51 = (multi_dot([B(a13,a49),a13]) + (-1) * multi_dot([B(a35,a50),a35]))
-        a52 = (self.Rd_rbr_coupling_inner + (-1) * self.Rd_rbr_coupling_outer + multi_dot([B(a16,a49),a13]) + (-1) * multi_dot([B(a39,a50),a35]))
-        a53 = (self.R_rbr_coupling_inner.T + (-1) * self.R_rbr_coupling_outer.T + multi_dot([a49.T,a17]) + (-1) * multi_dot([a50.T,a40]))
+        a51 = (multi_dot([B(a13,a49),a13]) + (-1) * multi_dot([B(a40,a50),a40]))
+        a52 = (self.Rd_rbr_coupling_inner + (-1) * self.Rd_rbr_coupling_outer + multi_dot([B(a16,a49),a13]) + (-1) * multi_dot([B(a35,a50),a40]))
+        a53 = (self.R_rbr_coupling_inner.T + (-1) * self.R_rbr_coupling_outer.T + multi_dot([a49.T,a17]) + (-1) * multi_dot([a50.T,a36]))
         a54 = self.Mbar_rbr_coupling_outer_jcr_coupling_trans[:,1:2]
         a55 = self.Mbar_rbl_coupling_inner_jcl_coupling_trans[:,0:1]
         a56 = a55.T
@@ -404,42 +404,42 @@ class topology(object):
         a78 = self.Mbar_vbr_wheel_hub_jcr_outer_cv[:,0:1]
         a79 = self.P_vbr_wheel_hub
         a80 = self.Mbar_rbr_coupling_outer_jcr_outer_cv[:,0:1]
-        a81 = a35.T
+        a81 = a40.T
         a82 = self.Pd_vbl_wheel_hub
-        a83 = self.Mbar_rbl_coupling_outer_jcl_outer_cv[:,0:1]
-        a84 = self.Mbar_vbl_wheel_hub_jcl_outer_cv[:,0:1]
-        a85 = self.P_vbl_wheel_hub
+        a83 = self.Mbar_vbl_wheel_hub_jcl_outer_cv[:,0:1]
+        a84 = self.P_vbl_wheel_hub
+        a85 = self.Mbar_rbl_coupling_outer_jcl_outer_cv[:,0:1]
         a86 = a57.T
 
         self.acc_eq_blocks = ((multi_dot([B(a0,self.ubar_rbr_inner_shaft_jcr_diff_joint),a0]) + (-1) * multi_dot([B(a1,self.ubar_vbs_differential_jcr_diff_joint),a1])),
-        (multi_dot([a3,a5,B(a0,a6),a0]) + multi_dot([a6.T,a8,a9,a1]) + (2) * multi_dot([a10,B(a7,a6).T,a11,a1])),
-        (multi_dot([a3,a5,B(a0,a12),a0]) + multi_dot([a12.T,a8,a9,a1]) + (2) * multi_dot([a10,B(a7,a12).T,a11,a1])),
+        (multi_dot([a2.T,a4,a6,a1]) + multi_dot([a7,a9,B(a0,a2),a0]) + (2) * multi_dot([a10,B(a3,a2).T,a11,a1])),
+        (multi_dot([a12.T,a4,a6,a1]) + multi_dot([a7,a9,B(a0,a12),a0]) + (2) * multi_dot([a10,B(a3,a12).T,a11,a1])),
         (multi_dot([B(a0,self.ubar_rbr_inner_shaft_jcr_inner_cv),a0]) + (-1) * multi_dot([B(a13,self.ubar_rbr_coupling_inner_jcr_inner_cv),a13])),
-        (multi_dot([a14.T,a8,B(a13,a15),a13]) + multi_dot([a15.T,a17,B(a0,a14),a0]) + (2) * multi_dot([a10,B(a7,a14).T,B(a16,a15),a13])),
+        (multi_dot([a14.T,a4,B(a13,a15),a13]) + multi_dot([a15.T,a17,B(a0,a14),a0]) + (2) * multi_dot([a10,B(a3,a14).T,B(a16,a15),a13])),
         (multi_dot([B(a18,self.ubar_rbl_inner_shaft_jcl_diff_joint),a18]) + (-1) * multi_dot([B(a1,self.ubar_vbs_differential_jcl_diff_joint),a1])),
-        (multi_dot([a19.T,a21,a23,a1]) + multi_dot([a24,a5,B(a18,a19),a18]) + (2) * multi_dot([a25,B(a20,a19).T,a26,a1])),
-        (multi_dot([a27.T,a21,a23,a1]) + multi_dot([a24,a5,B(a18,a27),a18]) + (2) * multi_dot([a25,B(a20,a27).T,a26,a1])),
+        (multi_dot([a19.T,a21,a23,a1]) + multi_dot([a24,a9,B(a18,a19),a18]) + (2) * multi_dot([a25,B(a20,a19).T,a26,a1])),
+        (multi_dot([a27.T,a21,a23,a1]) + multi_dot([a24,a9,B(a18,a27),a18]) + (2) * multi_dot([a25,B(a20,a27).T,a26,a1])),
         (multi_dot([B(a18,self.ubar_rbl_inner_shaft_jcl_inner_cv),a18]) + (-1) * multi_dot([B(a28,self.ubar_rbl_coupling_inner_jcl_inner_cv),a28])),
         (multi_dot([a29.T,a21,B(a28,a30),a28]) + multi_dot([a30.T,a32,B(a18,a29),a18]) + (2) * multi_dot([a25,B(a20,a29).T,B(a31,a30),a28])),
-        (multi_dot([a34,a17,a37,a35]) + multi_dot([a38,a40,a41,a13]) + (2) * multi_dot([a42,a43,a44,a35])),
-        (multi_dot([a46,a17,a37,a35]) + multi_dot([a38,a40,a47,a13]) + (2) * multi_dot([a42,a48,a44,a35])),
-        (multi_dot([a34,a17,a51]) + (2) * multi_dot([a42,a43,a52]) + multi_dot([a53,a41,a13])),
-        (multi_dot([a46,a17,a51]) + (2) * multi_dot([a42,a48,a52]) + multi_dot([a53,a47,a13])),
-        (multi_dot([a34,a17,B(a35,a54),a35]) + multi_dot([a54.T,a40,a41,a13]) + (2) * multi_dot([a42,a43,B(a39,a54),a35])),
+        (multi_dot([a34,a36,a38,a13]) + multi_dot([a39,a17,a41,a40]) + (2) * multi_dot([a42,a43,a44,a40])),
+        (multi_dot([a34,a36,a46,a13]) + multi_dot([a47,a17,a41,a40]) + (2) * multi_dot([a42,a48,a44,a40])),
+        (multi_dot([a39,a17,a51]) + (2) * multi_dot([a42,a43,a52]) + multi_dot([a53,a38,a13])),
+        (multi_dot([a47,a17,a51]) + (2) * multi_dot([a42,a48,a52]) + multi_dot([a53,a46,a13])),
+        (multi_dot([a54.T,a36,a38,a13]) + multi_dot([a39,a17,B(a40,a54),a40]) + (2) * multi_dot([a42,a43,B(a35,a54),a40])),
         (multi_dot([a56,a32,a59,a57]) + multi_dot([a60,a62,a63,a28]) + (2) * multi_dot([a64,a65,a66,a57])),
         (multi_dot([a68,a32,a59,a57]) + multi_dot([a60,a62,a69,a28]) + (2) * multi_dot([a64,a70,a66,a57])),
         (multi_dot([a56,a32,a73]) + (2) * multi_dot([a64,a65,a74]) + multi_dot([a75,a63,a28])),
         (multi_dot([a68,a32,a73]) + (2) * multi_dot([a64,a70,a74]) + multi_dot([a75,a69,a28])),
         (multi_dot([a56,a32,B(a57,a76),a57]) + multi_dot([a76.T,a62,a63,a28]) + (2) * multi_dot([a64,a65,B(a61,a76),a57])),
-        (multi_dot([B(a35,self.ubar_rbr_coupling_outer_jcr_outer_cv),a35]) + (-1) * multi_dot([B(a77,self.ubar_vbr_wheel_hub_jcr_outer_cv),a77])),
-        (multi_dot([a78.T,A(a79).T,B(a35,a80),a35]) + multi_dot([a80.T,a40,B(a77,a78),a77]) + (2) * multi_dot([a81,B(a39,a80).T,B(a79,a78),a77])),
+        (multi_dot([B(a40,self.ubar_rbr_coupling_outer_jcr_outer_cv),a40]) + (-1) * multi_dot([B(a77,self.ubar_vbr_wheel_hub_jcr_outer_cv),a77])),
+        (multi_dot([a78.T,A(a79).T,B(a40,a80),a40]) + multi_dot([a80.T,a36,B(a77,a78),a77]) + (2) * multi_dot([a81,B(a35,a80).T,B(a79,a78),a77])),
         (multi_dot([B(a57,self.ubar_rbl_coupling_outer_jcl_outer_cv),a57]) + (-1) * multi_dot([B(a82,self.ubar_vbl_wheel_hub_jcl_outer_cv),a82])),
-        (multi_dot([a83.T,a62,B(a82,a84),a82]) + multi_dot([a84.T,A(a85).T,B(a57,a83),a57]) + (2) * multi_dot([a86,B(a61,a83).T,B(a85,a84),a82])),
+        (multi_dot([a83.T,A(a84).T,B(a57,a85),a57]) + multi_dot([a85.T,a62,B(a82,a83),a82]) + (2) * multi_dot([a86,B(a61,a85).T,B(a84,a83),a82])),
         (2) * multi_dot([a10,a0]),
         (2) * multi_dot([a25,a18]),
         (2) * multi_dot([a42,a13]),
         (2) * multi_dot([a64,a28]),
-        (2) * multi_dot([a81,a35]),
+        (2) * multi_dot([a81,a40]),
         (2) * multi_dot([a86,a57]),)
 
     
