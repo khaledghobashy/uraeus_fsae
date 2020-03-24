@@ -41,9 +41,11 @@ class topology(object):
         self.reactions_indicies = ['%s%s'%(self.prefix,i) for i in reactions_indicies]
 
     
-    def initialize(self):
+    def initialize(self, q, qd, qdd, lgr):
         self.t = 0
         self.assemble(self.indicies_map, {}, 0)
+        self._set_states_arrays(q, qd, qdd, lgr)
+        self._map_states_arrays()
         self.set_initial_states()
         self.eval_constants()
 
@@ -55,14 +57,24 @@ class topology(object):
         self.jac_rows += self.rows_offset
         self.jac_cols = np.array([self.rbs_chassis*2, self.rbs_chassis*2+1], dtype=np.intc)
 
-    def set_initial_states(self):
-        self.q0  = np.concatenate([self.config.R_rbs_chassis,
-        self.config.P_rbs_chassis])
-        self.qd0 = np.concatenate([self.config.Rd_rbs_chassis,
-        self.config.Pd_rbs_chassis])
+    def _set_states_arrays(self, q, qd, qdd, lgr):
+        self._q = q
+        self._qd = qd
+        self._qdd = qdd
+        self._lgr = lgr
 
-        self.set_gen_coordinates(self.q0)
-        self.set_gen_velocities(self.qd0)
+    def _map_states_arrays(self):
+        self._map_gen_coordinates()
+        self._map_gen_velocities()
+        self._map_gen_accelerations()
+        self._map_lagrange_multipliers()
+
+    def set_initial_states(self):
+        np.concatenate([self.config.R_rbs_chassis,
+        self.config.P_rbs_chassis], out=self._q)
+
+        np.concatenate([self.config.Rd_rbs_chassis,
+        self.config.Pd_rbs_chassis], out=self._qd)
 
     def _set_mapping(self,indicies_map, interface_map):
         p = self.prefix
@@ -79,22 +91,26 @@ class topology(object):
         self.ubar_vbs_ground_fas_aero_drag = (multi_dot([A(config.P_vbs_ground).T,config.pt1_fas_aero_drag]) + (-1) * multi_dot([A(config.P_vbs_ground).T,config.R_vbs_ground]))
 
     
-    def set_gen_coordinates(self,q):
+    def _map_gen_coordinates(self):
+        q = self._q
         self.R_rbs_chassis = q[0:3]
         self.P_rbs_chassis = q[3:7]
 
     
-    def set_gen_velocities(self,qd):
+    def _map_gen_velocities(self):
+        qd = self._qd
         self.Rd_rbs_chassis = qd[0:3]
         self.Pd_rbs_chassis = qd[3:7]
 
     
-    def set_gen_accelerations(self,qdd):
+    def _map_gen_accelerations(self):
+        qdd = self._qdd
         self.Rdd_rbs_chassis = qdd[0:3]
         self.Pdd_rbs_chassis = qdd[3:7]
 
     
-    def set_lagrange_multipliers(self,Lambda):
+    def _map_lagrange_multipliers(self):
+        Lambda = self._lgr
         pass
 
     
@@ -113,7 +129,7 @@ class topology(object):
 
     
 
-        self.vel_eq_blocks = (Z1x1,)
+        self.vel_eq_blocks = (np.zeros((1,1),dtype=np.float64),)
 
     
     def eval_acc_eq(self):
@@ -131,7 +147,7 @@ class topology(object):
 
     
 
-        self.jac_eq_blocks = (Z1x3,
+        self.jac_eq_blocks = (np.zeros((1,3),dtype=np.float64),
         (2) * self.P_rbs_chassis.T,)
 
     
