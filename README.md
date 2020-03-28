@@ -1,6 +1,6 @@
 # **URAEUS** | FSAE
 
-A multi-body systems database for formula-style vehicles, such as those developed in the **FSAE** and the **Formula Student** competitions, implemented in the **uraeus** open-source framework.
+A multi-body systems database for formula-style vehicles, such as those developed in the **FSAE** and the **Formula Student** competitions, implemented in the **uraeus.mbd** open-source framework.
 
 ----------------
 
@@ -18,6 +18,10 @@ Vehicle dynamics is a major field of study when it comes to modelling and simula
 Another way of approaching the problem is by treating the vehicle as a generic multi-body system, where the vehicle systems of interest are modelled as rigid/flexible bodies connected together via joints, bushes and force elements.
 
 *To be Continued ...*
+
+## Modelling Approach
+
+
 
 ## About The Repository
 
