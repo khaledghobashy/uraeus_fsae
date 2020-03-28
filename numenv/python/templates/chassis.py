@@ -129,7 +129,7 @@ class topology(object):
 
     
 
-        self.vel_eq_blocks = (np.zeros((1,1),dtype=np.float64),)
+        self.vel_eq_blocks = (Z1x1,)
 
     
     def eval_acc_eq(self):
@@ -147,7 +147,7 @@ class topology(object):
 
     
 
-        self.jac_eq_blocks = (np.zeros((1,3),dtype=np.float64),
+        self.jac_eq_blocks = (Z1x3,
         (2) * self.P_rbs_chassis.T,)
 
     

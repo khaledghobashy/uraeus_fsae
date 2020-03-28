@@ -41,9 +41,11 @@ class topology(object):
         self.reactions_indicies = ['%s%s'%(self.prefix,i) for i in reactions_indicies]
 
     
-    def initialize(self):
+    def initialize(self, q, qd, qdd, lgr):
         self.t = 0
         self.assemble(self.indicies_map, {}, 0)
+        self._set_states_arrays(q, qd, qdd, lgr)
+        self._map_states_arrays()
         self.set_initial_states()
         self.eval_constants()
 
@@ -55,22 +57,32 @@ class topology(object):
         self.jac_rows += self.rows_offset
         self.jac_cols = np.array([self.rbr_rocker*2, self.rbr_rocker*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbr_rocker*2, self.rbr_rocker*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbr_rocker*2, self.rbr_rocker*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbs_coupler*2, self.rbs_coupler*2+1, self.rbr_rocker*2, self.rbr_rocker*2+1, self.rbs_coupler*2, self.rbs_coupler*2+1, self.rbr_rocker*2, self.rbr_rocker*2+1, self.rbl_rocker*2, self.rbl_rocker*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbl_rocker*2, self.rbl_rocker*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbl_rocker*2, self.rbl_rocker*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbl_rocker*2, self.rbl_rocker*2+1, self.vbs_chassis*2, self.vbs_chassis*2+1, self.rbs_coupler*2, self.rbs_coupler*2+1, self.rbl_rocker*2, self.rbl_rocker*2+1, self.rbs_coupler*2, self.rbs_coupler*2+1, self.rbr_rocker*2, self.rbr_rocker*2+1, self.rbl_rocker*2, self.rbl_rocker*2+1], dtype=np.intc)
 
+    def _set_states_arrays(self, q, qd, qdd, lgr):
+        self._q = q
+        self._qd = qd
+        self._qdd = qdd
+        self._lgr = lgr
+
+    def _map_states_arrays(self):
+        self._map_gen_coordinates()
+        self._map_gen_velocities()
+        self._map_gen_accelerations()
+        self._map_lagrange_multipliers()
+
     def set_initial_states(self):
-        self.q0  = np.concatenate([self.config.R_rbs_coupler,
+        np.concatenate([self.config.R_rbs_coupler,
         self.config.P_rbs_coupler,
         self.config.R_rbr_rocker,
         self.config.P_rbr_rocker,
         self.config.R_rbl_rocker,
-        self.config.P_rbl_rocker])
-        self.qd0 = np.concatenate([self.config.Rd_rbs_coupler,
+        self.config.P_rbl_rocker], out=self._q)
+
+        np.concatenate([self.config.Rd_rbs_coupler,
         self.config.Pd_rbs_coupler,
         self.config.Rd_rbr_rocker,
         self.config.Pd_rbr_rocker,
         self.config.Rd_rbl_rocker,
-        self.config.Pd_rbl_rocker])
-
-        self.set_gen_coordinates(self.q0)
-        self.set_gen_velocities(self.qd0)
+        self.config.Pd_rbl_rocker], out=self._qd)
 
     def _set_mapping(self,indicies_map, interface_map):
         p = self.prefix
@@ -108,7 +120,8 @@ class topology(object):
         self.ubar_rbs_coupler_jcs_rocker_sph = (multi_dot([A(config.P_rbs_coupler).T,config.pt1_jcs_rocker_sph]) + (-1) * multi_dot([A(config.P_rbs_coupler).T,config.R_rbs_coupler]))
 
     
-    def set_gen_coordinates(self,q):
+    def _map_gen_coordinates(self):
+        q = self._q
         self.R_rbs_coupler = q[0:3]
         self.P_rbs_coupler = q[3:7]
         self.R_rbr_rocker = q[7:10]
@@ -117,7 +130,8 @@ class topology(object):
         self.P_rbl_rocker = q[17:21]
 
     
-    def set_gen_velocities(self,qd):
+    def _map_gen_velocities(self):
+        qd = self._qd
         self.Rd_rbs_coupler = qd[0:3]
         self.Pd_rbs_coupler = qd[3:7]
         self.Rd_rbr_rocker = qd[7:10]
@@ -126,7 +140,8 @@ class topology(object):
         self.Pd_rbl_rocker = qd[17:21]
 
     
-    def set_gen_accelerations(self,qdd):
+    def _map_gen_accelerations(self):
+        qdd = self._qdd
         self.Rdd_rbs_coupler = qdd[0:3]
         self.Pdd_rbs_coupler = qdd[3:7]
         self.Rdd_rbr_rocker = qdd[7:10]
@@ -135,7 +150,8 @@ class topology(object):
         self.Pdd_rbl_rocker = qdd[17:21]
 
     
-    def set_lagrange_multipliers(self,Lambda):
+    def _map_lagrange_multipliers(self):
+        Lambda = self._lgr
         self.L_jcr_rocker_chassis = Lambda[0:5]
         self.L_jcs_rocker_uni = Lambda[5:9]
         self.L_jcl_rocker_chassis = Lambda[9:14]
