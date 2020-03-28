@@ -1,0 +1,33 @@
+{
+    "information": {
+        "topology_name": "front_axle_testrig",
+        "configuration_name": "front_axle_testrig_cfg",
+        "subsystem_name": ""
+    },
+    "user_inputs": {
+        "UF_mcr_wheel_lock": {
+            "constructor": "Lambda",
+            "args": [
+                [
+                    "t"
+                ],
+                0.0
+            ]
+        },
+        "vcs_y": {
+            "constructor": "array",
+            "args": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "evaluations": {},
+    "outputs": {
+        "ax1_jcr_hub_bearing": "vcs_y",
+        "ax1_jcl_hub_bearing": "vcs_y",
+        "UF_mcl_wheel_lock": "UF_mcr_wheel_lock"
+    },
+    "geometries_map": {}
+}
