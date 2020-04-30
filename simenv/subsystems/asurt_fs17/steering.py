@@ -4,8 +4,6 @@ import os
 import numpy as np
 import pandas as pd
 from uraeus.nmbd.python import configuration
-    
-from uraeus_fsae.numenv.python.templates import rack_steering
 
 json_file = os.path.abspath('../symenv/templates/rack_steering/data/rack_steering_cfg.json')
 

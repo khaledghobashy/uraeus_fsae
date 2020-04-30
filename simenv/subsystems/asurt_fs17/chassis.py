@@ -4,8 +4,6 @@ import os
 import numpy as np
 import pandas as pd
 from uraeus.nmbd.python import configuration
-    
-from uraeus_fsae.numenv.python.templates import chassis
 
 json_file = os.path.abspath('../symenv/templates/chassis/data/chassis_cfg.json')
 

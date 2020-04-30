@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from uraeus.nmbd.python import configuration
 
-json_file = os.path.abspath('../symenv/templates/double_wishbone_bellcrank/data/dwb_bellcrank_push_cfg.json')
+json_file = os.path.abspath('../symenv/templates/double_wishbone_bellcrank/data/double_wishbone_bellcrank_cfg.json')
 
 AX1_config = configuration('front_axle')
 AX1_config.construct_from_json(json_file)

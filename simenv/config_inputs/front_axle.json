@@ -1,7 +1,7 @@
 {
     "information": {
-        "topology_name": "dwb_bellcrank_push",
-        "configuration_name": "dwb_bellcrank_push_cfg",
+        "topology_name": "double_wishbone_bellcrank",
+        "configuration_name": "double_wishbone_bellcrank_cfg",
         "subsystem_name": "AX1"
     },
     "user_inputs": {
