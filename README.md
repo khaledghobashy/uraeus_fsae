@@ -1,6 +1,6 @@
 # **URAEUS** | FSAE
 
-A multi-body systems database for formula-style vehicles, such as those developed in the **FSAE** and the **Formula Student** competitions, implemented in the **uraeus.mbd** open-source framework.
+A multi-body systems' database for formula-style vehicles, such as those developed in the **FSAE** and the **Formula Student** competitions, implemented in the [**uraeus.mbd**](https://github.com/khaledghobashy/uraeus_mbd) open-source framework.
 
 ----------------
 
@@ -15,13 +15,11 @@ While the real physical system encounters all these domains at once, it can be a
 
 Vehicle dynamics is a major field of study when it comes to modelling and simulating vehicle performance regarding isolation and control. Traditionally, these performance aspects were analysed using classical vehicle dynamics approaches that are developed for ages and proved to be quite helpful and insightful.
 
-Another way of approaching the problem is by treating the vehicle as a generic multi-body system, where the vehicle systems of interest are modelled as rigid/flexible bodies connected together via joints, bushes and force elements.
+Another way of approaching the problem is by treating the vehicle as a generic multi-body system, where the vehicle systems of interest are modelled as a set of rigid/flexible bodies connected together via joints, bushes and force elements. This approach can be considered as a high-fidelity modelling approach that abstracts the physical system in a more realistic -but complex- manner. This opens the doors for the next level of simulations ...
 
 *To be Continued ...*
 
-## Modelling Approach
-
-
+---
 
 ## About The Repository
 
@@ -30,12 +28,10 @@ Another way of approaching the problem is by treating the vehicle as a generic m
 This repository aims to provide:
 
 - A full-featured database of multi-body system models commonly used in developing **Formula Student** vehicles.
-- A showcase of the **uraeus** open-source framework capabilities, and a "How To" use it in real-world modelling situations.
+- A showcase of the **uraeus.mbd** open-source framework capabilities, and a "How To" use it in real-world modelling situations.
 - A full-featured modelling and simulation process, i.e. model creation, numerical simulation and 3D visualization.
 
-### URAEUS
 
-*Brief about the uraeus framework*
 
 ![vehicle visual](readme_materials/sample_vehicle_3D_2.png)
 
@@ -76,8 +72,15 @@ Symbolic Assemblies are topologies that assemble various template-based models t
     Double Wishbone Bellcrank-Actuated mechanism
   - **Rear Axle**
     Double Wishbone Bellcrank-Actuated mechanism
+  - **Rear Drive Shafts**
+    Couplings drive shafts connected by universal joints.
   - **Front Steering**
     Steering Rack
   - **Vehicle Chassis**
     Rigid Chassis
 
+---
+
+## Approach
+
+For insights about the general high-level modelling approach adopted by the **uraeus.mbd** , please read through the [**README**](https://github.com/khaledghobashy/uraeus_mbd/blob/master/README.md) first.
