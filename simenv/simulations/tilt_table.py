@@ -10,7 +10,7 @@ from uraeus.nmbd.python.engine.numerics.math_funcs import A
 database_directory = os.path.abspath('../../')
 sys.path.append(database_directory)
 
-from uraeus_fsae.simenv.assemblies import asurt_FS17 as num_assm
+from uraeus_fsae.simenv.assemblies import asurt_FS17_v1 as num_assm
 
 num_model = num_assm.num_model
 
@@ -24,7 +24,7 @@ def terrain_state(x, y):
     duration  = 15
     theta = amplitude*(1/duration)*t if t <=duration else amplitude
 
-    print('Table Angle = %s'%np.rad2deg(theta))
+    #print('Table Angle = %s'%np.rad2deg(theta))
 
     local_normal = np.array([[0],[0],[1]])
     table_matrix = np.array([[1, 0, 0],
@@ -81,7 +81,7 @@ sim.set_time_array(20, dt)
 
 # Getting Equilibrium results as initial conditions to this simulation
 # ====================================================================
-sim.set_initial_states('results/equilibrium_v1.npz')
+sim.set_initial_states('results/equilibrium_v4.npz')
 
 sim.solve()
 
