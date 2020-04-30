@@ -64,10 +64,8 @@ num_assm.terrain_data.get_state = terrain_state
 
 num_assm.ST1_config.UF_mcs_rack_act = steering_function
 
-num_assm.AX1_config.UF_far_drive = FR_Torque
-num_assm.AX1_config.UF_fal_drive = FL_Torque
-num_assm.AX2_config.UF_far_drive = RR_Torque
-num_assm.AX2_config.UF_fal_drive = RL_Torque
+num_assm.DR2_config.UF_far_drive = RR_Torque
+num_assm.DR2_config.UF_fal_drive = RL_Torque
 
 num_assm.CH_config.UF_fas_aero_drag_F = zero_func
 num_assm.CH_config.UF_fas_aero_drag_T = zero_func
