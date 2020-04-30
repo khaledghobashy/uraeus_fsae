@@ -1,0 +1,66 @@
+{
+    "assembly_name": "front_axle",
+    "subsystems": {
+        "AX1": "double_wishbone_bellcrank",
+        "ST1": "rack_steering"
+    },
+    "interface_map": {
+        "AX1.vbl_steer": "ST1.rbs_rack",
+        "AX1.vbs_ground": "ground",
+        "AX1.vbr_steer": "ST1.rbs_rack",
+        "AX1.vbs_chassis": "ground",
+        "ST1.vbs_chassis": "ground",
+        "ST1.vbs_ground": "ground"
+    },
+    "nodes_indicies": {
+        "ground": 0,
+        "AX1.rbr_uca": 1,
+        "AX1.rbl_uca": 2,
+        "AX1.rbr_lca": 3,
+        "AX1.rbl_lca": 4,
+        "AX1.rbr_upright": 5,
+        "AX1.rbl_upright": 6,
+        "AX1.rbr_tie_rod": 7,
+        "AX1.rbl_tie_rod": 8,
+        "AX1.rbr_hub": 9,
+        "AX1.rbl_hub": 10,
+        "AX1.rbr_pushrod": 11,
+        "AX1.rbl_pushrod": 12,
+        "AX1.rbr_rocker": 13,
+        "AX1.rbl_rocker": 14,
+        "AX1.rbr_upper_strut": 15,
+        "AX1.rbl_upper_strut": 16,
+        "AX1.rbr_lower_strut": 17,
+        "AX1.rbl_lower_strut": 18,
+        "ST1.rbs_rack": 19
+    },
+    "mapped_vir_coordinates": {},
+    "mapped_vir_velocities": {
+        "AX1.Rd_vbl_steer": "ST1.Rd_rbs_rack",
+        "AX1.Pd_vbl_steer": "ST1.Pd_rbs_rack",
+        "AX1.Rd_vbs_ground": "Rd_ground",
+        "AX1.Pd_vbs_ground": "Pd_ground",
+        "AX1.Rd_vbr_steer": "ST1.Rd_rbs_rack",
+        "AX1.Pd_vbr_steer": "ST1.Pd_rbs_rack",
+        "AX1.Rd_vbs_chassis": "Rd_ground",
+        "AX1.Pd_vbs_chassis": "Pd_ground",
+        "ST1.Rd_vbs_chassis": "Rd_ground",
+        "ST1.Pd_vbs_chassis": "Pd_ground",
+        "ST1.Rd_vbs_ground": "Rd_ground",
+        "ST1.Pd_vbs_ground": "Pd_ground"
+    },
+    "mapped_vir_accelerations": {
+        "AX1.Rdd_vbl_steer": "ST1.Rdd_rbs_rack",
+        "AX1.Pdd_vbl_steer": "ST1.Pdd_rbs_rack",
+        "AX1.Rdd_vbs_ground": "Rdd_ground",
+        "AX1.Pdd_vbs_ground": "Pdd_ground",
+        "AX1.Rdd_vbr_steer": "ST1.Rdd_rbs_rack",
+        "AX1.Pdd_vbr_steer": "ST1.Pdd_rbs_rack",
+        "AX1.Rdd_vbs_chassis": "Rdd_ground",
+        "AX1.Pdd_vbs_chassis": "Pdd_ground",
+        "ST1.Rdd_vbs_chassis": "Rdd_ground",
+        "ST1.Pdd_vbs_chassis": "Pdd_ground",
+        "ST1.Rdd_vbs_ground": "Rdd_ground",
+        "ST1.Pdd_vbs_ground": "Pdd_ground"
+    }
+}

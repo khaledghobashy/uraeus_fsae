@@ -38,8 +38,8 @@ sym_model.add_actuator.translational_actuator('rack_act', 'jcs_rack')
 
 
 # Assembling and Saving the model
-sym_model.assemble()
 sym_model.save(data_dir)
+sym_model.assemble()
 
 # ============================================================= #
 #                     Symbolic Configuration

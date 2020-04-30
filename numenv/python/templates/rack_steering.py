@@ -79,8 +79,8 @@ class topology(object):
     def _set_mapping(self,indicies_map, interface_map):
         p = self.prefix
         self.rbs_rack = indicies_map[p + 'rbs_rack']
-        self.vbs_chassis = indicies_map[interface_map[p + 'vbs_chassis']]
         self.vbs_ground = indicies_map[interface_map[p + 'vbs_ground']]
+        self.vbs_chassis = indicies_map[interface_map[p + 'vbs_chassis']]
 
     
     def eval_constants(self):

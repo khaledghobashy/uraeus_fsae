@@ -1,7 +1,7 @@
 {
     "information": {
-        "topology_name": "dwb_direct_acting",
-        "configuration_name": "dwb_direct_acting_cfg",
+        "topology_name": "double_wishbone_direct_acting",
+        "configuration_name": "double_wishbone_direct_acting_cfg",
         "subsystem_name": ""
     },
     "user_inputs": {

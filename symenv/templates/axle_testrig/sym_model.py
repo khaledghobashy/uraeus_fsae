@@ -16,7 +16,7 @@ database_directory = os.path.abspath(os.path.join(dir_name, '../../../'))
 
 # Creating the symbolic topology as an instance of the
 # standalone_topology class
-project_name = 'front_axle_testrig'
+project_name = 'axle_testrig'
 sym_model = template_topology(project_name)
 
 # Adding Bodies
@@ -37,8 +37,8 @@ sym_model.add_actuator.rotational_actuator('wheel_lock', 'jcr_hub_bearing', mirr
 
 
 # Assembling and Saving the model
-sym_model.assemble()
 sym_model.save(data_dir)
+sym_model.assemble()
 
 # ============================================================= #
 #                     Symbolic Configuration

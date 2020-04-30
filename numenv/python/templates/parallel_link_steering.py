@@ -89,8 +89,8 @@ class topology(object):
         self.rbs_coupler = indicies_map[p + 'rbs_coupler']
         self.rbr_rocker = indicies_map[p + 'rbr_rocker']
         self.rbl_rocker = indicies_map[p + 'rbl_rocker']
-        self.vbs_chassis = indicies_map[interface_map[p + 'vbs_chassis']]
         self.vbs_ground = indicies_map[interface_map[p + 'vbs_ground']]
+        self.vbs_chassis = indicies_map[interface_map[p + 'vbs_chassis']]
 
     
     def eval_constants(self):
@@ -236,9 +236,9 @@ class topology(object):
         a11 = B(a8,a5)
         a12 = self.Mbar_rbr_rocker_jcr_rocker_chassis[:,1:2]
         a13 = self.Pd_rbs_coupler
-        a14 = self.Mbar_rbr_rocker_jcs_rocker_uni[:,0:1]
-        a15 = self.Mbar_rbs_coupler_jcs_rocker_uni[:,0:1]
-        a16 = self.P_rbs_coupler
+        a14 = self.Mbar_rbs_coupler_jcs_rocker_uni[:,0:1]
+        a15 = self.P_rbs_coupler
+        a16 = self.Mbar_rbr_rocker_jcs_rocker_uni[:,0:1]
         a17 = self.Pd_rbl_rocker
         a18 = self.Mbar_rbl_rocker_jcl_rocker_chassis[:,0:1]
         a19 = self.P_rbl_rocker
@@ -257,7 +257,7 @@ class topology(object):
         (multi_dot([a2.T,a4,a6,a1]) + multi_dot([a7,a9,B(a0,a2),a0]) + (2) * multi_dot([a10,B(a3,a2).T,a11,a1])),
         (multi_dot([a12.T,a4,a6,a1]) + multi_dot([a7,a9,B(a0,a12),a0]) + (2) * multi_dot([a10,B(a3,a12).T,a11,a1])),
         (multi_dot([B(a0,self.ubar_rbr_rocker_jcs_rocker_uni),a0]) + (-1) * multi_dot([B(a13,self.ubar_rbs_coupler_jcs_rocker_uni),a13])),
-        (multi_dot([a14.T,a4,B(a13,a15),a13]) + multi_dot([a15.T,A(a16).T,B(a0,a14),a0]) + (2) * multi_dot([a10,B(a3,a14).T,B(a16,a15),a13])),
+        (multi_dot([a14.T,A(a15).T,B(a0,a16),a0]) + multi_dot([a16.T,a4,B(a13,a14),a13]) + (2) * multi_dot([a10,B(a3,a16).T,B(a15,a14),a13])),
         (multi_dot([B(a17,self.ubar_rbl_rocker_jcl_rocker_chassis),a17]) + (-1) * multi_dot([B(a1,self.ubar_vbs_chassis_jcl_rocker_chassis),a1])),
         (multi_dot([a18.T,a20,a22,a1]) + multi_dot([a23,a9,B(a17,a18),a17]) + (2) * multi_dot([a24,B(a19,a18).T,a25,a1])),
         (multi_dot([a26.T,a20,a22,a1]) + multi_dot([a23,a9,B(a17,a26),a17]) + (2) * multi_dot([a24,B(a19,a26).T,a25,a1])),

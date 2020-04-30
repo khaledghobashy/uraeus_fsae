@@ -16,7 +16,7 @@ database_directory = os.path.abspath(os.path.join(dir_name, '../../../'))
 
 # Creating the symbolic topology as an instance of the
 # standalone_topology class
-project_name = 'dwb_bellcrank_push'
+project_name = 'double_wishbone_bellcrank'
 sym_model = template_topology(project_name)
 
 # Adding Bodies
@@ -66,8 +66,8 @@ sym_model.add_force.local_torque('drive', 'rbr_hub', mirror=True)
 
 
 # Assembling and Saving the model
-sym_model.assemble()
 sym_model.save(data_dir)
+sym_model.assemble()
 
 # ============================================================= #
 #                     Symbolic Configuration

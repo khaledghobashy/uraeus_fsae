@@ -43,8 +43,8 @@ sym_model.add_force.local_torque('drive', 'rbr_inner_shaft', mirror=True)
 
 
 # Assembling and Saving the model
-sym_model.assemble()
 sym_model.save(data_dir)
+sym_model.assemble()
 
 # ============================================================= #
 #                     Symbolic Configuration

@@ -78,9 +78,9 @@ class topology(object):
         p = self.prefix
     
         self.vbl_wheel_upright = indicies_map[interface_map[p + 'vbl_wheel_upright']]
+        self.vbl_wheel_hub = indicies_map[interface_map[p + 'vbl_wheel_hub']]
         self.vbs_ground = indicies_map[interface_map[p + 'vbs_ground']]
         self.vbr_wheel_upright = indicies_map[interface_map[p + 'vbr_wheel_upright']]
-        self.vbl_wheel_hub = indicies_map[interface_map[p + 'vbl_wheel_hub']]
         self.vbr_wheel_hub = indicies_map[interface_map[p + 'vbr_wheel_hub']]
 
     

@@ -41,8 +41,8 @@ sym_model = template_topology(project_name)
 
 
 # Assembling and Saving the model
-sym_model.assemble()
 sym_model.save(data_dir)
+sym_model.assemble()
 
 # ============================================================= #
 #                     Symbolic Configuration

@@ -44,8 +44,8 @@ sym_model.add_actuator.rotational_actuator('steer_act', 'jcl_rocker_chassis')
 #
 
 # Assembling and Saving the model
-sym_model.assemble()
 sym_model.save(data_dir)
+sym_model.assemble()
 
 # ============================================================= #
 #                     Symbolic Configuration
