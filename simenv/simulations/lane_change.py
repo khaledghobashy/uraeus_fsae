@@ -74,7 +74,9 @@ num_assm.DR2_config.UF_fal_drive = RL_Torque
 num_assm.CH_config.UF_fas_aero_drag_F = zero_func
 num_assm.CH_config.UF_fas_aero_drag_T = zero_func
 
-
+# =============================================================================
+#                       Setting and Starting Simulation
+# =============================================================================
 
 sim = simulation('sim', num_model, 'dds')
 sim.set_time_array(9, dt)
@@ -82,13 +84,14 @@ sim.set_time_array(9, dt)
 plt.plot(sim.soln.time_array, [steering_function(i) for i in sim.soln.time_array])
 plt.show()
 
+# Getting Equilibrium results as initial conditions to this simulation
+# ====================================================================
 sim.set_initial_states('results/equilibrium_v4.npz')
 
 sim.solve()
 
-sim.save_as_csv('results', 'lanechange_v4', 'pos')
-sim.save_as_npz('results', 'lanechange_v4')
-
+sim.save_as_csv('results', 'lanechange_v1', 'pos')
+sim.save_as_npz('results', 'lanechange_v1')
 
 #=============================================================================
 #                       Plotting Simulation Results

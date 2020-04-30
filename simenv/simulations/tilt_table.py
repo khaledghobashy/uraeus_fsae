@@ -40,13 +40,6 @@ def terrain_state(x, y):
     return [table_normal, hieght]
 
 
-
-def FR_Torque(t):
-    return 0
-
-def FL_Torque(t):
-    return 0
-
 def RR_Torque(t):
     return 0
 
