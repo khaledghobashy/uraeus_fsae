@@ -10,7 +10,7 @@ from uraeus.nmbd.python.engine.numerics.math_funcs import A
 database_directory = os.path.abspath('../../')
 sys.path.append(database_directory)
 
-from uraeus_fsae.simenv.assemblies import asurt_FS17 as num_assm
+from uraeus_fsae.simenv.assemblies import asurt_FS17_v1 as num_assm
 
 num_model = num_assm.num_model
 
@@ -22,19 +22,23 @@ def terrain_state(x, y):
     hieght = 0
     return [local_normal, hieght]
 
-def FR_Torque(t):
-    return 0
+from controllers import longitudinal_control
 
-def FL_Torque(t):
-    return 0
+controler = longitudinal_control()
+
+def torque_function(t):
+    P_ch = num_model.Subsystems.CH.P_rbs_chassis
+    Rd = num_model.Subsystems.CH.Rd_rbs_chassis
+    factor = controler.get_torque_factor(P_ch, Rd)
+    return factor
 
 def RR_Torque(t):
-    factor = 0.8 if t <= 3 else 0.2
+    factor = torque_function(t)
     torque = -factor*(70*9.81)*1e6*TR
     return torque
 
 def RL_Torque(t):
-    factor = 0.8 if t <= 3 else 0.2
+    factor = torque_function(t)
     torque = -factor*(70*9.81)*1e6*TR
     return torque
 
@@ -49,10 +53,11 @@ num_assm.terrain_data.get_state = terrain_state
 
 num_assm.ST1_config.UF_mcs_rack_act = steering_function
 
-num_assm.AX1_config.UF_far_drive = FR_Torque
-num_assm.AX1_config.UF_fal_drive = FL_Torque
-num_assm.AX2_config.UF_far_drive = RR_Torque
-num_assm.AX2_config.UF_fal_drive = RL_Torque
+num_assm.AX1_config.UF_far_drive = RR_Torque
+num_assm.AX1_config.UF_fal_drive = RL_Torque
+
+#num_assm.DR2_config.UF_far_drive = RR_Torque
+#num_assm.DR2_config.UF_fal_drive = RL_Torque
 
 num_assm.CH_config.UF_fas_aero_drag_F = zero_func
 num_assm.CH_config.UF_fas_aero_drag_T = zero_func
