@@ -40,7 +40,7 @@ class speed_controller(object):
         self._last_err = err
         
         factor = P + I + D
-        if factor > 1.2:# or factor < -1.2:
+        if factor > 1.2 or factor < -1.2:
             self._sum_int -= err * self.dt
         
         factor = clamp(factor, -1.2, 1.2)

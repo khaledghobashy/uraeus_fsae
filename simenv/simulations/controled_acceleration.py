@@ -19,11 +19,13 @@ dt = num_assm.dt
 TR = 254
 
 
-controller = speed_controller(40, dt)
+controller = speed_controller(60, dt)
 
 def torque_function(t):
     P_ch = num_model.Subsystems.CH.P_rbs_chassis
     Rd = num_model.Subsystems.CH.Rd_rbs_chassis
+    if t >= 3:
+        controller.desired_speed = 0
     factor = controller.get_torque_factor(P_ch, Rd)
     return factor
 
