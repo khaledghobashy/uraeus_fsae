@@ -6,6 +6,7 @@ import pandas as pd
 
 from uraeus.nmbd.python import simulation
 from uraeus.nmbd.python.engine.numerics.math_funcs import A
+from controllers import speed_controller
 
 database_directory = os.path.abspath('../../')
 sys.path.append(database_directory)
@@ -17,14 +18,13 @@ num_model = num_assm.num_model
 dt = num_assm.dt
 TR = 254
 
-from controllers import longitudinal_control
 
-controler = longitudinal_control()
+controller = speed_controller(40, dt)
 
 def torque_function(t):
     P_ch = num_model.Subsystems.CH.P_rbs_chassis
     Rd = num_model.Subsystems.CH.Rd_rbs_chassis
-    factor = controler.get_torque_factor(P_ch, Rd)
+    factor = controller.get_torque_factor(P_ch, Rd)
     return factor
 
 def RR_Torque(t):
