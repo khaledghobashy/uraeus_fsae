@@ -24,7 +24,12 @@ def terrain_state(x, y):
     return [local_normal, hieght]
 
 
-controller = speed_controller(40, dt)
+controller = speed_controller(30, dt, [5*1e-3, 1*1e-5, 0])
+
+def get_yaw_angle(P_ch):
+    w, x, y, z = P_ch.flat[:]
+    angle = np.arctan2(2*(w*z + x*y), 1 - 2*(y**2 + z**2))
+    return angle
 
 def torque_function(t):
     P_ch = num_model.Subsystems.CH.P_rbs_chassis
@@ -44,6 +49,9 @@ def RL_Torque(t):
 
 def steering_function(t):
     amplitude = 22
+    P_ch = num_model.Subsystems.CH.P_rbs_chassis
+    yaw_angle = get_yaw_angle(P_ch)
+    #print('Yaw Angle = %s'%yaw_angle)
     return amplitude
 
 def zero_func(t):

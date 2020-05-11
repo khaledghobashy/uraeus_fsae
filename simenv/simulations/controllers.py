@@ -23,6 +23,7 @@ class speed_controller(object):
 
     def _get_error(self, P_ch, Rd_ch):
         v_c = abs(A(P_ch).T @ Rd_ch)[0,0]
+        print('vel = %s'%v_c)
         v_r = self.desired_speed
         err = v_r - v_c
         self._errors_array.append(err)
@@ -45,11 +46,11 @@ class speed_controller(object):
         
         factor = clamp(factor, -1.2, 1.2)
         
-        #print('E = %s'%err)
-        #print('P = %s'%P)
-        #print('I = %s'%I)
-        #print('D = %s'%D)
-        #print('F = %s\n'%factor)
+        print('E = %s'%err)
+        print('P = %s'%P)
+        print('I = %s'%I)
+        print('D = %s'%D)
+        print('F = %s\n'%factor)
 
         return factor
 
@@ -72,7 +73,7 @@ class stanley_controller(object):
         yaw_ch = self.get_yaw_angle(P_ch)
         err, yaw_path = self.get_waypoint(x_ax1, y_ax1, yaw_ch)
 
-        yaw_diff = -(yaw_path - yaw_ch)
+        yaw_diff = (yaw_ch - yaw_path)
         print(yaw_diff)
         if yaw_diff > np.pi:
             yaw_diff -= 2 * np.pi
@@ -83,7 +84,7 @@ class stanley_controller(object):
         crosstrack_factor = np.arctan2(k * err, k_soft + vel)
         delta = yaw_diff + crosstrack_factor
 
-        #delta = clamp(delta, np.deg2rad(-60), np.deg2rad(60))
+        delta = clamp(delta, np.deg2rad(-60), np.deg2rad(60))
 
         print('x_ax1, y_ax1 = %s'%((x_ax1, y_ax1),))
         print('vel = %s'%vel)
@@ -115,9 +116,9 @@ class stanley_controller(object):
         print('min_idx = %s'%min_idx)
         
         err = min_dist
-        yaw_path = 0 #np.arctan(self._waypoints[min_idx][2])
-        #if min_idx != 0:
-        #    yaw_path = np.arctan2(self._waypoints[min_idx][1]-self._waypoints[min_idx-1][1], self._waypoints[min_idx][0]-self._waypoints[min_idx-1][0])
+        yaw_path = np.arctan(self._waypoints[min_idx][2])
+        if min_idx != 0:
+            yaw_path = np.arctan2(self._waypoints[min_idx][1]-self._waypoints[min_idx-1][1], self._waypoints[min_idx][0]-self._waypoints[min_idx-1][0])
 
 
         return err, yaw_path
@@ -137,6 +138,9 @@ class stanley_controller(object):
                           -np.sin(yaw + np.pi / 2)]
         error_front_axle = np.dot([dx[target_idx], dy[target_idx]], front_axle_vec)
 
-        yaw_path = 0 
+        print('target_idx = %s'%target_idx)
+
+        yaw_path = self._waypoints[target_idx][2]
+
         return error_front_axle, yaw_path
 
