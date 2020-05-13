@@ -19,15 +19,15 @@ num_model = num_assm.num_model
 dt = num_assm.dt
 TR = 254
 
-path_data = np.zeros((1000, 3))
-path_data[:, 0] = (10*1e3 / 2*np.pi) * np.linspace(0, -2*np.pi, 1000)
-path_data[:, 1] = (5*1e3 * np.sin(np.linspace(0, -2*np.pi, 1000)))
-path_data[:, 2] = np.gradient(path_data[:, 1] / ((25*1e3 / 2*np.pi)), np.linspace(0, -2*np.pi, 1000))
-
 #path_data = np.zeros((1000, 3))
-#path_data[:, 0] = 100*1e3 * np.linspace(0, -2*np.pi, 1000)
-#path_data[:, 1] = 10*1e3 * np.ones((1000,))
-#path_data[:, 2] = np.gradient(path_data[:, 1] / (100*1e3), path_data[:, 1])
+#path_data[:, 0] = (10*1e3 / 2*np.pi) * np.linspace(0, -2*np.pi, 1000)
+#path_data[:, 1] = (5*1e3 * np.sin(np.linspace(0, -2*np.pi, 1000)))
+#path_data[:, 2] = np.gradient(path_data[:, 1] / ((25*1e3 / 2*np.pi)), np.linspace(0, -2*np.pi, 1000))
+
+path_data = np.zeros((1000, 3))
+path_data[:, 0] = 100*1e3 * np.linspace(0, -2*np.pi, 1000)
+path_data[:, 1] = 10*1e3 * np.ones((1000,))
+path_data[:, 2] = np.gradient(path_data[:, 1] / (100*1e3), path_data[:, 1])
 
 plt.figure(figsize=(10, 5))
 plt.plot(path_data[:,0], path_data[:,1]*1e-3)
@@ -43,38 +43,6 @@ plt.grid()
 
 plt.show()
 
-
-def iso_dlc1(x):
-    A = (1.1 * 1.2) + 0.25
-    C = 0.6
-    atr = 6
-    y =   ((1+A)/2) * (1 + np.tanh((x - 25.2)/atr)) \
-        - (A/2) + ((1+C)/2)*(1 - np.tanh((x - 36.8)/atr)) - 1 + C
-    
-    return y
-
-def iso_dlc2(x):
-    A = (1.1 * 1.2) + 0.25
-    C = 0.6
-    B = 1.2 + 1
-    atr = 6
-    y =   ((1+B)/2) * (1 + np.tanh((x - 12.3)/atr)) \
-        + (A/2) + ((1+C)/2)*(1 - np.tanh((x - 48.7)/atr)) - 1 - B
-    
-    return y
-
-x = np.arange(0, 61, 0.1)
-y1 = [iso_dlc1(i) for i in x]#[:x.shape[0]//2]]
-y2 = [iso_dlc2(i) for i in x]#[x.shape[0]//2:]]
-plt.figure(figsize=(10, 5))
-#plt.plot(x[:x.shape[0]//2], y1)
-#plt.plot(x[x.shape[0]//2:], y2)
-plt.plot(x, y1)
-plt.plot(x, y2)
-
-plt.grid()
-
-plt.show()
 
 controller = speed_controller(30, dt)
 lateral_controller = stanley_controller(path_data)
@@ -114,7 +82,7 @@ def steering_function(t):
 
     delta = lateral_controller.get_steer_angle(r_ax1, P_ch, vel)
 
-    travel = delta * 17
+    travel = delta * 15
     print('Travel = %s'%travel)
     return travel
 
@@ -146,7 +114,7 @@ sim.set_time_array(15, dt)
 # ====================================================================
 sim.set_initial_states('results/equilibrium_v4.npz')
 
-#sim.solve()
+sim.solve()
 
 sim.save_as_csv('results', 'sine_path_v8', 'pos')
 sim.save_as_npz('results', 'sine_path_v8')

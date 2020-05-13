@@ -80,7 +80,7 @@ def steering_function(t):
 
     delta = lateral_controller.get_steer_angle(r_ax1, P_ch, vel)
 
-    travel = delta * 17
+    travel = delta * 15
     print('Travel = %s'%travel)
     return travel
 

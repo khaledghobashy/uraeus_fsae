@@ -46,13 +46,15 @@ class speed_controller(object):
         
         factor = clamp(factor, -1.2, 1.2)
         
-        print('E = %s'%err)
-        print('P = %s'%P)
-        print('I = %s'%I)
-        print('D = %s'%D)
-        print('F = %s\n'%factor)
+        #print('E = %s'%err)
+        #print('P = %s'%P)
+        #print('I = %s'%I)
+        #print('D = %s'%D)
+        #print('F = %s\n'%factor)
 
         return factor
+
+
 
 class stanley_controller(object):
 
@@ -71,14 +73,14 @@ class stanley_controller(object):
         x_ax1, y_ax1, _ = r_ax1.flat[:]
 
         yaw_ch = self.get_yaw_angle(P_ch)
-        err, yaw_path = self.get_waypoint(x_ax1, y_ax1, yaw_ch)
+        err, yaw_path, idx = self.get_waypoint(x_ax1, y_ax1, yaw_ch)
 
-        yaw_diff = (yaw_ch - yaw_path)
-        print(yaw_diff)
-        if yaw_diff > np.pi:
-            yaw_diff -= 2 * np.pi
-        if yaw_diff < - np.pi:
-            yaw_diff += 2 * np.pi
+        yaw_diff = self.get_heading_error(P_ch, idx) #(yaw_ch - yaw_path)
+        print('heading_error = %s'%yaw_diff)
+        #if yaw_diff > np.pi:
+        #    yaw_diff -= 2 * np.pi
+        #if yaw_diff < - np.pi:
+        #    yaw_diff += 2 * np.pi
         
         heading_factor = yaw_diff
         crosstrack_factor = np.arctan2(k * err, k_soft + vel)
@@ -142,5 +144,17 @@ class stanley_controller(object):
 
         yaw_path = self._waypoints[target_idx][2]
 
-        return error_front_axle, yaw_path
+        return error_front_axle, yaw_path, target_idx
 
+    def get_heading_error(self, P_ch, idx):
+
+        try:
+            path_vector = np.array([[self._waypoints[idx+1][0] - self._waypoints[idx][0]], 
+                                    [self._waypoints[idx+1][1] - self._waypoints[idx][1]]])
+        except(IndexError):
+            path_vector = np.array([[1], [0]])
+        
+        chassis_heading = (A(P_ch) @ np.array([[-1], [0], [0]]))[0:2]
+
+        angle = np.arccos((chassis_heading/np.linalg.norm(chassis_heading)).T.dot(path_vector/np.linalg.norm(path_vector)))
+        return angle[0,0]

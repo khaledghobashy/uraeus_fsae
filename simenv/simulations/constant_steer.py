@@ -24,7 +24,7 @@ def terrain_state(x, y):
     return [local_normal, hieght]
 
 
-controller = speed_controller(30, dt, [5*1e-3, 1*1e-5, 0])
+controller = speed_controller(30, dt, [5*1e-3, 3*1e-4, 0])
 
 def get_yaw_angle(P_ch):
     w, x, y, z = P_ch.flat[:]
@@ -47,11 +47,13 @@ def RL_Torque(t):
     torque = -factor*(70*9.81)*1e6*TR
     return torque
 
+yaw_angles = []
 def steering_function(t):
     amplitude = 22
     P_ch = num_model.Subsystems.CH.P_rbs_chassis
     yaw_angle = get_yaw_angle(P_ch)
-    #print('Yaw Angle = %s'%yaw_angle)
+    print('Yaw Angle = %s'%yaw_angle)
+    yaw_angles.append(yaw_angle)
     return amplitude
 
 def zero_func(t):
@@ -92,6 +94,8 @@ sim.save_as_npz('results', 'constant_steer_v2')
 
 import matplotlib.pyplot as plt
 
+sim.soln.pos_dataframe.plot(x='CH.rbs_chassis.x', y='CH.rbs_chassis.y', grid=True)
+
 sim.soln.pos_dataframe.plot(x='time', y='CH.rbs_chassis.z', grid=True)
 sim.soln.vel_dataframe.plot(x='time', y='CH.rbs_chassis.z', grid=True)
 sim.soln.acc_dataframe.plot(x='time', y='CH.rbs_chassis.z', grid=True)
@@ -121,6 +125,10 @@ sim.soln.pos_dataframe.plot(x='time',
                             y=['AX1.rbr_hub.e0', 'AX1.rbr_hub.e1',
                                'AX1.rbr_hub.e2', 'AX1.rbr_hub.e3'], 
                             grid=True)
+
+plt.figure(figsize=(10,5))
+plt.plot(np.arange(0, len(yaw_angles), 1), yaw_angles)
+plt.grid()
 
 plt.show()
 
