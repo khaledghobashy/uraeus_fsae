@@ -26,7 +26,7 @@ def generate_circular_path(radius, offset):
     return x_data, y_data, theta
 
 
-x_data, y_data, theta = generate_circular_path(10, (0, -10))
+x_data, y_data, theta = generate_circular_path(15, (0, -15))
 
 path_data = np.zeros((360, 3))
 path_data[:, 0] = -1e3 * x_data
@@ -42,7 +42,7 @@ plt.plot(path_data[:, 0], path_data[:, 2])
 plt.grid()
 plt.show()
 
-controller = speed_controller(10, dt)
+logitudinal_controller = speed_controller(20, dt)
 lateral_controller = stanley_controller(path_data)
 
 
@@ -55,7 +55,11 @@ def terrain_state(x, y):
 def torque_function(t):
     P_ch = num_model.Subsystems.CH.P_rbs_chassis
     Rd = num_model.Subsystems.CH.Rd_rbs_chassis
-    factor = controller.get_torque_factor(P_ch, Rd)
+    #if t <= 2:
+    #    logitudinal_controller.desired_speed = (10 /3.6) * 1e3
+    #elif t> 2:
+    #    logitudinal_controller.desired_speed = (20 /3.6) * 1e3
+    factor = logitudinal_controller.get_torque_factor(P_ch, Rd)
     return factor
 
 def RR_Torque(t):
@@ -78,9 +82,9 @@ def steering_function(t):
     r_ax1 = R_ch + A(P_ch)@rbar_ax1
     vel = (A(P_ch).T@(Rd_ch + B(P_ch, rbar_ax1)@Pd_ch))[0,0]
 
-    delta = lateral_controller.get_steer_angle(r_ax1, P_ch, vel)
+    delta = lateral_controller.get_steer_factor(r_ax1, P_ch, vel)
 
-    travel = delta * 15
+    travel = delta * 18
     print('Travel = %s'%travel)
     return travel
 
@@ -106,7 +110,7 @@ num_assm.CH_config.UF_fas_aero_drag_T = zero_func
 # =============================================================================
 
 sim = simulation('sim', num_model, 'dds')
-sim.set_time_array(10, dt)
+sim.set_time_array(40, dt)
 
 # Getting Equilibrium results as initial conditions to this simulation
 # ====================================================================
@@ -114,8 +118,8 @@ sim.set_initial_states('results/equilibrium_v4.npz')
 
 sim.solve()
 
-sim.save_as_csv('results', 'constant_radius_v1', 'pos')
-sim.save_as_npz('results', 'constant_radius_v1')
+sim.save_as_csv('results', 'constant_radius_v3', 'pos')
+sim.save_as_npz('results', 'constant_radius_v3')
 
 #=============================================================================
 #                       Plotting Simulation Results

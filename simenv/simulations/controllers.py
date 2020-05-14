@@ -60,40 +60,35 @@ class stanley_controller(object):
 
     def __init__(self, way_points):
        self._waypoints = way_points
-       self._gain = 0.3
+       self._gain = 8
        self._k_soft = 1
 
-    
-    def get_steer_angle(self, r_ax1, P_ch, vel):
+       self._path_heading = np.arctan(np.gradient(self._waypoints[:,1], self._waypoints[:,0]))
 
-        vel = abs(vel)
+    
+    def get_steer_factor(self, r_ax1, P_ch, vel):
+
         k = self._gain
         k_soft = self._k_soft
-
+       
+        vel = abs(vel)
         x_ax1, y_ax1, _ = r_ax1.flat[:]
 
         yaw_ch = self.get_yaw_angle(P_ch)
-        err, yaw_path, idx = self.get_waypoint(x_ax1, y_ax1, yaw_ch)
+        err, idx = self.get_waypoint(x_ax1, y_ax1, yaw_ch)
 
-        yaw_diff = self.get_heading_error(P_ch, idx) #(yaw_ch - yaw_path)
-        print('heading_error = %s'%yaw_diff)
-        #if yaw_diff > np.pi:
-        #    yaw_diff -= 2 * np.pi
-        #if yaw_diff < - np.pi:
-        #    yaw_diff += 2 * np.pi
+        heading_error = self.get_heading_error(P_ch, idx) 
         
-        heading_factor = yaw_diff
         crosstrack_factor = np.arctan2(k * err, k_soft + vel)
-        delta = yaw_diff + crosstrack_factor
+        delta = heading_error + crosstrack_factor
 
         delta = clamp(delta, np.deg2rad(-60), np.deg2rad(60))
-
-        print('x_ax1, y_ax1 = %s'%((x_ax1, y_ax1),))
+        
         print('vel = %s'%vel)
-        print('heading_factor = %s'%heading_factor)
+        print('x_ax1, y_ax1 = %s'%((x_ax1, y_ax1),))
+        print('heading_error = %s'%heading_error)
+        print('crosstrack_error = %s'%err)
         print('crosstrack_factor = %s'%crosstrack_factor)
-        print('E = %s'%err)
-        print('Yaw_Ch, Yaw_Path = %s'%((yaw_ch, yaw_path),))
         print('delta = %s\n'%delta)
 
         return delta
@@ -102,29 +97,7 @@ class stanley_controller(object):
         w, x, y, z = P_ch.flat[:]
         angle = np.arctan2(2*(w*z + x*y), 1 - 2*(y**2 + z**2))
         return angle
-    
-    def get_waypoint2(self, x, y):
-        min_idx       = 0
-        min_dist      = float("inf")
-        for i in range(self._waypoints.shape[0]):
-            dist = np.linalg.norm(np.array([
-                    self._waypoints[i][0] - x,
-                    self._waypoints[i][1] - y]))
-            if dist < min_dist:
-                min_dist = dist
-                min_idx = i
-        
-        print('min_dist = %s'%min_dist)
-        print('min_idx = %s'%min_idx)
-        
-        err = min_dist
-        yaw_path = np.arctan(self._waypoints[min_idx][2])
-        if min_idx != 0:
-            yaw_path = np.arctan2(self._waypoints[min_idx][1]-self._waypoints[min_idx-1][1], self._waypoints[min_idx][0]-self._waypoints[min_idx-1][0])
 
-
-        return err, yaw_path
-    
     def get_waypoint(self, x, y, yaw):
 
         cx = self._waypoints[:,0]
@@ -142,9 +115,8 @@ class stanley_controller(object):
 
         print('target_idx = %s'%target_idx)
 
-        yaw_path = self._waypoints[target_idx][2]
+        return error_front_axle, target_idx
 
-        return error_front_axle, yaw_path, target_idx
 
     def get_heading_error(self, P_ch, idx):
 
@@ -158,3 +130,22 @@ class stanley_controller(object):
 
         angle = np.arccos((chassis_heading/np.linalg.norm(chassis_heading)).T.dot(path_vector/np.linalg.norm(path_vector)))
         return angle[0,0]
+
+    def get_heading_error2(self, P_ch, idx):
+
+        yaw_chassis = self.get_yaw_angle(P_ch)
+        yaw_path = self.get_yaw_path(idx)
+
+        heading_error = yaw_chassis - yaw_path
+
+        print('Yaw_Ch, Yaw_Path = %s'%((yaw_chassis, yaw_path),))
+
+        #if heading_error > np.pi:
+        #    heading_error -= 2 * np.pi
+        #if heading_error < - np.pi:
+        #    heading_error += 2 * np.pi
+
+        return heading_error
+
+    def get_yaw_path(self, idx):
+        return self._path_heading[idx]

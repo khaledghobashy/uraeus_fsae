@@ -80,7 +80,7 @@ def steering_function(t):
     r_ax1 = R_ch + A(P_ch)@rbar_ax1
     vel = (A(P_ch).T@(Rd_ch + B(P_ch, rbar_ax1)@Pd_ch))[0,0]
 
-    delta = lateral_controller.get_steer_angle(r_ax1, P_ch, vel)
+    delta = lateral_controller.get_steer_factor(r_ax1, P_ch, vel)
 
     travel = delta * 15
     print('Travel = %s'%travel)
