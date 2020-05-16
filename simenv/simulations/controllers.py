@@ -1,7 +1,17 @@
 import numpy as np
+import scipy as sc
+import matplotlib.pyplot as plt
+
 from uraeus.nmbd.python.engine.numerics.math_funcs import A
 
-clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
+
+def clamp(n, nmin, nmax):
+    return max(min(nmax, n), nmin)
+
+def normalize(v):
+    n = v / np.linalg.norm(v)
+    return n
+
 
 class speed_controller(object):
 
@@ -23,7 +33,6 @@ class speed_controller(object):
 
     def _get_error(self, P_ch, Rd_ch):
         v_c = abs(A(P_ch).T @ Rd_ch)[0,0]
-        print('vel = %s'%v_c)
         v_r = self.desired_speed
         err = v_r - v_c
         self._errors_array.append(err)
@@ -41,10 +50,10 @@ class speed_controller(object):
         self._last_err = err
         
         factor = P + I + D
-        if factor > 1.2 or factor < -1.2:
+        if factor > 1 or factor < -1:
             self._sum_int -= err * self.dt
         
-        factor = clamp(factor, -1.2, 1.2)
+        factor = clamp(factor, -1, 1)
         
         #print('E = %s'%err)
         #print('P = %s'%P)
@@ -58,47 +67,122 @@ class speed_controller(object):
 
 class stanley_controller(object):
 
-    def __init__(self, way_points):
-       self._waypoints = way_points
-       self._gain = 8
-       self._k_soft = 1
+    def __init__(self, way_points, gain=1):
+        
+        # waypoints' array containig the x and y coordinates of the desired 
+        # path. shape = (n, 2)
+        self._waypoints = way_points
 
-       self._path_heading = np.arctan(np.gradient(self._waypoints[:,1], self._waypoints[:,0]))
+        # crossfactor error gain
+        self._gain = gain
 
-    
+        # softning gain for lower vehicle speeds (1 m/s)
+        self._k_soft = 1e3
+
+        # Evaluating path heading vectors as vector point from current point to
+        # the next point as: array([[x[i+1] - x[i]], [y[i+1] - y[i]]])
+        x_diffs = np.diff(way_points[:,0])[:,None]
+        y_diffs = np.diff(way_points[:,1])[:,None]
+        self._path_headings = np.concatenate([x_diffs, y_diffs], 1)
+
+        # variable holding the current waypoint index
+        self._idx = 0
+
     def get_steer_factor(self, r_ax1, P_ch, vel):
 
-        k = self._gain
-        k_soft = self._k_soft
+        k = self._gain # crossfactor gain
+        k_soft = self._k_soft # softning gain
        
+        # longitudinal velocity of the front axle
         vel = abs(vel)
+        # x and y coordinates of the reference point at the front axle
         x_ax1, y_ax1, _ = r_ax1.flat[:]
-
-        yaw_ch = self.get_yaw_angle(P_ch)
-        err, idx = self.get_waypoint(x_ax1, y_ax1, yaw_ch)
-
-        heading_error = self.get_heading_error(P_ch, idx) 
         
-        crosstrack_factor = np.arctan2(k * err, k_soft + vel)
-        delta = heading_error + crosstrack_factor
+        crosstrack_error = self._get_crosstrack_error(x_ax1, y_ax1)
+        crosstrack_factor = np.arctan2(k * crosstrack_error, (k_soft + vel))
 
+        heading_error = self._get_heading_error(P_ch) 
+
+        # wheels steering angle needed
+        delta = heading_error + crosstrack_factor
+        # clamping the value to the applicable angular boundries
         delta = clamp(delta, np.deg2rad(-60), np.deg2rad(60))
         
-        print('vel = %s'%vel)
-        print('x_ax1, y_ax1 = %s'%((x_ax1, y_ax1),))
-        print('heading_error = %s'%heading_error)
-        print('crosstrack_error = %s'%err)
-        print('crosstrack_factor = %s'%crosstrack_factor)
-        print('delta = %s\n'%delta)
+        #print('vel = %s'%vel)
+        #print('x_ax1, y_ax1 = %s'%((x_ax1, y_ax1),))
+        #print('target_idx = %s'%self._idx)
+        #print('heading_error = %s'%heading_error)
+        #print('crosstrack_error = %s'%crosstrack_error)
+        #print('crosstrack_factor = %s'%crosstrack_factor)
+        #print('delta = %s\n'%delta)
 
         return delta
     
-    def get_yaw_angle(self, P_ch):
+    def _get_yaw_angle(self, P_ch):
         w, x, y, z = P_ch.flat[:]
         angle = np.arctan2(2*(w*z + x*y), 1 - 2*(y**2 + z**2))
         return angle
 
-    def get_waypoint(self, x, y, yaw):
+    
+    def _get_crosstrack_error(self, x, y):
+        
+        path_x = self._waypoints[:,0]
+        path_y = self._waypoints[:,1]
+
+        # Search nearest point index as the smallest hypotenuse fromed by the
+        # x and y differences between the reference point and the path
+        dx = x - path_x # broadcasting rule (float - array)
+        dy = y - path_y # broadcasting rule (float - array)
+        d  = np.hypot(dx, dy)
+
+        # error vector point from path point to the vehicle reference point
+        error_vector = np.array([dx[idx], dy[idx]])
+
+        # target waypoint index
+        self._idx = idx = np.argmin(d)
+
+        # projecting the error on the path normal, as the error is the normal 
+        # distance between the path and the reference point, relative to path
+        try:
+            path_heading = self._path_headings[idx]
+        except(IndexError):
+            # assuming forward path vector in case of indexError. 
+            path_heading = np.array([-1, 0])
+
+        # normalized path normal acquired from the path heading as a 90 deg. 
+        # rotation.
+        path_normal = normalize(np.array([[ path_heading[1]], 
+                                          [-path_heading[0]]]))
+                
+        # error value
+        error_front_axle = float(-np.dot(error_vector.T, path_normal))
+
+        return error_front_axle
+
+    def _get_heading_error(self, P_ch):
+
+        idx = self._idx
+
+        try:
+            path_vector = self._path_headings[idx]
+        except(IndexError):
+            path_vector = np.array([[-1], [0]])
+        
+        # getting the chassis heading as a 2d vector of two components [x, y]
+        chassis_heading = (A(P_ch) @ np.array([[-1], [0], [0]]))[0:2]
+        
+        # normalizing the vectors to get non-scaled angle
+        chassis_heading = normalize(chassis_heading)
+        path_vector = normalize(path_vector)
+
+        # The cross funtion returns a scaler for 2d vectors that represent the
+        # z-axis value of the resultant normal vector. This captures the 
+        # direction of rotation needed too.
+        angle = np.cross(path_vector.flat[:], chassis_heading.flat[:])
+
+        return angle
+    
+    def _DEP_get_waypoint(self, x, y, yaw):
 
         cx = self._waypoints[:,0]
         cy = self._waypoints[:,1]
@@ -113,39 +197,13 @@ class stanley_controller(object):
                           -np.sin(yaw + np.pi / 2)]
         error_front_axle = np.dot([dx[target_idx], dy[target_idx]], front_axle_vec)
 
-        print('target_idx = %s'%target_idx)
+        path_tanget = self._path_headings[target_idx]
+        path_normal = np.array([[ path_tanget[1]], 
+                                [-path_tanget[0]]])
+        
+        error_vector = np.array([dx[target_idx], dy[target_idx]])
+
+        error_front_axle = np.dot(error_vector.T,
+                                  path_normal)
 
         return error_front_axle, target_idx
-
-
-    def get_heading_error(self, P_ch, idx):
-
-        try:
-            path_vector = np.array([[self._waypoints[idx+1][0] - self._waypoints[idx][0]], 
-                                    [self._waypoints[idx+1][1] - self._waypoints[idx][1]]])
-        except(IndexError):
-            path_vector = np.array([[1], [0]])
-        
-        chassis_heading = (A(P_ch) @ np.array([[-1], [0], [0]]))[0:2]
-
-        angle = np.arccos((chassis_heading/np.linalg.norm(chassis_heading)).T.dot(path_vector/np.linalg.norm(path_vector)))
-        return angle[0,0]
-
-    def get_heading_error2(self, P_ch, idx):
-
-        yaw_chassis = self.get_yaw_angle(P_ch)
-        yaw_path = self.get_yaw_path(idx)
-
-        heading_error = yaw_chassis - yaw_path
-
-        print('Yaw_Ch, Yaw_Path = %s'%((yaw_chassis, yaw_path),))
-
-        #if heading_error > np.pi:
-        #    heading_error -= 2 * np.pi
-        #if heading_error < - np.pi:
-        #    heading_error += 2 * np.pi
-
-        return heading_error
-
-    def get_yaw_path(self, idx):
-        return self._path_heading[idx]
