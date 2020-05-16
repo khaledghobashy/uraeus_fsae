@@ -7,12 +7,12 @@ import matplotlib.pyplot as plt
 
 from uraeus.nmbd.python import simulation
 from uraeus.nmbd.python.engine.numerics.math_funcs import A, B
-from controllers import speed_controller, stanley_controller
 
 database_directory = os.path.abspath('../../')
 sys.path.append(database_directory)
 
 from uraeus_fsae.simenv.assemblies import asurt_FS17_v1 as num_assm
+from controllers import speed_controller, stanley_controller
 
 num_model = num_assm.num_model
 
@@ -23,27 +23,22 @@ def generate_circular_path(radius, offset):
     theta  = np.deg2rad(np.linspace(0, 360, 360))
     x_data = radius * np.sin(theta) + offset[0]
     y_data = radius * np.cos(theta) + offset[1]
-    return x_data, y_data, theta
+    return x_data, y_data
 
 
-x_data, y_data, theta = generate_circular_path(15, (0, -15))
+x_data, y_data = generate_circular_path(15, (0, -15))
 
 path_data = np.zeros((360, 3))
 path_data[:, 0] = -1e3 * x_data
 path_data[:, 1] =  1e3 * y_data
-path_data[:, 2] =  theta
 
 plt.figure(figsize=(10, 5))
 plt.plot(path_data[:, 0], path_data[:, 1])
 plt.grid()
-
-plt.figure(figsize=(10, 5))
-plt.plot(path_data[:, 0], path_data[:, 2])
-plt.grid()
 plt.show()
 
-logitudinal_controller = speed_controller(20, dt)
-lateral_controller = stanley_controller(path_data)
+logitudinal_controller = speed_controller(30, dt)
+lateral_controller = stanley_controller(path_data, 15)
 
 
 def terrain_state(x, y):
@@ -55,10 +50,6 @@ def terrain_state(x, y):
 def torque_function(t):
     P_ch = num_model.Subsystems.CH.P_rbs_chassis
     Rd = num_model.Subsystems.CH.Rd_rbs_chassis
-    #if t <= 2:
-    #    logitudinal_controller.desired_speed = (10 /3.6) * 1e3
-    #elif t> 2:
-    #    logitudinal_controller.desired_speed = (20 /3.6) * 1e3
     factor = logitudinal_controller.get_torque_factor(P_ch, Rd)
     return factor
 
@@ -80,7 +71,7 @@ def steering_function(t):
 
     rbar_ax1 = np.array([[-800], [0], [0]], dtype=np.float64)
     r_ax1 = R_ch + A(P_ch)@rbar_ax1
-    vel = (A(P_ch).T@(Rd_ch + B(P_ch, rbar_ax1)@Pd_ch))[0,0]
+    vel = (A(P_ch).T @ (Rd_ch + B(P_ch, rbar_ax1)@Pd_ch))[0,0]
 
     delta = lateral_controller.get_steer_factor(r_ax1, P_ch, vel)
 
@@ -110,7 +101,7 @@ num_assm.CH_config.UF_fas_aero_drag_T = zero_func
 # =============================================================================
 
 sim = simulation('sim', num_model, 'dds')
-sim.set_time_array(40, dt)
+sim.set_time_array(15, dt)
 
 # Getting Equilibrium results as initial conditions to this simulation
 # ====================================================================
@@ -118,8 +109,8 @@ sim.set_initial_states('results/equilibrium_v4.npz')
 
 sim.solve()
 
-sim.save_as_csv('results', 'constant_radius_v3', 'pos')
-sim.save_as_npz('results', 'constant_radius_v3')
+sim.save_as_csv('results', 'constant_radius_v5', 'pos')
+sim.save_as_npz('results', 'constant_radius_v5')
 
 #=============================================================================
 #                       Plotting Simulation Results
