@@ -24,7 +24,7 @@ def iso_dlc(vehicle_width):
     a = 1.1 * vehicle_width + 0.25
     b = vehicle_width + 1
     
-    x_offset = 30
+    x_offset = 50
     y_peak = (a/2 + b/2 + 1)
     
     x1 = np.arange(0, x_offset, 1)
@@ -67,7 +67,7 @@ plt.grid()
 plt.show()
 
 logitudinal_controller = speed_controller(60, dt)
-lateral_controller = stanley_controller(path_data, 10)
+lateral_controller = stanley_controller(path_data, 25)
 
 
 def terrain_state(x, y):
@@ -130,7 +130,7 @@ num_assm.CH_config.UF_fas_aero_drag_T = zero_func
 # =============================================================================
 
 sim = simulation('sim', num_model, 'dds')
-sim.set_time_array(10, dt)
+sim.set_time_array(11, dt)
 
 # Getting Equilibrium results as initial conditions to this simulation
 # ====================================================================
@@ -138,8 +138,8 @@ sim.set_initial_states('results/equilibrium_v4.npz')
 
 sim.solve()
 
-sim.save_as_csv('results', 'dlc_auto_v4', 'pos')
-sim.save_as_npz('results', 'dlc_auto_v4')
+sim.save_as_csv('results', 'dlc_auto_v7', 'pos')
+sim.save_as_npz('results', 'dlc_auto_v7')
 
 #=============================================================================
 #                       Plotting Simulation Results

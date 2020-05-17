@@ -26,7 +26,7 @@ def generate_circular_path(radius, offset):
     return x_data, y_data
 
 
-x_data, y_data = generate_circular_path(15, (0, -15))
+x_data, y_data = generate_circular_path(10.5, (0, -10.5))
 
 path_data = np.zeros((360, 3))
 path_data[:, 0] = -1e3 * x_data
@@ -37,8 +37,8 @@ plt.plot(path_data[:, 0], path_data[:, 1])
 plt.grid()
 plt.show()
 
-logitudinal_controller = speed_controller(30, dt)
-lateral_controller = stanley_controller(path_data, 15)
+logitudinal_controller = speed_controller(35, dt)
+lateral_controller = stanley_controller(path_data, 25)
 
 
 def terrain_state(x, y):
@@ -76,7 +76,7 @@ def steering_function(t):
     delta = lateral_controller.get_steer_factor(r_ax1, P_ch, vel)
 
     travel = delta * 18
-    print('Travel = %s'%travel)
+    #print('Travel = %s'%travel)
     return travel
 
 
@@ -109,8 +109,8 @@ sim.set_initial_states('results/equilibrium_v4.npz')
 
 sim.solve()
 
-sim.save_as_csv('results', 'constant_radius_v5', 'pos')
-sim.save_as_npz('results', 'constant_radius_v5')
+sim.save_as_csv('results', 'constant_radius_v7', 'pos')
+sim.save_as_npz('results', 'constant_radius_v7')
 
 #=============================================================================
 #                       Plotting Simulation Results
