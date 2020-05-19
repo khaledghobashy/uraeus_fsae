@@ -55,13 +55,16 @@ class speed_controller(object):
         
         factor = clamp(factor, -1, 1)
         
-        #print('E = %s'%err)
-        #print('P = %s'%P)
-        #print('I = %s'%I)
-        #print('D = %s'%D)
-        #print('F = %s\n'%factor)
+        #self._print_states(err, P, I, D, factor)
 
         return factor
+    
+    def _print_states(self, err, P, I, D, factor):
+        print('E = %s'%err)
+        print('P = %s'%P)
+        print('I = %s'%I)
+        print('D = %s'%D)
+        print('F = %s\n'%factor)
 
 
 class trajectory(object):
@@ -147,6 +150,8 @@ class stanley_controller(object):
         # softning gain for lower vehicle speeds (1 m/s)
         self._k_soft = 1e3
 
+        self.error_array = []
+
     def get_steer_factor(self, r_ax1, P_ch, vel):
 
         k = self._gain # crossfactor gain
@@ -167,13 +172,15 @@ class stanley_controller(object):
         # clamping the value to the applicable angular boundries
         delta = clamp(delta, np.deg2rad(-60), np.deg2rad(60))
         
-        #print('vel = %s'%vel)
-        #print('x_ax1, y_ax1 = %s'%((x_ax1, y_ax1),))
-        #print('target_idx = %s'%self.trajectory._idx)
-        #print('heading_error = %s'%heading_error)
-        #print('crosstrack_error = %s'%crosstrack_error)
-        #print('crosstrack_factor = %s'%crosstrack_factor)
-        #print('delta = %s\n'%delta)
+        print('vel = %s'%vel)
+        print('x_ax1, y_ax1 = %s'%((x_ax1, y_ax1),))
+        print('target_idx = %s'%self.trajectory._idx)
+        print('heading_error = %s'%heading_error)
+        print('crosstrack_error = %s'%crosstrack_error)
+        print('crosstrack_factor = %s'%crosstrack_factor)
+        print('delta = %s\n'%delta)
+
+        self.error_array.append(crosstrack_error)
 
         return delta
     

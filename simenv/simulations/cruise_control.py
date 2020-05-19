@@ -19,13 +19,11 @@ dt = num_assm.dt
 TR = 254
 
 
-controller = speed_controller(60, dt)
+controller = speed_controller(80, dt, [1*1e-3, 1*1e-6, 1*1e-5])
 
 def torque_function(t):
     P_ch = num_model.Subsystems.CH.P_rbs_chassis
     Rd = num_model.Subsystems.CH.Rd_rbs_chassis
-    if t >= 3:
-        pass
     factor = controller.get_torque_factor(P_ch, Rd)
     return factor
 
@@ -61,7 +59,7 @@ num_assm.CH_config.UF_fas_aero_drag_T = zero_func
 # =============================================================================
 
 sim = simulation('sim', num_model, 'dds')
-sim.set_time_array(6, dt)
+sim.set_time_array(5, dt)
 
 # Getting Equilibrium results as initial conditions to this simulation
 # ====================================================================
@@ -69,8 +67,8 @@ sim.set_initial_states('results/equilibrium_v4.npz')
 
 sim.solve()
 
-sim.save_as_csv('results', 'acceleration_v10')
-sim.save_as_npz('results', 'acceleration_v10')
+sim.save_as_csv('results', 'cruise_5kmh', 'pos')
+sim.save_as_npz('results', 'cruise_5kmh')
 
 #=============================================================================
 #                       Plotting Simulation Results
