@@ -20,53 +20,65 @@ num_model = num_assm.num_model
 dt = num_assm.dt
 TR = 254
 
-def iso_dlc(vehicle_width):
+def iso_dlc(vehicle_width, x_offset=0):
     a = 1.1 * vehicle_width + 0.25
-    b = vehicle_width + 1
+    b = 1.2 * vehicle_width + 0.25
     
-    x_offset = 50
     y_peak = (a/2 + b/2 + 1)
     
-    x1 = np.arange(0, x_offset, 1)
-    y1 = np.zeros((x_offset,))
+    xs = np.arange(0, x_offset, 1)
+    ys = 0 * np.ones((len(xs),))
     
-    x2_r = np.array([0, 25]) + x_offset
-    y2_r = np.array([0, y_peak])
-    spl1 = interpolate.CubicSpline(x2_r, y2_r, bc_type='clamped')
+    x1 = np.arange(0, 10, 1) + x_offset
+    y1 = 0 * np.ones((len(x1),))
+    
+    x2 = np.arange(55, 65, 1) + x_offset
+    y2 = y_peak * np.ones((len(x2),))
+    
+    x3 = np.arange(100, 125, 1) + x_offset
+    y3 = 0 * np.ones((len(x3),))
+    
+    xe = np.arange(x3[-1]+1, x3[-1] + x_offset, 1)
+    ye = 0 * np.ones((len(xe),))
+    
+    x_data = np.concatenate([xs, x1, x2, x3, xe])
+    y_data = np.concatenate([ys, y1, y2, y3, ye])
+    
+    tck = interpolate.splrep(x_data, y_data, k=5)#, s=1e-4)
+    
+    x_new = np.arange(min(x_data), max(x_data), 1)
+    y_new = interpolate.splev(x_new, tck)
 
-    x2 = np.arange(x2_r[0], x2_r[-1], 1)
-    y2 = spl1(x2)
-    
-    x3 = np.arange(x2[np.argmax(spl1(x2))]+1, 32 + x_offset, 1)
-    y3 = max(spl1(x2)) * np.ones((len(x3),))
-    
-    x4_r = np.array([32, 59]) + x_offset
-    y4_r = np.array([y_peak, 0])
-    spl2 = interpolate.CubicSpline(x4_r, y4_r, bc_type='clamped')
+    return x_new, y_new
 
-    x4 = np.arange(x4_r[0], x4_r[-1], 1)
-    y4 = spl2(x4)
+def plot_iso_dlc(vehicle_width, x_offset=0):
+    a  = 1.1 * vehicle_width + 0.25
+    b1 = 1.2 * vehicle_width + 0.25
+    b2 = 1.3 * vehicle_width + 0.25
     
-    x5 = np.arange(x4[np.argmin(spl2(x4))]+1, 120+x_offset, 1)
-    y5 = min(spl2(x4)) * np.ones((len(x5),))
+    x_polyons  = np.array([ 0, 7.5, 15, 45, 57.5, 70, 95, 110, 125])
+    y_polyons1 = np.array([0, 0, 0, a+1, a+1, a+1, 0, 0, 0])
+    y_polyons2 = np.array([a, a, a, a+1+b1, a+1+b1, a+1+b1, b2, b2, b2])
     
-    x_data = np.concatenate([x1, x2, x3, x4, x5])
-    y_data = np.concatenate([y1, y2, y3, y4, y5])
+    x_data, y_data = iso_dlc(vehicle_width, x_offset)
     
-    return x_data, y_data
+    plt.figure(figsize=(15, 5))
+    plt.plot(x_data[x_offset:125+x_offset]-x_offset, y_data[x_offset:125+x_offset]+(a/2))
+    plt.plot(x_polyons, y_polyons1, 'o')
+    plt.plot(x_polyons, y_polyons2, 'o')
+    plt.grid()
+    plt.show()
 
-x_data, y_data = iso_dlc(1.2)
+
+x_data, y_data = iso_dlc(1.2, 80)
 
 path_data = np.zeros((len(x_data), 2))
 path_data[:, 0] = -1e3 * x_data
 path_data[:, 1] =  1e3 * y_data
 
-plt.figure(figsize=(10, 5))
-plt.plot(path_data[:, 0], path_data[:, 1])
-plt.grid()
-plt.show()
+plot_iso_dlc(1.2, 100)
 
-logitudinal_controller = speed_controller(60, dt)
+logitudinal_controller = speed_controller(65, dt)
 lateral_controller = stanley_controller(path_data, 25)
 
 
@@ -79,7 +91,7 @@ def terrain_state(x, y):
 def torque_function(t):
     P_ch = num_model.Subsystems.CH.P_rbs_chassis
     Rd = num_model.Subsystems.CH.Rd_rbs_chassis
-    factor = logitudinal_controller.get_torque_factor(P_ch, Rd)
+    factor = logitudinal_controller.get_torque_factor(P_ch, Rd)# if t<5 else 0
     return factor
 
 def RR_Torque(t):
@@ -130,7 +142,7 @@ num_assm.CH_config.UF_fas_aero_drag_T = zero_func
 # =============================================================================
 
 sim = simulation('sim', num_model, 'dds')
-sim.set_time_array(11, dt)
+sim.set_time_array(15, dt)
 
 # Getting Equilibrium results as initial conditions to this simulation
 # ====================================================================
@@ -138,8 +150,8 @@ sim.set_initial_states('results/equilibrium_v4.npz')
 
 sim.solve()
 
-sim.save_as_csv('results', 'dlc_auto_v7', 'pos')
-sim.save_as_npz('results', 'dlc_auto_v7')
+sim.save_as_csv('results', 'dlc_auto_v10', 'pos')
+sim.save_as_npz('results', 'dlc_auto_v10')
 
 #=============================================================================
 #                       Plotting Simulation Results
@@ -159,5 +171,10 @@ sim.soln.pos_dataframe.plot(x='time', y='CH.rbs_chassis.e0', grid=True)
 sim.soln.pos_dataframe.plot(x='time', y='CH.rbs_chassis.e1', grid=True)
 sim.soln.pos_dataframe.plot(x='time', y='CH.rbs_chassis.e2', grid=True)
 sim.soln.pos_dataframe.plot(x='time', y='CH.rbs_chassis.e3', grid=True)
+
+
+plt.figure(figsize=(10, 5))
+plt.plot(range(len(lateral_controller.error_array)), lateral_controller.error_array)
+plt.grid()
 
 plt.show()
