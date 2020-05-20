@@ -35,7 +35,7 @@ def iso_dlc(vehicle_width, x_offset=0):
     x2 = np.arange(55, 65, 1) + x_offset
     y2 = y_peak * np.ones((len(x2),))
     
-    x3 = np.arange(100, 125, 1) + x_offset
+    x3 = np.arange(105, 125, 1) + x_offset
     y3 = 0 * np.ones((len(x3),))
     
     xe = np.arange(x3[-1]+1, x3[-1] + x_offset, 1)
@@ -49,7 +49,9 @@ def iso_dlc(vehicle_width, x_offset=0):
     x_new = np.arange(min(x_data), max(x_data), 1)
     y_new = interpolate.splev(x_new, tck)
 
-    return x_new, y_new
+    radii = abs(((1 + interpolate.splev(x_new, tck, der=2)**2)**(3/2))/(interpolate.splev(x_new, tck, der=2)))
+
+    return x_new, y_new, radii
 
 def plot_iso_dlc(vehicle_width, x_offset=0):
     a  = 1.1 * vehicle_width + 0.25
@@ -60,7 +62,7 @@ def plot_iso_dlc(vehicle_width, x_offset=0):
     y_polyons1 = np.array([0, 0, 0, a+1, a+1, a+1, 0, 0, 0])
     y_polyons2 = np.array([a, a, a, a+1+b1, a+1+b1, a+1+b1, b2, b2, b2])
     
-    x_data, y_data = iso_dlc(vehicle_width, x_offset)
+    x_data, y_data, radii = iso_dlc(vehicle_width, x_offset)
     
     plt.figure(figsize=(15, 5))
     plt.plot(x_data[x_offset:125+x_offset]-x_offset, y_data[x_offset:125+x_offset]+(a/2))
@@ -70,15 +72,69 @@ def plot_iso_dlc(vehicle_width, x_offset=0):
     plt.show()
 
 
-x_data, y_data = iso_dlc(1.2, 80)
 
-path_data = np.zeros((len(x_data), 2))
+def iso_dlc(vehicle_width, x_offset=0):
+    a = 1.1 * vehicle_width + 0.25
+    b = 1.2 * vehicle_width + 0.25
+    
+    y_peak = (a/2 + b/2 + 1)
+    
+    xs = np.arange(0, x_offset, 1)
+    ys = 0 * np.ones((len(xs),))
+    
+    x1 = np.arange(0, 7, 1) + x_offset
+    y1 = 0 * np.ones((len(x1),))
+    
+    x2 = np.arange(29.5, 32, 1) + x_offset
+    y2 = y_peak * np.ones((len(x2),))
+    
+    x3 = np.arange(56, 61, 1) + x_offset
+    y3 = 0 * np.ones((len(x3),))
+    
+    xe = np.arange(x3[-1]+1, x3[-1] + x_offset, 1)
+    ye = 0 * np.ones((len(xe),))
+    
+    x_data = np.concatenate([xs, x1, x2, x3, xe])
+    y_data = np.concatenate([ys, y1, y2, y3, ye])
+    
+    tck = interpolate.splrep(x_data, y_data, k=5)#, s=1e-4)
+    
+    x_new = np.arange(min(x_data), max(x_data), 1)
+    y_new = interpolate.splev(x_new, tck)
+    
+    radii = abs(((1 + interpolate.splev(x_new, tck, der=2)**2)**(3/2))/(interpolate.splev(x_new, tck, der=2)))
+
+    return x_new, y_new, radii
+
+def plot_iso_dlc(vehicle_width, x_offset=0):
+    a  = 1.1 * vehicle_width + 0.25
+    b1 = 1.2 * vehicle_width + 0.25
+    b2 = 1.3 * vehicle_width + 0.25
+    
+    x_polyons  = np.array([ 0, 6, 12, 25.5, 30.5, 35.5, 48, 54, 60])
+    y_polyons1 = np.array([0, 0, 0, a+1, a+1, a+1, 0, 0, 0])
+    y_polyons2 = np.array([a, a, a, a+1+b1, a+1+b1, a+1+b1, b2, b2, b2])
+    
+    x_data, y_data, radii = iso_dlc(vehicle_width, x_offset)
+    
+    plt.figure(figsize=(15, 5))
+    plt.plot(x_data[x_offset:60+x_offset]-x_offset, y_data[x_offset:60+x_offset]+(a/2))
+    plt.plot(x_polyons, y_polyons1, 'o')
+    plt.plot(x_polyons, y_polyons2, 'o')
+    plt.grid()
+    plt.show()
+    
+
+x_data, y_data, radii = iso_dlc(1.2, 50)
+
+path_data = np.zeros((len(x_data), 3))
 path_data[:, 0] = -1e3 * x_data
 path_data[:, 1] =  1e3 * y_data
+path_data[:, 2] =  1e3 * radii
 
 plot_iso_dlc(1.2, 100)
 
-logitudinal_controller = speed_controller(65, dt)
+logitudinal_controller = speed_controller(50, dt)
 lateral_controller = stanley_controller(path_data, 25)
 
 
@@ -114,7 +170,7 @@ def steering_function(t):
     r_ax1 = R_ch + A(P_ch)@rbar_ax1
     vel = (A(P_ch).T @ (Rd_ch + B(P_ch, rbar_ax1)@Pd_ch))[0,0]
 
-    delta = lateral_controller.get_steer_factor(r_ax1, P_ch, vel)
+    delta = lateral_controller.get_steer_factor(r_ax1, P_ch, Pd_ch, vel)
 
     travel = delta * 18
     #print('Travel = %s'%travel)
@@ -142,7 +198,7 @@ num_assm.CH_config.UF_fas_aero_drag_T = zero_func
 # =============================================================================
 
 sim = simulation('sim', num_model, 'dds')
-sim.set_time_array(15, dt)
+sim.set_time_array(11, dt)
 
 # Getting Equilibrium results as initial conditions to this simulation
 # ====================================================================

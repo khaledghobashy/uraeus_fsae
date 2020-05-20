@@ -2,7 +2,7 @@ import numpy as np
 import scipy as sc
 import matplotlib.pyplot as plt
 
-from uraeus.nmbd.python.engine.numerics.math_funcs import A
+from uraeus.nmbd.python.engine.numerics.math_funcs import A, E
 
 
 def clamp(n, nmin, nmax):
@@ -83,6 +83,8 @@ class trajectory(object):
         self._path_headings = [normalize(np.array([x,  y])) for x,y in zip(x_diffs, y_diffs)] 
         self._path_normals  = [normalize(np.array([y, -x])) for x,y in zip(x_diffs, y_diffs)]
 
+        self._radii = waypoints[:,2] #abs(((1 + interpolate.splev(x_new, tck, der=2)**2)**(3/2))/(interpolate.splev(x_new, tck, der=2)))
+
         # variable holding the current waypoint index
         self._idx = 0
 
@@ -137,6 +139,9 @@ class trajectory(object):
         error = float(-np.dot(error_vector.T, path_normal))
 
         return error
+    
+    def get_radius(self):
+        return self._radii[self._idx]
 
 
 class stanley_controller(object):
@@ -149,13 +154,16 @@ class stanley_controller(object):
         self._gain = gain
         # softning gain for lower vehicle speeds (1 m/s)
         self._k_soft = 1e3
+        self._kd_yawrate = 0
 
-        self.error_array = []
+        self.error_array = [0]
+        self.steering_angles = [0, 0]
 
-    def get_steer_factor(self, r_ax1, P_ch, vel):
+    def get_steer_factor(self, r_ax1, P_ch, Pd_ch, vel):
 
         k = self._gain # crossfactor gain
         k_soft = self._k_soft # softning gain
+        kd_yawrate = self._kd_yawrate
        
         # longitudinal velocity of the front axle
         vel = abs(vel)
@@ -167,10 +175,15 @@ class stanley_controller(object):
         
         crosstrack_factor = np.arctan2(k * crosstrack_error, (k_soft + vel))
         
+        steadystate_yawrate = vel / self.trajectory.get_radius()
+        yaw_damping_factor = kd_yawrate * (self._get_yaw_rate(P_ch, Pd_ch) - steadystate_yawrate)
+
         # wheels steering angle needed
-        delta = heading_error + crosstrack_factor
+        delta = heading_error + crosstrack_factor + yaw_damping_factor
         # clamping the value to the applicable angular boundries
         delta = clamp(delta, np.deg2rad(-60), np.deg2rad(60))
+
+        self.steering_angles.append(delta)
         
         print('vel = %s'%vel)
         print('x_ax1, y_ax1 = %s'%((x_ax1, y_ax1),))
@@ -178,6 +191,7 @@ class stanley_controller(object):
         print('heading_error = %s'%heading_error)
         print('crosstrack_error = %s'%crosstrack_error)
         print('crosstrack_factor = %s'%crosstrack_factor)
+        print('yaw_damp_factor = %s'%yaw_damping_factor)
         print('delta = %s\n'%delta)
 
         self.error_array.append(crosstrack_error)
@@ -188,6 +202,10 @@ class stanley_controller(object):
         w, x, y, z = P_ch.flat[:]
         angle = np.arctan2(2*(w*z + x*y), 1 - 2*(y**2 + z**2))
         return angle
+    
+    def _get_yaw_rate(self, P_ch, Pd_ch):
+        yaw_rate = 2*E(P_ch)@Pd_ch # Global
+        return yaw_rate[2,0]
 
     
 
