@@ -41,7 +41,9 @@ This repository aims to provide:
 
 *Vehicle performing a tilt table test*
 
+![](readme_materials/iso_dlc_fsae2.gif)
 
+*Vehicle performing an ISO double lane change manoeuvre*
 
 ### Features
 
