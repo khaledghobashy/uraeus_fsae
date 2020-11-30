@@ -23,14 +23,16 @@ def generate_circular_path(radius, offset):
     theta  = np.deg2rad(np.linspace(0, 360, 360))
     x_data = radius * np.sin(theta) + offset[0]
     y_data = radius * np.cos(theta) + offset[1]
-    return x_data, y_data
+    radii = radius * np.ones((360,))
+    return x_data, y_data, radii
 
 
-x_data, y_data = generate_circular_path(10.5, (0, -10.5))
+x_data, y_data, radii = generate_circular_path(10.5, (0, -10.5))
 
 path_data = np.zeros((360, 3))
 path_data[:, 0] = -1e3 * x_data
 path_data[:, 1] =  1e3 * y_data
+path_data[:, 2] =  1e3 * radii
 
 plt.figure(figsize=(10, 5))
 plt.plot(path_data[:, 0], path_data[:, 1])
@@ -73,7 +75,7 @@ def steering_function(t):
     r_ax1 = R_ch + A(P_ch)@rbar_ax1
     vel = (A(P_ch).T @ (Rd_ch + B(P_ch, rbar_ax1)@Pd_ch))[0,0]
 
-    delta = lateral_controller.get_steer_factor(r_ax1, P_ch, vel)
+    delta = lateral_controller.get_steer_factor(r_ax1, P_ch, Pd_ch,  vel)
 
     travel = delta * 18
     #print('Travel = %s'%travel)
@@ -109,8 +111,8 @@ sim.set_initial_states('results/equilibrium_v4.npz')
 
 sim.solve()
 
-sim.save_as_csv('results', 'constant_radius_v7', 'pos')
-sim.save_as_npz('results', 'constant_radius_v7')
+sim.save_as_csv('results', 'constant_radius_v8', 'pos')
+sim.save_as_npz('results', 'constant_radius_v8')
 
 #=============================================================================
 #                       Plotting Simulation Results
